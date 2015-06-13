@@ -4,8 +4,8 @@ object F_Main: TF_Main
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Jerry'
-  ClientHeight = 237
-  ClientWidth = 449
+  ClientHeight = 219
+  ClientWidth = 432
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,8 +22,8 @@ object F_Main: TF_Main
   TextHeight = 13
   object SB_Main: TStatusBar
     Left = 0
-    Top = 218
-    Width = 449
+    Top = 200
+    Width = 432
     Height = 19
     Panels = <
       item
@@ -33,10 +33,12 @@ object F_Main: TF_Main
       item
         Width = 250
       end>
+    ExplicitTop = 218
+    ExplicitWidth = 449
   end
   object PC_Main: TPageControl
-    Left = 8
-    Top = 8
+    Left = 0
+    Top = 0
     Width = 433
     Height = 201
     MultiLine = True
@@ -51,8 +53,8 @@ object F_Main: TF_Main
     OnMouseUp = PageControlCloseButtonMouseUp
   end
   object BitBtn1: TBitBtn
-    Left = 392
-    Top = 2
+    Left = 384
+    Top = 0
     Width = 25
     Height = 25
     DoubleBuffered = True
@@ -88,8 +90,8 @@ object F_Main: TF_Main
     OnClick = BitBtn1Click
   end
   object BitBtn2: TBitBtn
-    Left = 416
-    Top = 2
+    Left = 408
+    Top = 0
     Width = 25
     Height = 25
     DoubleBuffered = True
