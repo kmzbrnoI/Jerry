@@ -5,7 +5,7 @@ object F_DigiReg: TF_DigiReg
   Caption = 'Regul'#225'tor'
   ClientHeight = 169
   ClientWidth = 417
-  Color = clWhite
+  Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
