@@ -71,7 +71,7 @@ begin
  tab.form        := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab);
  Self.tabs.Add(tab);
 
- if (Self.tabs.Count > 1) then (Self.tabs[0].form as TF_DigiReg).CHB_Multitrack.Checked := true;
+ (Self.tabs[0].form as TF_DigiReg).CHB_Multitrack.Checked := ((Self.tabs.Count > 1) and (total));
 
  if ((F_NewLoko.Showing) and (F_NewLoko.zadost_probiha)) then
   begin
@@ -179,7 +179,10 @@ begin
  if ((Sender.form as TF_DigiReg).CHB_Multitrack.Checked) then
    for tab in Self.tabs do
      if ((tab <> Sender) and ((tab.form as TF_DigiReg).TB_reg.Enabled)) then
-       (tab.form as TF_DIgiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
+      begin
+       (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
+       (tab.form as TF_DigiReg).UpdateRych(false);
+      end;
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
