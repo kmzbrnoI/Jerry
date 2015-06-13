@@ -72,7 +72,6 @@ type
    procedure SetElementsState(state:boolean);
 
    procedure UpdateSent();
-   procedure UpdateRych();
 
    function GetMultitrack:boolean;
 
@@ -86,6 +85,8 @@ type
    procedure Parse(data:TStrings);
 
    function MyKeyPress(key:Integer):boolean;  // returns handled
+
+   procedure UpdateRych(multitrack:boolean = true);
 
    property multitrack:boolean read GetMultitrack;
   end;
@@ -358,14 +359,14 @@ begin
   end;
 end;//procedure
 
-procedure TF_DigiReg.UpdateRych();
+procedure TF_DigiReg.UpdateRych(multitrack:boolean = true);
 begin
  if ((Self.speed <> Self.TB_reg.Position) and (Self.speed > -2)) then
   begin
    Self.SendCmd('SPD-S;'+IntToStr(Self.TB_reg.Position)+';'+IntToStr(Self.RG_Smer.ItemIndex));
    Self.L_stupen.Caption := IntToStr(TB_Reg.Position)+' / 28';
    Self.speed := Self.TB_reg.Position;
-   RegColl.UpdateMultitrack(Self.Parent as TCloseTabSheet);
+   if (multitrack) then RegColl.UpdateMultitrack(Self.Parent as TCloseTabSheet);
   end;
 end;//procedure
 
