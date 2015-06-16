@@ -264,7 +264,7 @@ end;//procedure
 procedure TPanelTCPClient.DataReceived(const data: string);
 begin
  Self.parsed.Clear();
- ExtractStrings([';'], [], PChar(data), Self.parsed);
+ ExtractStringsEx([';'], [#13, #10], data, Self.parsed);
 
  Self.data := data;
 

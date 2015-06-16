@@ -2,7 +2,7 @@ unit HVDb;
 
 interface
 
-uses Classes, SysUtils, StdCtrls, RPConst;
+uses Classes, SysUtils, StdCtrls, RPConst, Generics.Collections;
 
 const
   _MAX_HV = 128;
@@ -12,6 +12,11 @@ type
   THVClass = (parni = 0, diesel = 1, motor = 2, elektro = 3);
   TFunkce = array[0.._MAX_FUNC] of boolean;
   THVStanoviste = (lichy = 0, sudy = 1);              // v jakem smeru se nachazi stanoviste A
+
+  THVPomCV = record                                 // jeden zaznam POM se sklada z
+    cv:Word;                                           // oznaceni CV a
+    data:Byte;                                         // dat, ktera se maji do CV zapsat.
+  end;
 
   THV = class
    private
@@ -30,6 +35,9 @@ type
      rychlost_stupne:Word;
      rychlost_kmph:Word;
      smer:Integer;
+
+     POMtake : TList<THVPomCV>;                          // seznam POM pri prevzeti do automatu
+     POMrelease : TList<THVPomCV>;                       // seznam POM pri uvolneni to rucniho rizeni
 
      procedure ParseData(data:string);
      constructor Create(data:string); overload;
@@ -89,7 +97,7 @@ var str:TStrings;
     i:Integer;
 begin
  str := TStringList.Create();
- ExtractStrings(['[', ']'], [], PChar(data), str);
+ ExtractStringsEx([']'], ['['], data, str);
 
  Self.ClearList();
 
@@ -137,24 +145,32 @@ end;//procedure
 constructor THV.Create(data:string);
 begin
  inherited Create();
+ Self.POMtake    := TList<THVPomCv>.Create();
+ Self.POMrelease := TList<THVPomCv>.Create();
  Self.ParseData(data);
 end;//ctor
 
 constructor THV.Create();
 begin
+ Self.POMtake.Free();
+ Self.POMrelease.Free();
  inherited Create();
 end;//ctor
 
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure THV.ParseData(data:string);
-var str:TStrings;
+var str, str2, str3:TStrings;
     i:Integer;
+    pomCv:THVPomCv;
+    tmp:string;
 begin
- // format zapisu: nazev|majitel|oznaceni|poznamka|adresa|trida|souprava|stanovisteA|funkce|rychlost_supne|rychlost_kmph|smer|
+ // format zapisu: nazev|majitel|oznaceni|poznamka|adresa|trida|souprava|stanovisteA|funkce|rychlost_stupne|rychlost_kmph|smer|{[{cv1take|cv1take-value}][{...}]...}|{[{cv1release|cv1release-value}][{...}]...}|
  // souprava je bud cislo soupravy, nebo znak '-'
- str := TStringList.Create();
- ExtractStringsEx('|', data, str);
+ str  := TStringList.Create();
+ str2 := TStringList.Create();
+ str3 := TStringList.Create();
+ ExtractStringsEx(['|'] , [], data, str);
 
  Self.DefaultData();
 
@@ -180,11 +196,37 @@ begin
    Self.rychlost_stupne := StrToInt(str[9]);
    Self.rychlost_kmph   := StrToInt(str[10]);
    Self.smer            := StrToInt(str[11]);
+
+   if (str.Count > 11) then
+    begin
+     // pom-take
+     ExtractStringsEx([']'] , ['['], str[12], str2);
+     for tmp in str2 do
+      begin
+       ExtractStringsEx(['|'] , [], tmp, str3);
+       pomCV.cv := StrToInt(str3[0]);
+       pomCV.cv := StrToInt(str3[1]);
+       Self.POMtake.Add(pomCV);
+      end;
+
+     // pom-release
+     ExtractStringsEx([']'] , ['['], str[13], str2);
+     for tmp in str2 do
+      begin
+       ExtractStringsEx(['|'] , [], tmp, str3);
+       pomCV.cv := StrToInt(str3[0]);
+       pomCV.cv := StrToInt(str3[1]);
+       Self.POMrelease.Add(pomCV);
+      end;
+    end;//if str.Count > 11
+
  except
 
  end;
 
  str.Free();
+ str2.Free();
+ str3.Free();
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +241,9 @@ begin
  Self.Adresa    := 0;
  Self.Trida     := THvClass.diesel;
  Self.Souprava  := '-';
+
+ Self.POMtake.Clear();
+ self.POMrelease.Clear();
 
  for i := 0 to _MAX_FUNC do
    Self.funkce[i] := false;

@@ -46,8 +46,8 @@ type
     TB_reg: TTrackBar;
     Label1: TLabel;
     L_speed: TLabel;
-    Label3: TLabel;
     CHB_Multitrack: TCheckBox;
+    Label2: TLabel;
     procedure CHB_svetlaClick(Sender: TObject);
     procedure B_PrevzitLokoClick(Sender: TObject);
     procedure B_STOPClick(Sender: TObject);
@@ -97,7 +97,7 @@ implementation
 
 {$R *.dfm}
 
-uses TCPClientPanel, ORList, Main, RegCollector;
+uses TCPClientPanel, ORList, Main, RegCollector, RPConst;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -232,7 +232,7 @@ var func:TStrings;
 begin
  if (data[3] = 'F') then begin
    func := TStringList.Create();
-   ExtractStrings(['-'], [], PChar(data[4]), func);
+   ExtractStringsEx(['-'], [], data[4], func);
    left := StrToInt(func[0]);
    if (data.Count > 1) then
     right := StrToInt(func[1])

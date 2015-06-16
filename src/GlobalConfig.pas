@@ -178,7 +178,7 @@ begin
      // parse loko
      try
        data.Clear();
-       ExtractStringsEx(':', ParamStr(i), data);
+       ExtractStringsEx([':'] , [], ParamStr(i), data);
        lok.addr  := StrToInt(data[0]);
        if (data.Count > 1) then
          lok.token := data[1]
