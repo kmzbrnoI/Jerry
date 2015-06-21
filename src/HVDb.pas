@@ -197,7 +197,7 @@ begin
    Self.rychlost_kmph   := StrToInt(str[10]);
    Self.smer            := StrToInt(str[11]);
 
-   if (str.Count > 11) then
+   if (str.Count > 12) then
     begin
      // pom-take
      ExtractStringsEx([']'] , ['['], str[12], str2);
