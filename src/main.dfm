@@ -4,8 +4,8 @@ object F_Main: TF_Main
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Jerry'
-  ClientHeight = 219
-  ClientWidth = 432
+  ClientHeight = 212
+  ClientWidth = 415
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,6 +13,8 @@ object F_Main: TF_Main
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Visible = True
+  OnClick = A_ConnectExecute
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -22,8 +24,8 @@ object F_Main: TF_Main
   TextHeight = 13
   object SB_Main: TStatusBar
     Left = 0
-    Top = 200
-    Width = 432
+    Top = 193
+    Width = 415
     Height = 19
     Panels = <
       item
@@ -33,17 +35,18 @@ object F_Main: TF_Main
       item
         Width = 250
       end>
-    ExplicitTop = 218
-    ExplicitWidth = 449
+    ExplicitTop = 200
+    ExplicitWidth = 432
   end
   object PC_Main: TPageControl
     Left = 0
     Top = 0
-    Width = 433
-    Height = 201
+    Width = 416
+    Height = 194
     MultiLine = True
     OwnerDraw = True
     TabOrder = 1
+    OnChange = PC_MainChange
     OnDragDrop = PageControlDragDrop
     OnDragOver = PageControlDragOver
     OnDrawTab = PageControlCloseButtonDrawTab
@@ -53,7 +56,7 @@ object F_Main: TF_Main
     OnMouseUp = PageControlCloseButtonMouseUp
   end
   object BitBtn1: TBitBtn
-    Left = 384
+    Left = 367
     Top = 0
     Width = 25
     Height = 25
@@ -90,7 +93,7 @@ object F_Main: TF_Main
     OnClick = BitBtn1Click
   end
   object BitBtn2: TBitBtn
-    Left = 408
+    Left = 391
     Top = 0
     Width = 25
     Height = 25

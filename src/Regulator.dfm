@@ -4,7 +4,7 @@ object F_DigiReg: TF_DigiReg
   BorderStyle = bsNone
   Caption = 'Regul'#225'tor'
   ClientHeight = 166
-  ClientWidth = 417
+  ClientWidth = 410
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object F_DigiReg: TF_DigiReg
   PixelsPerInch = 96
   TextHeight = 13
   object Label5: TLabel
-    Left = 336
-    Top = 56
+    Left = 328
+    Top = 53
     Width = 33
     Height = 13
     Margins.Left = 2
@@ -34,8 +34,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object Label6: TLabel
-    Left = 336
-    Top = 71
+    Left = 328
+    Top = 68
     Width = 43
     Height = 13
     Margins.Left = 2
@@ -51,8 +51,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object Label7: TLabel
-    Left = 336
-    Top = 87
+    Left = 328
+    Top = 84
     Width = 34
     Height = 13
     Margins.Left = 2
@@ -68,8 +68,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_address: TLabel
-    Left = 386
-    Top = 56
+    Left = 378
+    Top = 53
     Width = 24
     Height = 13
     Margins.Left = 2
@@ -86,8 +86,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_mine: TLabel
-    Left = 398
-    Top = 71
+    Left = 390
+    Top = 68
     Width = 12
     Height = 13
     Margins.Left = 2
@@ -104,8 +104,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_stupen: TLabel
-    Left = 398
-    Top = 87
+    Left = 390
+    Top = 84
     Width = 12
     Height = 13
     Margins.Left = 2
@@ -122,16 +122,16 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object S_Status: TShape
-    Left = 25
-    Top = 110
+    Left = 17
+    Top = 107
     Width = 48
     Height = 18
     Brush.Color = clGray
     OnMouseUp = S_StatusMouseUp
   end
   object L_ComStatus: TLabel
-    Left = 232
-    Top = 43
+    Left = 224
+    Top = 40
     Width = 63
     Height = 13
     Caption = 'L_ComStatus'
@@ -145,8 +145,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object Label1: TLabel
-    Left = 336
-    Top = 104
+    Left = 328
+    Top = 101
     Width = 41
     Height = 13
     Margins.Left = 2
@@ -162,8 +162,8 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_speed: TLabel
-    Left = 404
-    Top = 104
+    Left = 396
+    Top = 101
     Width = 6
     Height = 13
     Margins.Left = 2
@@ -180,15 +180,15 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 346
-    Top = 118
+    Left = 338
+    Top = 115
     Width = 31
     Height = 13
     Caption = '(km/h)'
   end
   object CHB_svetla: TCheckBox
-    Left = 147
-    Top = 42
+    Left = 139
+    Top = 39
     Width = 80
     Height = 21
     Hint = '0'
@@ -208,8 +208,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f1: TCheckBox
     Tag = 1
-    Left = 147
-    Top = 60
+    Left = 139
+    Top = 57
     Width = 34
     Height = 17
     Hint = '1'
@@ -229,8 +229,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f2: TCheckBox
     Tag = 2
-    Left = 147
-    Top = 76
+    Left = 139
+    Top = 73
     Width = 32
     Height = 17
     Hint = '2'
@@ -250,8 +250,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f4: TCheckBox
     Tag = 4
-    Left = 147
-    Top = 108
+    Left = 139
+    Top = 105
     Width = 34
     Height = 17
     Hint = '4'
@@ -271,8 +271,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f3: TCheckBox
     Tag = 3
-    Left = 147
-    Top = 92
+    Left = 139
+    Top = 89
     Width = 34
     Height = 17
     Hint = '3'
@@ -292,8 +292,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f5: TCheckBox
     Tag = 5
-    Left = 147
-    Top = 124
+    Left = 139
+    Top = 121
     Width = 32
     Height = 17
     Hint = '5'
@@ -313,8 +313,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f6: TCheckBox
     Tag = 6
-    Left = 147
-    Top = 140
+    Left = 139
+    Top = 137
     Width = 34
     Height = 17
     Hint = '6'
@@ -334,8 +334,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f8: TCheckBox
     Tag = 8
-    Left = 230
-    Top = 76
+    Left = 222
+    Top = 73
     Width = 32
     Height = 17
     Hint = '8'
@@ -355,8 +355,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f7: TCheckBox
     Tag = 7
-    Left = 230
-    Top = 60
+    Left = 222
+    Top = 57
     Width = 32
     Height = 17
     Hint = '7'
@@ -375,8 +375,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = CHB_svetlaClick
   end
   object RG_Smer: TRadioGroup
-    Left = 16
-    Top = 48
+    Left = 8
+    Top = 45
     Width = 65
     Height = 57
     Margins.Left = 2
@@ -397,8 +397,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = RG_SmerClick
   end
   object B_PrevzitLoko: TButton
-    Left = 336
-    Top = 138
+    Left = 328
+    Top = 135
     Width = 75
     Height = 24
     Margins.Left = 2
@@ -411,8 +411,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = B_PrevzitLokoClick
   end
   object B_STOP: TButton
-    Left = 96
-    Top = 54
+    Left = 88
+    Top = 51
     Width = 39
     Height = 30
     Margins.Left = 2
@@ -430,8 +430,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = B_STOPClick
   end
   object CHB_Total: TCheckBox
-    Left = 17
-    Top = 129
+    Left = 9
+    Top = 126
     Width = 119
     Height = 17
     Margins.Left = 2
@@ -450,8 +450,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f9: TCheckBox
     Tag = 9
-    Left = 230
-    Top = 92
+    Left = 222
+    Top = 89
     Width = 32
     Height = 17
     Hint = '5'
@@ -471,8 +471,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f10: TCheckBox
     Tag = 10
-    Left = 230
-    Top = 108
+    Left = 222
+    Top = 105
     Width = 40
     Height = 17
     Hint = '6'
@@ -492,8 +492,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f12: TCheckBox
     Tag = 12
-    Left = 230
-    Top = 140
+    Left = 222
+    Top = 137
     Width = 40
     Height = 16
     Hint = '8'
@@ -513,8 +513,8 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_f11: TCheckBox
     Tag = 11
-    Left = 230
-    Top = 124
+    Left = 222
+    Top = 121
     Width = 40
     Height = 17
     Hint = '7'
@@ -533,8 +533,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = CHB_svetlaClick
   end
   object B_Idle: TButton
-    Left = 96
-    Top = 89
+    Left = 88
+    Top = 86
     Width = 39
     Height = 30
     Caption = 'idle'
@@ -548,8 +548,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = B_IdleClick
   end
   object TB_reg: TTrackBar
-    Left = 7
-    Top = 7
+    Left = -1
+    Top = 4
     Width = 405
     Height = 27
     Margins.Left = 2
@@ -565,8 +565,8 @@ object F_DigiReg: TF_DigiReg
     TabOrder = 0
   end
   object CHB_Multitrack: TCheckBox
-    Left = 17
-    Top = 144
+    Left = 9
+    Top = 142
     Width = 81
     Height = 17
     Caption = 'Multitrakce'
@@ -575,7 +575,7 @@ object F_DigiReg: TF_DigiReg
   object T_Speed: TTimer
     Interval = 100
     OnTimer = T_SpeedTimer
-    Left = 16
-    Top = 16
+    Left = 8
+    Top = 13
   end
 end
