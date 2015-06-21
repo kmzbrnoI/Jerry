@@ -124,7 +124,7 @@ end;//ctor
 
 destructor TF_DigiReg.Destroy();
 begin
- Self.SendCmd(';RELEASE;');
+ Self.SendCmd('RELEASE;');
  Self.sent.Free();
  Self.HV.Free();
 
