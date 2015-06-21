@@ -71,7 +71,7 @@ begin
  tab.form        := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab);
  Self.tabs.Add(tab);
 
- (Self.tabs[0].form as TF_DigiReg).CHB_Multitrack.Checked := ((Self.tabs.Count > 1) and (total));
+ (tab.form as TF_DigiReg).CHB_Multitrack.Checked := true;
 
  if ((F_NewLoko.Showing) and (F_NewLoko.zadost_probiha)) then
   begin
@@ -84,6 +84,8 @@ begin
    (tab.form as TF_DigiReg).TB_reg.SetFocus()
  else
    (tab.form as TF_DigiReg).CHB_Total.SetFocus();
+
+ F_Main.PC_MainChange(F_Main);
 end;//procedure
 
 function TRegulatorCollector.GetTab(OblR:string; addr:Word):TCloseTabSheet;
@@ -167,8 +169,6 @@ begin
 
  (Sender as TCloseTabSheet).form.Free();
  (Sender as TCloseTabSheet).Free();
-
- if (Self.tabs.Count = 1) then (Self.tabs[0].form as TF_DigiReg).CHB_Multitrack.Checked := false;
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
