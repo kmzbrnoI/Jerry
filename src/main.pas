@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ActnList, CloseTabSheet, Themes, StdCtrls, Buttons,
-  AppEvnts;
+  AppEvnts, StrUtils;
 
 type
   TF_Main = class(TForm)
@@ -43,6 +43,7 @@ type
     procedure AE_MainMessage(var Msg: tagMSG; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure PC_MainChange(Sender: TObject);
 
   private
     FCloseButtonMouseDownTab: TCloseTabSheet;
@@ -175,7 +176,7 @@ end;
 
 procedure TF_Main.FormShow(Sender: TObject);
 begin
- Self.Caption := 'Jerry - v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+ Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -359,20 +360,20 @@ begin
  if (Sender is TPageControl) then Accept := True;
 end;
 
+procedure TF_Main.PC_MainChange(Sender: TObject);
+begin
+ if (Self.PC_Main.ActivePage = nil) then
+  Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')'
+ else
+  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '-- Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure TF_Main.OnTabClose(Sender:TObject);
 begin
   // close tab
 end;//procedure
-
-////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 
