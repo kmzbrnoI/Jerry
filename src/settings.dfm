@@ -49,7 +49,7 @@ object F_Settings: TF_Settings
     Top = 8
     Width = 629
     Height = 273
-    ActivePage = TS_Server
+    ActivePage = TS_Rights
     TabOrder = 2
     object TS_Server: TTabSheet
       Caption = 'P'#345'ipojen'#237
@@ -160,6 +160,7 @@ object F_Settings: TF_Settings
           PasswordChar = '*'
           TabOrder = 2
           Text = 'Edit1'
+          OnChange = E_PasswordChange
           OnKeyPress = E_usernameKeyPress
         end
         object CHB_ShowPassword: TCheckBox

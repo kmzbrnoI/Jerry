@@ -4,7 +4,7 @@ interface
 
 uses SysUtils, IdTCPClient, ListeningThread, IdTCPConnection, IdGlobal,
      Classes, StrUtils, RPConst, Graphics, Windows, Forms, Controls,
-     Generics.Collections;
+     Generics.Collections, Hash;
 
 const
   _DEFAULT_PORT = 5896;
@@ -337,7 +337,7 @@ begin
    else begin
     // pokud nemame odkud ziskat login, zobrazime okynko
     F_Auth.OpenForm('Autorizujte se');
-    Self.SendLn('-;LOK;G;AUTH;' + F_Auth.E_username.Text + ';' + F_Auth.E_Password.Text);
+    Self.SendLn('-;LOK;G;AUTH;' + F_Auth.E_username.Text + ';' + GenerateHash(F_Auth.E_Password.Text));
     F_Main.SB_Main.Panels[1].Text := 'Odeslán požadavek na autorizaci...';
    end;
   end

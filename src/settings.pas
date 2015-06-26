@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, ComCtrls, Spin, RPConst;
+  Dialogs, ExtCtrls, StdCtrls, ComCtrls, Spin, RPConst, Hash;
 
 type
   TF_Settings = class(TForm)
@@ -35,6 +35,7 @@ type
     procedure CHB_ShowPasswordClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure E_usernameKeyPress(Sender: TObject; var Key: Char);
+    procedure E_PasswordChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -62,7 +63,7 @@ begin
  if (GlobConfig.data.auth.autoauth) then
   begin
    GlobConfig.data.auth.username           := Self.E_username.Text;
-   GlobConfig.data.auth.password           := Self.E_Password.Text;
+   GlobConfig.data.auth.password           := GenerateHash(Self.E_Password.Text);
   end else begin
    GlobConfig.data.auth.username           := '';
    GlobConfig.data.auth.password           := '';
@@ -96,6 +97,11 @@ begin
   Self.E_Password.PasswordChar := '*';
 end;
 
+procedure TF_Settings.E_PasswordChange(Sender: TObject);
+begin
+ if (Self.E_Password.Text = '') then Self.CHB_ShowPassword.Enabled := true;
+end;
+
 procedure TF_Settings.E_usernameKeyPress(Sender: TObject; var Key: Char);
 begin
  if ((Key = ';') or (Key = ',')) then Key := #0;
@@ -127,6 +133,8 @@ begin
  Self.CHB_RememberAuthClick(Self.CHB_RememberAuth);
  Self.E_username.Text          := data.auth.username;
  Self.E_Password.Text          := data.auth.password;
+
+ Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
 
  Self.Show();
 end;//procedure

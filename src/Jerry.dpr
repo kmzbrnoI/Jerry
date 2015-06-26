@@ -27,7 +27,8 @@ uses
   fAuth in 'fAuth.pas' {F_Auth},
   fNewLoko in 'fNewLoko.pas' {F_NewLoko},
   Debug in 'Debug.pas' {F_Debug},
-  Verze in 'Verze.pas';
+  Verze in 'Verze.pas',
+  Hash in 'Hash.pas';
 
 {$R *.res}
 
