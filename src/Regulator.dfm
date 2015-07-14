@@ -186,194 +186,6 @@ object F_DigiReg: TF_DigiReg
     Height = 13
     Caption = '(km/h)'
   end
-  object CHB_svetla: TCheckBox
-    Left = 139
-    Top = 39
-    Width = 80
-    Height = 21
-    Hint = '0'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F0 (sv'#283'tla)'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 2
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f1: TCheckBox
-    Tag = 1
-    Left = 139
-    Top = 57
-    Width = 34
-    Height = 17
-    Hint = '1'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F1'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 3
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f2: TCheckBox
-    Tag = 2
-    Left = 139
-    Top = 73
-    Width = 32
-    Height = 17
-    Hint = '2'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F2'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 4
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f4: TCheckBox
-    Tag = 4
-    Left = 139
-    Top = 105
-    Width = 34
-    Height = 17
-    Hint = '4'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F4'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 6
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f3: TCheckBox
-    Tag = 3
-    Left = 139
-    Top = 89
-    Width = 34
-    Height = 17
-    Hint = '3'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F3'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 5
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f5: TCheckBox
-    Tag = 5
-    Left = 139
-    Top = 121
-    Width = 32
-    Height = 17
-    Hint = '5'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F5'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 7
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f6: TCheckBox
-    Tag = 6
-    Left = 139
-    Top = 137
-    Width = 34
-    Height = 17
-    Hint = '6'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F6'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 8
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f8: TCheckBox
-    Tag = 8
-    Left = 222
-    Top = 73
-    Width = 32
-    Height = 17
-    Hint = '8'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F8'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 10
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f7: TCheckBox
-    Tag = 7
-    Left = 222
-    Top = 57
-    Width = 32
-    Height = 17
-    Hint = '7'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F7'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 9
-    OnClick = CHB_svetlaClick
-  end
   object RG_Smer: TRadioGroup
     Left = 8
     Top = 45
@@ -407,7 +219,7 @@ object F_DigiReg: TF_DigiReg
     Margins.Bottom = 2
     Caption = 'P'#345'evz'#237't loko'
     Enabled = False
-    TabOrder = 19
+    TabOrder = 6
     OnClick = B_PrevzitLokoClick
   end
   object B_STOP: TButton
@@ -426,7 +238,7 @@ object F_DigiReg: TF_DigiReg
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 15
+    TabOrder = 2
     OnClick = B_STOPClick
   end
   object CHB_Total: TCheckBox
@@ -445,92 +257,8 @@ object F_DigiReg: TF_DigiReg
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 17
+    TabOrder = 4
     OnClick = CHB_TotalClick
-  end
-  object CHB_f9: TCheckBox
-    Tag = 9
-    Left = 222
-    Top = 89
-    Width = 32
-    Height = 17
-    Hint = '5'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F9'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 11
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f10: TCheckBox
-    Tag = 10
-    Left = 222
-    Top = 105
-    Width = 40
-    Height = 17
-    Hint = '6'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F10'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 12
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f12: TCheckBox
-    Tag = 12
-    Left = 222
-    Top = 137
-    Width = 40
-    Height = 16
-    Hint = '8'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F12'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 14
-    OnClick = CHB_svetlaClick
-  end
-  object CHB_f11: TCheckBox
-    Tag = 11
-    Left = 222
-    Top = 121
-    Width = 40
-    Height = 17
-    Hint = '7'
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'F11'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 13
-    OnClick = CHB_svetlaClick
   end
   object B_Idle: TButton
     Left = 88
@@ -544,7 +272,7 @@ object F_DigiReg: TF_DigiReg
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
-    TabOrder = 16
+    TabOrder = 3
     OnClick = B_IdleClick
   end
   object TB_reg: TTrackBar
@@ -570,7 +298,7 @@ object F_DigiReg: TF_DigiReg
     Width = 81
     Height = 17
     Caption = 'Multitrakce'
-    TabOrder = 18
+    TabOrder = 5
   end
   object T_Speed: TTimer
     Interval = 100

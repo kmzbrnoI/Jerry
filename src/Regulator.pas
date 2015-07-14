@@ -16,15 +16,6 @@ type
   end;
 
   TF_DigiReg = class(TForm)
-    CHB_svetla: TCheckBox;
-    CHB_f1: TCheckBox;
-    CHB_f2: TCheckBox;
-    CHB_f4: TCheckBox;
-    CHB_f3: TCheckBox;
-    CHB_f5: TCheckBox;
-    CHB_f6: TCheckBox;
-    CHB_f8: TCheckBox;
-    CHB_f7: TCheckBox;
     Label5: TLabel;
     RG_Smer: TRadioGroup;
     Label6: TLabel;
@@ -32,10 +23,6 @@ type
     B_STOP: TButton;
     Label7: TLabel;
     CHB_Total: TCheckBox;
-    CHB_f9: TCheckBox;
-    CHB_f10: TCheckBox;
-    CHB_f12: TCheckBox;
-    CHB_f11: TCheckBox;
     L_address: TLabel;
     L_mine: TLabel;
     L_stupen: TLabel;
@@ -65,15 +52,15 @@ type
    HV:THV;
    updating:boolean;        // je true, pokud se nastavuji elementy zvnejsi
    TS:TCloseTabSheet;
+   CHB_funkce:array[0.._MAX_FUNC] of TCheckBox;
 
    procedure SendCmd(cmd:string);
-   procedure UpdateFunc(f:Integer; state:boolean);
-
    procedure SetElementsState(state:boolean);
-
    procedure UpdateSent();
+   function GetMultitrack():boolean;
 
-   function GetMultitrack:boolean;
+   procedure CreateCHBFunkce();
+   procedure DestroyCHBFunkce();
 
   public
    addr:Word;
@@ -117,6 +104,8 @@ begin
 
  Self.HV := THV.Create(lok_data);
 
+ Self.CreateCHBFunkce();
+
  Self.Parent := tab;
  Self.Show();
  Self.updating := false;
@@ -127,6 +116,7 @@ begin
  Self.SendCmd('RELEASE;');
  Self.sent.Free();
  Self.HV.Free();
+ Self.DestroyCHBFunkce();
 
  inherited Destroy();
 end;//dtor
@@ -147,7 +137,7 @@ begin
   Self.TB_reg.Position   := Self.HV.rychlost_stupne;
 
   for i := 0 to _MAX_FUNC do
-    Self.UpdateFunc(i, Self.HV.funkce[i]);
+    Self.CHB_funkce[i].Checked := Self.HV.funkce[i];
 
   Self.updating := false;
   Self.L_ComStatus.Font.Color := clGreen;
@@ -158,6 +148,18 @@ begin
   Self.TB_reg.Enabled  := Self.CHB_Total.Checked;
   Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
   Self.B_Idle.Enabled  := Self.CHB_Total.Checked;
+
+  // zobrazeni nazvu funkci
+  for i := 0 to _MAX_FUNC do
+   begin
+    Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
+    if (Self.HV.funcVyznam[i] <> '') then
+     begin
+      Self.CHB_funkce[i].Caption := 'F'+IntToStr(i) + ': ' + Self.HV.funcVyznam[i];
+      Self.CHB_funkce[i].Hint    := Self.CHB_funkce[i].Caption;
+     end else
+      Self.CHB_funkce[i].Caption := 'F'+IntToStr(i);
+   end;
 
   Self.B_PrevzitLoko.Enabled := false;
 end;
@@ -243,9 +245,9 @@ begin
    Self.updating := true;
    for i := left to right do
     if (data[5][i-left+1] = '1') then
-      Self.UpdateFunc(i, true)
+      Self.CHB_funkce[i].Checked := true
      else
-      Self.UpdateFunc(i, false);
+      Self.CHB_funkce[i].Checked := false;
   Self.updating := false;
 
  //////////////////////////////////////////////////
@@ -385,16 +387,16 @@ begin
  Result := true;
 
  case (key) of
-  VK_NUMPAD0 : Self.CHB_svetla.Checked := not Self.CHB_svetla.Checked;
-  VK_NUMPAD1 : Self.CHB_f1.Checked := not Self.CHB_f1.Checked;
-  VK_NUMPAD2 : Self.CHB_f2.Checked := not Self.CHB_f2.Checked;
-  VK_NUMPAD3 : Self.CHB_f3.Checked := not Self.CHB_f3.Checked;
-  VK_NUMPAD4 : Self.CHB_f4.Checked := not Self.CHB_f4.Checked;
-  VK_NUMPAD5 : Self.CHB_f5.Checked := not Self.CHB_f5.Checked;
-  VK_NUMPAD6 : Self.CHB_f6.Checked := not Self.CHB_f6.Checked;
-  VK_NUMPAD7 : Self.CHB_f7.Checked := not Self.CHB_f7.Checked;
-  VK_NUMPAD8 : Self.CHB_f8.Checked := not Self.CHB_f8.Checked;
-  VK_NUMPAD9 : Self.CHB_f9.Checked := not Self.CHB_f9.Checked;
+  VK_NUMPAD0 : Self.CHB_funkce[0].Checked := not Self.CHB_funkce[0].Checked;
+  VK_NUMPAD1 : Self.CHB_funkce[1].Checked := not Self.CHB_funkce[1].Checked;
+  VK_NUMPAD2 : Self.CHB_funkce[2].Checked := not Self.CHB_funkce[2].Checked;
+  VK_NUMPAD3 : Self.CHB_funkce[3].Checked := not Self.CHB_funkce[3].Checked;
+  VK_NUMPAD4 : Self.CHB_funkce[4].Checked := not Self.CHB_funkce[4].Checked;
+  VK_NUMPAD5 : Self.CHB_funkce[5].Checked := not Self.CHB_funkce[5].Checked;
+  VK_NUMPAD6 : Self.CHB_funkce[6].Checked := not Self.CHB_funkce[6].Checked;
+  VK_NUMPAD7 : Self.CHB_funkce[7].Checked := not Self.CHB_funkce[7].Checked;
+  VK_NUMPAD8 : Self.CHB_funkce[8].Checked := not Self.CHB_funkce[8].Checked;
+  VK_NUMPAD9 : Self.CHB_funkce[9].Checked := not Self.CHB_funkce[9].Checked;
 
   VK_ADD      : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 0;
   VK_SUBTRACT : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 1;
@@ -419,46 +421,17 @@ end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure TF_DigiReg.UpdateFunc(f:Integer; state:boolean);
-begin
- case (f) of
-  0 : Self.CHB_svetla.Checked := state;
-  1 : Self.CHB_f1.Checked  := state;
-  2 : Self.CHB_f2.Checked  := state;
-  3 : Self.CHB_f3.Checked  := state;
-  4 : Self.CHB_f4.Checked  := state;
-  5 : Self.CHB_f5.Checked  := state;
-  6 : Self.CHB_f6.Checked  := state;
-  7 : Self.CHB_f7.Checked  := state;
-  8 : Self.CHB_f8.Checked  := state;
-  9 : Self.CHB_f9.Checked  := state;
-  10: Self.CHB_f10.Checked := state;
-  11: Self.CHB_f11.Checked := state;
-  12: Self.CHB_f12.Checked := state;
- end;//case
-end;//procedure
-
-////////////////////////////////////////////////////////////////////////////////
-
 procedure TF_DigiReg.SetElementsState(state:boolean);
+var i:Integer;
 begin
   TB_reg.Enabled  := state;
   RG_Smer.Enabled := state;
   B_STOP.Enabled  := state;
   B_idle.Enabled  := state;
-  CHB_svetla.Enabled := state;
-  CHB_f1.Enabled  := state;
-  CHB_f2.Enabled  := state;
-  CHB_f3.Enabled  := state;
-  CHB_f4.Enabled  := state;
-  CHB_f5.Enabled  := state;
-  CHB_f6.Enabled  := state;
-  CHB_f7.Enabled  := state;
-  CHB_f8.Enabled  := state;
-  CHB_f9.Enabled  := state;
-  CHB_f10.Enabled := state;
-  CHB_f11.Enabled := state;
-  CHB_f12.Enabled := state;
+
+  for i := 0 to _MAX_FUNC do
+    Self.CHB_funkce[i].Enabled := state;
+
   CHB_Total.Enabled := state;
   CHB_Multitrack.Enabled := state;
 end;//procedure
@@ -469,5 +442,45 @@ function TF_DigiReg.GetMultitrack():boolean;
 begin
  Result := Self.CHB_Multitrack.Checked;
 end;//function
+
+////////////////////////////////////////////////////////////////////////////////
+// vytvoreni CHB_funkce
+
+procedure TF_DigiReg.CreateCHBFunkce();
+var i:Integer;
+    myTop:Integer;
+begin
+ myTop := 39;
+
+ for i := 0 to _MAX_FUNC do
+  begin
+   Self.CHB_funkce[i] := TCheckBox.Create(Self);
+   with (Self.CHB_funkce[i]) do
+    begin
+     Parent   := Self;
+     Left     := 139 + (i div 7)*95;
+     Top      := myTop;
+     Caption  := 'F'+IntToStr(i);
+     Tag      := i;
+     AutoSize := false;
+     Width    := 85;
+
+     Inc(myTop, 16);
+     if (i = 6) then myTop := 57;
+
+     OnClick := Self.CHB_svetlaClick;
+    end;//with
+  end;//for i
+
+end;
+
+procedure TF_DigiReg.DestroyCHBFunkce();
+var i:Integer;
+begin
+ for i := 0 to _MAX_FUNC do
+   Self.CHB_funkce[i].Free();
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 
 end.//unit

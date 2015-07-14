@@ -39,6 +39,8 @@ type
      POMtake : TList<THVPomCV>;                          // seznam POM pri prevzeti do automatu
      POMrelease : TList<THVPomCV>;                       // seznam POM pri uvolneni to rucniho rizeni
 
+     funcVyznam:array[0.._MAX_FUNC] of string;        // seznam popisu funkci hnaciho vozidla
+
      procedure ParseData(data:string);
      constructor Create(data:string); overload;
      constructor Create(); overload;
@@ -218,7 +220,22 @@ begin
        pomCV.cv := StrToInt(str3[1]);
        Self.POMrelease.Add(pomCV);
       end;
-    end;//if str.Count > 11
+    end;//if str.Count > 12
+
+   // func-vyznam
+   if (str.Count > 14) then
+    begin
+     str2.Clear();
+     ExtractStringsEx([';'], [], str[14], str2);
+     for i := 0 to _MAX_FUNC do
+       if (i < str2.Count) then
+        Self.funcVyznam[i] := str2[i]
+       else
+        Self.funcVyznam[i] := '';
+    end else begin
+     for i := 0 to _MAX_FUNC do
+       Self.funcVyznam[i] := '';
+    end;
 
  except
 
