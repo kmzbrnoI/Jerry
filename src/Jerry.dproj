@@ -74,6 +74,7 @@
 				<Form>F_Debug</Form>
 			</DCCReference>
 			<DCCReference Include="Verze.pas"/>
+			<DCCReference Include="Hash.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -104,8 +105,8 @@
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">1</VersionInfo>
-						<VersionInfo Name="MinorVer">0</VersionInfo>
-						<VersionInfo Name="Release">2</VersionInfo>
+						<VersionInfo Name="MinorVer">1</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
 						<VersionInfo Name="Build">0</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
@@ -118,7 +119,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription">Regulátor pro Řídící program</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">1.0.2.0</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">1.1.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">Jerry</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Jan Horacek</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks">Jan Horacek</VersionInfoKeys>
