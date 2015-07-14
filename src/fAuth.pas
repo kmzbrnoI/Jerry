@@ -1,5 +1,7 @@
 unit fAuth;
 
+// Okynko zadani loginu
+
 interface
 
 uses

@@ -1,5 +1,7 @@
 unit Verze;
 
+// Zjisteni verze aplikace.
+
 interface
 
 uses  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,

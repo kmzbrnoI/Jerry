@@ -1,5 +1,7 @@
 unit Debug;
 
+// Debug okynko, otevirano klavesou F4
+
 interface
 
 uses

@@ -1,5 +1,7 @@
 unit TCPClientPanel;
 
+// Komunikace se serverem
+
 interface
 
 uses SysUtils, IdTCPClient, ListeningThread, IdTCPConnection, IdGlobal,

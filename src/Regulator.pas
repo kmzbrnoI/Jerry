@@ -1,5 +1,7 @@
 unit Regulator;
 
+// Okynko regulatoru jednoho hnaciho vozidla
+
 interface
 
 uses
@@ -87,6 +89,7 @@ implementation
 uses TCPClientPanel, ORList, Main, RegCollector, RPConst;
 
 ////////////////////////////////////////////////////////////////////////////////
+// Vytvoreni nove regulatoru
 
 constructor TF_DigiReg.Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet);
 begin
@@ -111,6 +114,9 @@ begin
  Self.updating := false;
 end;//ctor
 
+////////////////////////////////////////////////////////////////////////////////
+// Odstraneni regulatoru
+
 destructor TF_DigiReg.Destroy();
 begin
  Self.SendCmd('RELEASE;');
@@ -120,6 +126,9 @@ begin
 
  inherited Destroy();
 end;//dtor
+
+////////////////////////////////////////////////////////////////////////////////
+// Zobrazeni okynko regulatoru
 
 procedure TF_DigiReg.FormShow(Sender: TObject);
 var i:Integer;
@@ -165,6 +174,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+// Zapnuti/vypnuti totalniho rucniho rizeni
 
 procedure TF_DigiReg.CHB_TotalClick(Sender: TObject);
 begin
@@ -177,6 +187,9 @@ begin
    Self.SendCmd('TOTAL;0');
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Zapnuti/vypnuti libovolne funkce
+
 procedure TF_DigiReg.CHB_svetlaClick(Sender: TObject);
  begin
   if (Self.updating) then Exit();
@@ -187,10 +200,16 @@ procedure TF_DigiReg.CHB_svetlaClick(Sender: TObject);
     Self.SendCmd('F;'+IntToStr((Sender as TCheckBox).Tag)+';0');
  end;//procedure
 
+////////////////////////////////////////////////////////////////////////////////
+// Prevzit loko do rucniho rizeni
+
 procedure TF_DigiReg.B_PrevzitLokoClick(Sender: TObject);
 begin
  PanelTCPClient.SendLn('-;LOK;'+IntToStr(Self.addr)+';PLEASE;');
 end;//procedure
+
+////////////////////////////////////////////////////////////////////////////////
+// Nastavit rychlost loko na 0 stupnu
 
 procedure TF_DigiReg.B_IdleClick(Sender: TObject);
 begin
@@ -199,6 +218,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+// Nouzove zastaveni loko
 
 procedure TF_DigiReg.B_STOPClick(Sender: TObject);
  begin
@@ -207,6 +227,9 @@ procedure TF_DigiReg.B_STOPClick(Sender: TObject);
   Self.speed := 0;
   Self.TB_reg.Position := 0;
  end;//procedure
+
+////////////////////////////////////////////////////////////////////////////////
+// Zmena smeru loko
 
 procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
  begin
@@ -218,7 +241,7 @@ procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
  end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
-// prijmuta data ze serveru
+// Parsign dat ze serveru
 
 //  or;LOK;ADDR;AUTH;[ok,not,stolen,release]; info  - odpoved na pozadavek o autorizaci rizeni hnaciho vozidla (odesilano take jako informace o zruseni ovladani hnacicho vozidla)
 //  or;LOK;ADDR;F;F_left-F_right;states          - informace o stavu funkci lokomotivy
@@ -332,12 +355,23 @@ begin
  end;
 end;//procedure
 
+////////////////////////////////////////////////////////////////////////////////
+// Kliknuti na Share S_Status zpusobi zadost o prevzeti hnaciho vozidla,
+//  pokud neni HV prevzato (tj. shape je zluty)
+
 procedure TF_DigiReg.S_StatusMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
  if (Self.S_Status.Brush.Color <> clGreen) then
   Self.B_PrevzitLokoClick(self);
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// T_Speed odesila pri kazdem ticku aktualni rychlost hnaciho vozidla
+//  na server, pokud se tato rychlost zmenila od posledni rychlosti.
+// Pri pohybu posuvnikem tak neni rychlost poslana rovnou, ale az pri ticku
+//  timeru. To je dobre k tomu, abychom server moc nezatezovali. Pri vhodne
+//  zvolene periode timeru neni rozdil od primeho posilani patrny.
 
 procedure TF_DigiReg.T_SpeedTimer(Sender: TObject);
 begin
@@ -372,7 +406,10 @@ begin
   end;
 end;//procedure
 
-// vyvola se, pokud je me a=okynko aktivni a je nad nim stiskla klavesa
+////////////////////////////////////////////////////////////////////////////////
+// vyvola se, pokud je me okynko aktivni a je nad nim stiskla klavesa
+//  (resi se AppcationEvent)
+
 function TF_DigiReg.MyKeyPress(key:Integer):boolean;
 begin
  if (Self.S_Status.Brush.Color <> clGreen) then
@@ -409,6 +446,7 @@ begin
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
+// Odeslani prikazu serveru
 
 procedure TF_DigiReg.SendCmd(cmd:string);
 var lc:TLogCommand;
@@ -420,6 +458,7 @@ begin
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
+// Zmena enabled objektu na formulari
 
 procedure TF_DigiReg.SetElementsState(state:boolean);
 var i:Integer;
@@ -444,7 +483,7 @@ begin
 end;//function
 
 ////////////////////////////////////////////////////////////////////////////////
-// vytvoreni CHB_funkce
+// Vytvoreni vsech CHB_funkce
 
 procedure TF_DigiReg.CreateCHBFunkce();
 var i:Integer;
@@ -473,6 +512,9 @@ begin
   end;//for i
 
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Zniceni vsech CHB_funkce
 
 procedure TF_DigiReg.DestroyCHBFunkce();
 var i:Integer;

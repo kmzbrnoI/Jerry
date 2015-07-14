@@ -1,5 +1,7 @@
 unit RegCollector;
 
+// Collector regulatoru hnacich vozidel
+
 interface
 
 uses Regulator, Generics.Collections, SysUtils, Classes, Forms, Dialogs, Windows,

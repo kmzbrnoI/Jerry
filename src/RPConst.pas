@@ -1,5 +1,7 @@
 unit RPConst;
-//deklarace konstant programu
+
+// Konstanty programu
+
 interface
 
 uses Classes, SysUtils;

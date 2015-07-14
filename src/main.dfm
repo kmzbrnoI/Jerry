@@ -35,8 +35,6 @@ object F_Main: TF_Main
       item
         Width = 250
       end>
-    ExplicitTop = 200
-    ExplicitWidth = 432
   end
   object PC_Main: TPageControl
     Left = 0

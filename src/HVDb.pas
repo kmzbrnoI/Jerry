@@ -1,5 +1,7 @@
 unit HVDb;
 
+// Databaze hnacich vozidel
+
 interface
 
 uses Classes, SysUtils, StdCtrls, RPConst, Generics.Collections;
@@ -27,27 +29,28 @@ type
      Majitel:string;                                     // majitel HV
      Oznaceni:string;                                    // oznaceni HV
      Poznamka:String;                                    // poznamka k HV
-     Adresa:Word;
+     Adresa:Word;                                        // digitalni adresa HW
      Trida:THVClass;                                     // trida hnaciho vozidla - parni, diesel, motor, elektro
-     Souprava:string;
+     Souprava:string;                                    // cislo soupravy, na ktere je HV
      StanovisteA:THVStanoviste;                          //0 = lichy; 1 = sudy
      funkce:TFunkce;                                     // stav funkci
-     rychlost_stupne:Word;
-     rychlost_kmph:Word;
-     smer:Integer;
+     rychlost_stupne:Word;                               // aktualni rychlost ve stupnich
+     rychlost_kmph:Word;                                 // aktualni rychlost v km/h
+     smer:Integer;                                       // aktualni smer
 
      POMtake : TList<THVPomCV>;                          // seznam POM pri prevzeti do automatu
      POMrelease : TList<THVPomCV>;                       // seznam POM pri uvolneni to rucniho rizeni
 
-     funcVyznam:array[0.._MAX_FUNC] of string;        // seznam popisu funkci hnaciho vozidla
+     funcVyznam:array[0.._MAX_FUNC] of string;           // seznam popisu funkci hnaciho vozidla
 
-     procedure ParseData(data:string);
-     constructor Create(data:string); overload;
-     constructor Create(); overload;
+     procedure ParseData(data:string);                   // parse dat HV ze serveru
+     constructor Create(data:string); overload;          // vytvoreni HV s daty ze serveru
+     constructor Create(); overload;                     // vytvoreni HV s prazdnymi daty
 
-     function GetPanelLokString():string;
+     function GetPanelLokString():string;                // vytvoreni stringu obsahujici vsechna data HV pro server
   end;
 
+  // dtabaze hnacich vozidel
   THVDb = class
    public
     HVs:array [0.._MAX_HV] of THV;
@@ -112,6 +115,7 @@ begin
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
+// Vyplneni ComboBoxu seznamem hnacich vozidel
 
 procedure THVDb.FillHVs(var CB:TComboBox; var Indexes:TWordAr; addr:Integer = -1; special:THV = nil; with_spr:boolean = false);
 var i,index:Integer;
@@ -285,8 +289,6 @@ begin
      Result := Result + '0';
   end;
 end;//function
-
-////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 

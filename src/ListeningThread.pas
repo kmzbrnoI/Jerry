@@ -1,5 +1,7 @@
 unit ListeningThread;
 
+// Vlakno poslouchajici pakety na TCP spojeni
+
 interface
 
 uses

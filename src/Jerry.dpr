@@ -1,15 +1,41 @@
 program Jerry;
 
-// Format argumentu:
-//    "-u" username
-//    "-p" password
-//    "-s" server (ip/nd)
-//    "-pt" port
-//    addr:token
+{
+  --------------------------------- JERRY --------------------------------------
 
+  Tento program slouzi jako klientska aplikace k JOP technologii vyvinute
+  Janem Horackem, ktera umoznuje rizeni hnacivh vozidel.
 
-// Napr.
-//   jerry.exe -u root -p heslo 1521:8afff1s86fs4sf86hy16j 2341:f4w64fe5f4wefew4fryh4
+  Funkce:
+    - rizeni jizdniho stupne, smeru
+    - moznost nouzoveho zastaveni, moznost plynuleho zastaveni
+    - multitrakce
+    - rozliseni mezi totalnim rucnim rizenim (vhodne napr. pro posun) a
+      polorucnim rizenim (vhodne napr. pro rizeni funkci HV v trati)
+    - kontrola odpovedi serveru, resp. cetraly, na prikaz
+    - moznost prevzit hnaci vozidla na Rocomouse a zpet do regulatoru
+    - zadost o lokomotivu(y) do oblasti rizeni
+    - zmena serveru, portu, uzivatelskeho jmena a hesla
+    - prevzeti hnaciho vozidla za pomoci autorizacniho tokenu
+    - kompatibilita s vnejsimi programy akceptovanim argumentu
+}
+
+{
+ Format argumentu:
+    "-u" username
+    "-p" password
+    "-s" server (ip/dns)
+    "-pt" port
+    addr:token
+
+ napr.
+   jerry.exe -u root -p heslo 1521:8afff1s86fs4sf86hy16j 2341:f4w64fe5f4wefew4fryh4
+
+ Pokud nnektery z argumentu uzivatelske jmeno, heslo, server, nebo port neni
+ vyplnen, je pouzit udaj z nastaveni, popripade je uzivatel vyzvan k zadani
+ loginu. Pokud neni program volan s zadnymi hancimi vozidly, pouze se pripoji
+ k serveru a autorizuje.
+}
 
 uses
   Forms,
@@ -40,6 +66,7 @@ begin
   Application.CreateForm(TF_Auth, F_Auth);
   Application.CreateForm(TF_NewLoko, F_NewLoko);
   Application.CreateForm(TF_Debug, F_Debug);
+
   // automaticke pripojeni k serveru
   if (GlobConfig.data.server.autoconnect) then F_Main.A_ConnectExecute(nil);
 

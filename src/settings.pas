@@ -1,5 +1,7 @@
 unit settings;
 
+// Okynko nastaveni
+
 interface
 
 uses

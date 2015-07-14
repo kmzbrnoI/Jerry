@@ -1,5 +1,7 @@
 unit CloseTabSheet;
 
+// TabSheet PageControlu, ktera obsahuje zaviraci tlacitko
+
 interface
 
 uses Controls, Graphics, Types, ComCtrls, Classes, Forms;

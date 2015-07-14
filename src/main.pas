@@ -34,7 +34,6 @@ type
     procedure PageControlDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
 
-    procedure OnTabClose(Sender:TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure BitBtn2Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -65,6 +64,7 @@ uses TCPClientPanel, GlobalConfig, settings, fNewLoko, Debug, RegCollector,
       Verze, Regulator;
 
 ////////////////////////////////////////////////////////////////////////////////
+// Systemove zpravy, pouzito pro odchyceni stisku klavesy
 
 procedure TF_Main.AE_MainMessage(var Msg: tagMSG; var Handled: Boolean);
 begin
@@ -81,6 +81,9 @@ begin
    end;//case
   end;//WM_KeyDown
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Pripojit se k serveru
 
 procedure TF_Main.A_ConnectExecute(Sender: TObject);
 var host:string;
@@ -115,6 +118,9 @@ begin
  Screen.Cursor := crDefault;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Odpojit se od serveru
+
 procedure TF_Main.A_DisconnectExecute(Sender: TObject);
 begin
  F_Main.SB_Main.Panels[0].Text := 'Odpojování ...';
@@ -123,6 +129,9 @@ begin
  PanelTCPClient.Disconnect();
  Screen.Cursor := crDefault;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+// Zadost o lokomotivu do oblasti rizeni
 
 procedure TF_Main.BitBtn1Click(Sender: TObject);
 begin
@@ -135,10 +144,15 @@ begin
  F_NewLoko.Show();
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Zobrazeni okna nastaveni
+
 procedure TF_Main.BitBtn2Click(Sender: TObject);
 begin
  F_Settings.OpenForm();
 end;
+
+////////////////////////////////////////////////////////////////////////////////
 
 procedure TF_Main.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -154,6 +168,8 @@ begin
    CanClose := false;       // okno zatim nezavirame, zavre se az pri OnDisconnect
   end;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
 
 procedure TF_Main.FormCreate(Sender: TObject);
 begin
@@ -173,6 +189,8 @@ begin
    GlobConfig.SaveFile();
   end;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
 
 procedure TF_Main.FormShow(Sender: TObject);
 begin
@@ -367,13 +385,6 @@ begin
  else
   Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '-- Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
 end;
-
-////////////////////////////////////////////////////////////////////////////////
-
-procedure TF_Main.OnTabClose(Sender:TObject);
-begin
-  // close tab
-end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
 
