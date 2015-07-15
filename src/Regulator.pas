@@ -18,22 +18,16 @@ type
   end;
 
   TF_DigiReg = class(TForm)
-    Label5: TLabel;
     RG_Smer: TRadioGroup;
-    Label6: TLabel;
     B_PrevzitLoko: TButton;
     B_STOP: TButton;
-    Label7: TLabel;
     CHB_Total: TCheckBox;
-    L_address: TLabel;
-    L_mine: TLabel;
     L_stupen: TLabel;
     B_Idle: TButton;
     S_Status: TShape;
     T_Speed: TTimer;
     L_ComStatus: TLabel;
     TB_reg: TTrackBar;
-    Label1: TLabel;
     L_speed: TLabel;
     CHB_Multitrack: TCheckBox;
     Label2: TLabel;
@@ -133,10 +127,8 @@ end;//dtor
 procedure TF_DigiReg.FormShow(Sender: TObject);
 var i:Integer;
 begin
-  Self.L_mine.Caption       := 'ano';
   Self.S_Status.Brush.Color := clGreen;
   Self.TS.Caption           := Self.HV.Nazev+' ('+Self.HV.Oznaceni+') : '+IntToStr(Self.HV.Adresa)+'      ';
-  Self.L_address.Caption    := IntToStr(Self.addr);
   Self.L_stupen.Caption     := IntToStr(Self.HV.rychlost_stupne)+' / 28';
   Self.L_speed.Caption      := IntToStr(Self.HV.rychlost_kmph);
 
@@ -322,7 +314,6 @@ begin
      Self.OnShow(Self);
     end else begin
      Self.SetElementsState(false);
-     Self.L_mine.Caption := 'ne';
      if (data[4] = 'stolen') then
       begin
        Self.S_Status.Brush.Color := clYellow;
@@ -351,7 +342,7 @@ begin
    Self.B_Idle.Enabled  := Self.CHB_Total.Checked;
    updating := false;
 
-   if (F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) then Self.TB_reg.SetFocus();
+   if ((F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) and (Self.TB_reg.Enabled)) then Self.TB_reg.SetFocus();
  end;
 end;//procedure
 
@@ -497,12 +488,12 @@ begin
    with (Self.CHB_funkce[i]) do
     begin
      Parent   := Self;
-     Left     := 139 + (i div 7)*95;
+     Left     := 122 + (i div 7)*120;
      Top      := myTop;
      Caption  := 'F'+IntToStr(i);
      Tag      := i;
      AutoSize := false;
-     Width    := 85;
+     Width    := 110;
 
      Inc(myTop, 16);
      if (i = 6) then myTop := 57;

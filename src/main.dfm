@@ -4,7 +4,7 @@ object F_Main: TF_Main
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Jerry'
-  ClientHeight = 212
+  ClientHeight = 207
   ClientWidth = 415
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -24,7 +24,7 @@ object F_Main: TF_Main
   TextHeight = 13
   object SB_Main: TStatusBar
     Left = 0
-    Top = 193
+    Top = 188
     Width = 415
     Height = 19
     Panels = <
@@ -35,12 +35,13 @@ object F_Main: TF_Main
       item
         Width = 250
       end>
+    ExplicitTop = 193
   end
   object PC_Main: TPageControl
     Left = 0
     Top = 0
     Width = 416
-    Height = 194
+    Height = 189
     MultiLine = True
     OwnerDraw = True
     TabOrder = 1

@@ -3,7 +3,7 @@ object F_DigiReg: TF_DigiReg
   Top = 400
   BorderStyle = bsNone
   Caption = 'Regul'#225'tor'
-  ClientHeight = 166
+  ClientHeight = 164
   ClientWidth = 410
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,96 +16,9 @@ object F_DigiReg: TF_DigiReg
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Label5: TLabel
-    Left = 328
-    Top = 53
-    Width = 33
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'Adresa'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label6: TLabel
-    Left = 328
-    Top = 68
-    Width = 43
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'P'#345'evzato'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
-  object Label7: TLabel
-    Left = 328
-    Top = 84
-    Width = 34
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'Stupe'#328
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
-  object L_address: TLabel
-    Left = 378
-    Top = 53
-    Width = 24
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Alignment = taRightJustify
-    Caption = '9999'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
-  object L_mine: TLabel
-    Left = 390
-    Top = 68
-    Width = 12
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Alignment = taRightJustify
-    Caption = 'ne'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
   object L_stupen: TLabel
     Left = 390
-    Top = 84
+    Top = 56
     Width = 12
     Height = 13
     Margins.Left = 2
@@ -123,14 +36,14 @@ object F_DigiReg: TF_DigiReg
   end
   object S_Status: TShape
     Left = 17
-    Top = 107
+    Top = 100
     Width = 48
     Height = 18
     Brush.Color = clGray
     OnMouseUp = S_StatusMouseUp
   end
   object L_ComStatus: TLabel
-    Left = 224
+    Left = 200
     Top = 40
     Width = 63
     Height = 13
@@ -144,27 +57,10 @@ object F_DigiReg: TF_DigiReg
     ParentColor = False
     ParentFont = False
   end
-  object Label1: TLabel
-    Left = 328
-    Top = 101
-    Width = 41
-    Height = 13
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    Caption = 'Rychlost'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-  end
   object L_speed: TLabel
-    Left = 396
-    Top = 101
-    Width = 6
+    Left = 355
+    Top = 74
+    Width = 17
     Height = 13
     Margins.Left = 2
     Margins.Top = 2
@@ -180,15 +76,15 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 338
-    Top = 115
-    Width = 31
+    Left = 377
+    Top = 74
+    Width = 25
     Height = 13
-    Caption = '(km/h)'
+    Caption = 'km/h'
   end
   object RG_Smer: TRadioGroup
     Left = 8
-    Top = 45
+    Top = 35
     Width = 65
     Height = 57
     Margins.Left = 2
@@ -209,22 +105,22 @@ object F_DigiReg: TF_DigiReg
     OnClick = RG_SmerClick
   end
   object B_PrevzitLoko: TButton
-    Left = 328
+    Left = 355
     Top = 135
-    Width = 75
+    Width = 48
     Height = 24
     Margins.Left = 2
     Margins.Top = 2
     Margins.Right = 2
     Margins.Bottom = 2
-    Caption = 'P'#345'evz'#237't loko'
+    Caption = 'P'#345'evz'#237't'
     Enabled = False
     TabOrder = 6
     OnClick = B_PrevzitLokoClick
   end
   object B_STOP: TButton
-    Left = 88
-    Top = 51
+    Left = 78
+    Top = 39
     Width = 39
     Height = 30
     Margins.Left = 2
@@ -243,7 +139,7 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_Total: TCheckBox
     Left = 9
-    Top = 126
+    Top = 123
     Width = 119
     Height = 17
     Margins.Left = 2
@@ -261,8 +157,8 @@ object F_DigiReg: TF_DigiReg
     OnClick = CHB_TotalClick
   end
   object B_Idle: TButton
-    Left = 88
-    Top = 86
+    Left = 78
+    Top = 76
     Width = 39
     Height = 30
     Caption = 'idle'
@@ -294,7 +190,7 @@ object F_DigiReg: TF_DigiReg
   end
   object CHB_Multitrack: TCheckBox
     Left = 9
-    Top = 142
+    Top = 140
     Width = 81
     Height = 17
     Caption = 'Multitrakce'
@@ -303,7 +199,7 @@ object F_DigiReg: TF_DigiReg
   object T_Speed: TTimer
     Interval = 100
     OnTimer = T_SpeedTimer
-    Left = 8
+    Left = 96
     Top = 13
   end
 end
