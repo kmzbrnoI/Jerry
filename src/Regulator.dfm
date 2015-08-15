@@ -58,9 +58,9 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_speed: TLabel
-    Left = 355
+    Left = 366
     Top = 74
-    Width = 17
+    Width = 6
     Height = 13
     Margins.Left = 2
     Margins.Top = 2

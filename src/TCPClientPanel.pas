@@ -339,7 +339,7 @@ begin
    else begin
     // pokud nemame odkud ziskat login, zobrazime okynko
     F_Auth.OpenForm('Autorizujte se');
-    Self.SendLn('-;LOK;G;AUTH;' + F_Auth.E_username.Text + ';' + GenerateHash(F_Auth.E_Password.Text));
+    Self.SendLn('-;LOK;G;AUTH;' + F_Auth.E_username.Text + ';' + GenerateHash(AnsiString(F_Auth.E_Password.Text)));
     F_Main.SB_Main.Panels[1].Text := 'Odeslán požadavek na autorizaci...';
    end;
   end
