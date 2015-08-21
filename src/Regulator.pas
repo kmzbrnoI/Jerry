@@ -225,7 +225,7 @@ procedure TF_DigiReg.B_STOPClick(Sender: TObject);
 
 procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
  begin
-  if (Self.speed > -2) then
+  if ((Self.speed > -2) and (not Self.updating)) then
    begin
     Self.speed := -1;
     Self.T_SpeedTimer(Self);
@@ -267,9 +267,8 @@ begin
 
  //////////////////////////////////////////////////
  end else if (data[3] = 'SPD') then begin
-  Self.RG_Smer.ItemIndex := StrToInt(data[6]);
-
   Self.updating := true;
+  Self.RG_Smer.ItemIndex := StrToInt(data[6]);
   Self.speed            := StrToInt(data[5]);
   Self.TB_reg.Position  := Self.speed;
   Self.L_speed.Caption  := data[4];
