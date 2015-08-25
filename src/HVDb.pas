@@ -8,7 +8,7 @@ uses Classes, SysUtils, StdCtrls, RPConst, Generics.Collections;
 
 const
   _MAX_HV = 128;
-  _MAX_FUNC = 12;
+  _MAX_FUNC = 28;
 
 type
   THVClass = (parni = 0, diesel = 1, motor = 2, elektro = 3);

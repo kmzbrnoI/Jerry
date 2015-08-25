@@ -11,6 +11,7 @@ uses
 
 const
   _TIMEOUT_SEC = 5;
+  _MAX_FORM_FUNC = 27;
 
 type
   TLogCommand = record
@@ -31,6 +32,9 @@ type
     L_speed: TLabel;
     CHB_Multitrack: TCheckBox;
     Label2: TLabel;
+    PC_Funkce: TPageControl;
+    TS_func_0_13: TTabSheet;
+    TS_func_14_28: TTabSheet;
     procedure CHB_svetlaClick(Sender: TObject);
     procedure B_PrevzitLokoClick(Sender: TObject);
     procedure B_STOPClick(Sender: TObject);
@@ -48,7 +52,7 @@ type
    HV:THV;
    updating:boolean;        // je true, pokud se nastavuji elementy zvnejsi
    TS:TCloseTabSheet;
-   CHB_funkce:array[0.._MAX_FUNC] of TCheckBox;
+   CHB_funkce:array[0.._MAX_FORM_FUNC] of TCheckBox;
 
    procedure SendCmd(cmd:string);
    procedure SetElementsState(state:boolean);
@@ -127,6 +131,8 @@ end;//dtor
 procedure TF_DigiReg.FormShow(Sender: TObject);
 var i:Integer;
 begin
+  Self.PC_Funkce.ActivePageIndex := 0;
+
   Self.S_Status.Brush.Color := clGreen;
   Self.TS.Caption           := Self.HV.Nazev+' ('+Self.HV.Oznaceni+') : '+IntToStr(Self.HV.Adresa)+'      ';
   Self.L_stupen.Caption     := IntToStr(Self.HV.rychlost_stupne)+' / 28';
@@ -137,7 +143,7 @@ begin
   Self.speed             := Self.HV.rychlost_stupne;
   Self.TB_reg.Position   := Self.HV.rychlost_stupne;
 
-  for i := 0 to _MAX_FUNC do
+  for i := 0 to _MAX_FORM_FUNC do
     Self.CHB_funkce[i].Checked := Self.HV.funkce[i];
 
   Self.updating := false;
@@ -151,7 +157,7 @@ begin
   Self.B_Idle.Enabled  := Self.CHB_Total.Checked;
 
   // zobrazeni nazvu funkci
-  for i := 0 to _MAX_FUNC do
+  for i := 0 to _MAX_FORM_FUNC do
    begin
     Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
     if (Self.HV.funcVyznam[i] <> '') then
@@ -259,10 +265,13 @@ begin
 
    Self.updating := true;
    for i := left to right do
-    if (data[5][i-left+1] = '1') then
-      Self.CHB_funkce[i].Checked := true
-     else
-      Self.CHB_funkce[i].Checked := false;
+    if (i < _MAX_FORM_FUNC) then
+     begin
+      if (data[5][i-left+1] = '1') then
+        Self.CHB_funkce[i].Checked := true
+       else
+        Self.CHB_funkce[i].Checked := false;
+     end;
   Self.updating := false;
 
  //////////////////////////////////////////////////
@@ -458,7 +467,7 @@ begin
   B_STOP.Enabled  := state;
   B_idle.Enabled  := state;
 
-  for i := 0 to _MAX_FUNC do
+  for i := 0 to _MAX_FORM_FUNC do
     Self.CHB_funkce[i].Enabled := state;
 
   CHB_Total.Enabled := state;
@@ -479,23 +488,28 @@ procedure TF_DigiReg.CreateCHBFunkce();
 var i:Integer;
     myTop:Integer;
 begin
- myTop := 39;
+ myTop := 0;
 
- for i := 0 to _MAX_FUNC do
+ for i := 0 to 27 do
   begin
+   if ((i mod 7) = 0) then myTop := 0;
+
    Self.CHB_funkce[i] := TCheckBox.Create(Self);
    with (Self.CHB_funkce[i]) do
     begin
-     Parent   := Self;
-     Left     := 122 + (i div 7)*120;
+     if (i < 14) then
+       Parent  := Self.TS_func_0_13
+     else
+       Parent  := Self.TS_func_14_28;
+
+     Left     := ((i div 7) mod 2)*(Self.TS_func_0_13.ClientWidth div 2);
      Top      := myTop;
      Caption  := 'F'+IntToStr(i);
      Tag      := i;
      AutoSize := false;
-     Width    := 110;
+     Width    := (Self.TS_func_0_13.ClientWidth div 2)-10;
 
      Inc(myTop, 16);
-     if (i = 6) then myTop := 57;
 
      OnClick := Self.CHB_svetlaClick;
     end;//with
@@ -509,7 +523,7 @@ end;
 procedure TF_DigiReg.DestroyCHBFunkce();
 var i:Integer;
 begin
- for i := 0 to _MAX_FUNC do
+ for i := 0 to _MAX_FORM_FUNC do
    Self.CHB_funkce[i].Free();
 end;
 
