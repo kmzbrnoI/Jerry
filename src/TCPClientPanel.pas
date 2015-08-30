@@ -136,7 +136,7 @@ implementation
 //        3) klient pozada o LOKO a prilozi token, loko je mu prirazeno (pozor: token ma omezenou casovou platnost)
 
 
-uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, Debug;
+uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, Debug, settings;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -367,8 +367,17 @@ begin
      if (Self.first_connection) then
       begin
        // prvni pripojeni -> otevreme loko z argumentu
-       for loko in GlobConfig.data.args.loks do
-         Self.LokoPlease(loko.addr, loko.token);
+       if (GlobConfig.data.args.loks.Count > 0) then
+        begin
+         for loko in GlobConfig.data.args.loks do
+          Self.LokoPlease(loko.addr, loko.token);
+        end else begin
+         F_Settings.Close();
+         F_NewLoko.Show();
+        end;
+      end else begin
+       F_Settings.Close();
+       F_NewLoko.Show();
       end;
      Self.first_connection := false;
     end else begin
