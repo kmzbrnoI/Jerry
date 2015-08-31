@@ -215,7 +215,8 @@ begin
   PageControl := Control as TPageControl;
   TabCaption.Y := Rect.Top + 3;
 
-  if (((PageControl.Pages[TabIndex] as TCloseTabSheet).form as TF_DigiReg).S_Status.Brush.Color <> clGreen) then
+  if ((Assigned(((PageControl.Pages[TabIndex] as TCloseTabSheet).form as TF_DigiReg).S_Status)) and
+      (((PageControl.Pages[TabIndex] as TCloseTabSheet).form as TF_DigiReg).S_Status.Brush.Color <> clGreen)) then
    Control.Canvas.Brush.Color := ((PageControl.Pages[TabIndex] as TCloseTabSheet).form as TF_DigiReg).S_Status.Brush.Color
   else
    Control.Canvas.Brush.Color := clBtnFace;

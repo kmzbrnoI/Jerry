@@ -169,6 +169,7 @@ begin
      break;
     end;
 
+ (Sender as TCloseTabSheet).Visible := false;
  (Sender as TCloseTabSheet).form.Free();
  (Sender as TCloseTabSheet).Free();
 end;//procedure
