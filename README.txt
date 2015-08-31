@@ -1,7 +1,7 @@
 ---------------------------------- JERRY ---------------------------------------
 
-  Tento program slouzi jako klientska aplikace k JOP technologii vyvinute
-  Janem Horackem, ktera umoznuje rizeni hnacich vozidel.
+  Tento program slouzi jako klientska aplikace k hJOP serveru k rizeni hnacich
+  vozidel.
 
   Funkce:
     - rizeni jizdniho stupne, smeru
