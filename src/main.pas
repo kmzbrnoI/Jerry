@@ -1,5 +1,9 @@
 unit main;
 
+{
+  Unit hlavniho okynka, tady se resi predevsim interakce s GUI.
+}
+
 interface
 
 uses
@@ -181,6 +185,7 @@ var data:TGlobConfigData;
 begin
  Screen.Cursor := crHourGlass;
 
+ // ulozime globalni konfiguracni data
  if (Assigned(GlobConfig)) then
   begin
    data := GlobConfig.data;

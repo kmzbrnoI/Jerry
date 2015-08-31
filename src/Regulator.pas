@@ -1,6 +1,8 @@
 unit Regulator;
 
-// Okynko regulatoru jednoho hnaciho vozidla
+{
+  Okynko regulatoru jednoho hnaciho vozidla
+}
 
 interface
 
@@ -47,35 +49,33 @@ type
     procedure CHB_TotalClick(Sender: TObject);
   private
 
-   sent:TQueue<TLogCommand>;
-   speed:Integer;
-   HV:THV;
-   updating:boolean;        // je true, pokud se nastavuji elementy zvnejsi
-   TS:TCloseTabSheet;
-   CHB_funkce:array[0.._MAX_FORM_FUNC] of TCheckBox;
+   sent:TQueue<TLogCommand>;                                                    // vytupni fronta odeslanych prikazu na server
+   speed:Integer;                                                               // posledni poslana rychlost, pouziva se pri aktualizaci rychlosti v T_Speed
+   HV:THV;                                                                      // hnaciho vozidlo, ktere ridim
+   updating:boolean;                                                            // je true, pokud se nastavuji elementy zvnejsi
+   TS:TCloseTabSheet;                                                           // odkaz na zalozku PageControlleru
+   CHB_funkce:array[0.._MAX_FORM_FUNC] of TCheckBox;                            // CheckBoxy funkci
 
-   procedure SendCmd(cmd:string);
-   procedure SetElementsState(state:boolean);
-   procedure UpdateSent();
-   function GetMultitrack():boolean;
+   procedure SendCmd(cmd:string);                                               // odesli prikaz konkretniho hnaciho vozidla na server
+   procedure SetElementsState(state:boolean);                                   // nastav Enabled elementu na formulari na hodnotu \state
+   procedure UpdateSent();                                                      // kontroluje, jestli server odpovedel na vsechny pozadavky a v priapde potreby je posila znovu
+   function GetMultitrack():boolean;                                            // je okynko v multitrakci?
 
-   procedure CreateCHBFunkce();
-   procedure DestroyCHBFunkce();
+   procedure CreateCHBFunkce();                                                 // vytvori CheckBoxy funkci
+   procedure DestroyCHBFunkce();                                                // znici CHeckBoxy funkci
 
   public
-   addr:Word;
+   addr:Word;                                                                   // adresa rizeneho HV (hnaciho vozidla)
 
 
    constructor Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet); reintroduce;
    destructor Destroy(); override;
 
-   procedure Parse(data:TStrings);
+   procedure Parse(data:TStrings);                                              // parse dat pro tento regulator
+   function MyKeyPress(key:Integer):boolean;                                    // keyPress
+   procedure UpdateRych(multitrack:boolean = true);                             // aktualizace rychlosti z vedjesiho regulatoru pri multitrakci
 
-   function MyKeyPress(key:Integer):boolean;  // returns handled
-
-   procedure UpdateRych(multitrack:boolean = true);
-
-   property multitrack:boolean read GetMultitrack;
+    property multitrack:boolean read GetMultitrack;                             // jestli je HV v multitrakci
   end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ implementation
 uses TCPClientPanel, ORList, Main, RegCollector, RPConst;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Vytvoreni nove regulatoru
+// Vytvoreni noveho regulatoru
 
 constructor TF_DigiReg.Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet);
 begin
@@ -122,7 +122,7 @@ begin
  Self.HV.Free();
  Self.DestroyCHBFunkce();
 
- inherited Destroy();
+ inherited;
 end;//dtor
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -240,13 +240,6 @@ procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Parsign dat ze serveru
-
-//  or;LOK;ADDR;AUTH;[ok,not,stolen,release]; info  - odpoved na pozadavek o autorizaci rizeni hnaciho vozidla (odesilano take jako informace o zruseni ovladani hnacicho vozidla)
-//  or;LOK;ADDR;F;F_left-F_right;states          - informace o stavu funkci lokomotivy
-//    napr.; or;LOK;0-4;00010 informuje, ze je zaple F3 a F0, F1, F2 a F4 jsou vyple
-//  or;LOK;ADDR;SPD;sp_km/h;sp_stupne;dir        - informace o zmene rychlosti (ci smeru) lokomotivy
-//  or;LOK;ADDR;RESP;[ok, err]; info
-//  -;LOK;TOTAL;[0,1]                       - zmena rucniho rizeni lokomotivy
 
 procedure TF_DIgiReg.Parse(data:TStrings);
 var func:TStrings;

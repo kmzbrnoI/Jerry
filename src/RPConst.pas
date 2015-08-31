@@ -1,6 +1,8 @@
 unit RPConst;
 
-// Konstanty programu
+{
+  Konstanty programu
+}
 
 interface
 

@@ -46,7 +46,7 @@ object F_DigiReg: TF_DigiReg
     Left = 337
     Top = 40
     Width = 63
-    Height = 14
+    Height = 13
     Alignment = taRightJustify
     Caption = 'L_ComStatus'
     Color = clBtnFace
@@ -59,9 +59,9 @@ object F_DigiReg: TF_DigiReg
     ParentFont = False
   end
   object L_speed: TLabel
-    Left = 16
+    Left = 21
     Top = 164
-    Width = 11
+    Width = 6
     Height = 13
     Margins.Left = 2
     Margins.Top = 2
@@ -92,12 +92,16 @@ object F_DigiReg: TF_DigiReg
     TabOrder = 7
     object TS_func_0_13: TTabSheet
       Caption = 'F0-F13'
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 169
       ExplicitHeight = 37
     end
     object TS_func_14_28: TTabSheet
       Caption = 'F14-F28'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 169
       ExplicitHeight = 37
     end

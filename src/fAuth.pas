@@ -1,6 +1,8 @@
 unit fAuth;
 
-// Okynko zadani loginu
+{
+  Okynko zadani loginu
+}
 
 interface
 

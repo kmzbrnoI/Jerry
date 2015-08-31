@@ -1,6 +1,8 @@
 unit fNewLoko;
 
-// Okynko zadosti o loko do oblasti rizeni
+{
+  Okynko zadosti o loko do oblasti rizeni
+}
 
 interface
 

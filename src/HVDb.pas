@@ -1,6 +1,8 @@
 unit HVDb;
 
-// Databaze hnacich vozidel
+{
+  Databaze hnacich vozidel
+}
 
 interface
 
@@ -11,49 +13,50 @@ const
   _MAX_FUNC = 28;
 
 type
-  THVClass = (parni = 0, diesel = 1, motor = 2, elektro = 3);
-  TFunkce = array[0.._MAX_FUNC] of boolean;
-  THVStanoviste = (lichy = 0, sudy = 1);              // v jakem smeru se nachazi stanoviste A
+  THVClass = (parni = 0, diesel = 1, motor = 2, elektro = 3);                   // trida hnaciho vozidla
+  TFunkce = array[0.._MAX_FUNC] of boolean;                                     // stav funkci HV
+  THVStanoviste = (lichy = 0, sudy = 1);                                        // v jakem smeru se nachazi stanoviste A
 
-  THVPomCV = record                                 // jeden zaznam POM se sklada z
-    cv:Word;                                           // oznaceni CV a
-    data:Byte;                                         // dat, ktera se maji do CV zapsat.
+  // POM neni pro regulator vubec potreba, je tu jen z uplnosti:
+  THVPomCV = record                                                             // jeden zaznam POM se sklada z
+    cv:Word;                                                                      // oznaceni CV a
+    data:Byte;                                                                    // dat, ktera se maji do CV zapsat.
   end;
 
   THV = class
    private
-     procedure DefaultData();
+     procedure DefaultData();                                                   // nastavi vsechna data na default hodnoty
 
    public
-     Nazev:string;                                       // nazev HV
-     Majitel:string;                                     // majitel HV
-     Oznaceni:string;                                    // oznaceni HV
-     Poznamka:String;                                    // poznamka k HV
-     Adresa:Word;                                        // digitalni adresa HW
-     Trida:THVClass;                                     // trida hnaciho vozidla - parni, diesel, motor, elektro
-     Souprava:string;                                    // cislo soupravy, na ktere je HV
-     StanovisteA:THVStanoviste;                          //0 = lichy; 1 = sudy
-     funkce:TFunkce;                                     // stav funkci
-     rychlost_stupne:Word;                               // aktualni rychlost ve stupnich
-     rychlost_kmph:Word;                                 // aktualni rychlost v km/h
-     smer:Integer;                                       // aktualni smer
+     Nazev:string;                                                              // nazev HV
+     Majitel:string;                                                            // majitel HV
+     Oznaceni:string;                                                           // oznaceni HV
+     Poznamka:String;                                                           // poznamka k HV
+     Adresa:Word;                                                               // digitalni adresa HW (0..9999)
+     Trida:THVClass;                                                            // trida hnaciho vozidla - parni, diesel, motor, elektro
+     Souprava:string;                                                           // cislo soupravy, na ktere je HV
+     StanovisteA:THVStanoviste;                                                 // orientace stanoviste A
+     funkce:TFunkce;                                                            // stav funkci
+     rychlost_stupne:Word;                                                      // aktualni rychlost ve stupnich
+     rychlost_kmph:Word;                                                        // aktualni rychlost v km/h
+     smer:Integer;                                                              // aktualni smer
 
-     POMtake : TList<THVPomCV>;                          // seznam POM pri prevzeti do automatu
-     POMrelease : TList<THVPomCV>;                       // seznam POM pri uvolneni to rucniho rizeni
+     POMtake : TList<THVPomCV>;                                                 // seznam POM pri prevzeti do automatu
+     POMrelease : TList<THVPomCV>;                                              // seznam POM pri uvolneni to rucniho rizeni
 
-     funcVyznam:array[0.._MAX_FUNC] of string;           // seznam popisu funkci hnaciho vozidla
+     funcVyznam:array[0.._MAX_FUNC] of string;                                  // seznam popisu funkci hnaciho vozidla
 
-     procedure ParseData(data:string);                   // parse dat HV ze serveru
-     constructor Create(data:string); overload;          // vytvoreni HV s daty ze serveru
-     constructor Create(); overload;                     // vytvoreni HV s prazdnymi daty
+     procedure ParseData(data:string);                                          // parse dat HV ze serveru
+     constructor Create(data:string); overload;                                 // vytvoreni HV s daty ze serveru
+     destructor Destroy(); override;                                            // zniceni HV
 
-     function GetPanelLokString():string;                // vytvoreni stringu obsahujici vsechna data HV pro server
+     function GetPanelLokString():string;                                       // vytvoreni stringu obsahujici vsechna data HV pro server
   end;
 
-  // dtabaze hnacich vozidel
+  // databaze hnacich vozidel
   THVDb = class
    public
-    HVs:array [0.._MAX_HV] of THV;
+    HVs:array [0.._MAX_HV] of THV;                                              // hanciho vozidla jsou mapovana v poli 0..9999 podle adresy (adresa je primarni klic)
     count:Integer;
 
     constructor Create();
@@ -61,8 +64,6 @@ type
 
     procedure ParseHVs(data:string);
     procedure ClearList();
-
-    procedure FillHVs(var CB:TComboBox; var Indexes:TWordAr; addr:Integer = -1; special:THV = nil; with_spr:boolean = false);
 
   end;
 
@@ -73,16 +74,15 @@ implementation
 constructor THVDb.Create();
 var i:Integer;
 begin
- inherited Create();
-
+ inherited;
  for i := 0 to _MAX_HV-1 do
-  Self.HVs[i] := nil; 
+  Self.HVs[i] := nil;
 end;//ctor
 
 destructor THVDb.Destroy();
 begin
  Self.ClearList();
- inherited Destroy();
+ inherited;
 end;//dtor
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,38 +115,6 @@ begin
 end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
-// Vyplneni ComboBoxu seznamem hnacich vozidel
-
-procedure THVDb.FillHVs(var CB:TComboBox; var Indexes:TWordAr; addr:Integer = -1; special:THV = nil; with_spr:boolean = false);
-var i,index:Integer;
-begin
- CB.Clear();
-
- if (Assigned(special)) then
-  begin
-   SetLength(Indexes, Self.count+1);
-   CB.Items.Add(IntToStr(special.Adresa) + ' : ' + special.Nazev + ' (' + special.Oznaceni + ')');
-   Indexes[0] := special.Adresa;
-   if (special.Adresa = addr) then CB.ItemIndex := 0;
-   index := 1;
-  end else begin
-   SetLength(Indexes, Self.count);
-   index := 0;
-  end;
-
- for i := 0 to Self.count-1 do
-  begin
-   if ((Self.HVs[i].Souprava = '-') or (with_spr)) then
-    begin
-     CB.Items.Add(IntToStr(Self.HVs[i].Adresa) + ' : ' + Self.HVs[i].Nazev + ' (' + Self.HVs[i].Oznaceni + ')');
-     Indexes[index] := Self.HVs[i].Adresa;
-     if (Self.HVs[i].Adresa = addr) then CB.ItemIndex := i;
-     index := index + 1;
-    end;
-  end;
-end;//procedure
-
-////////////////////////////////////////////////////////////////////////////////
 
 constructor THV.Create(data:string);
 begin
@@ -156,11 +124,11 @@ begin
  Self.ParseData(data);
 end;//ctor
 
-constructor THV.Create();
+destructor THV.Destroy();
 begin
  Self.POMtake.Free();
  Self.POMrelease.Free();
- inherited Create();
+ inherited;
 end;//ctor
 
 ////////////////////////////////////////////////////////////////////////////////

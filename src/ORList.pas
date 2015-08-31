@@ -1,7 +1,9 @@
 unit ORList;
 
-// TORDb shromazduje vsechny oblasti rizeni
-//  ostatni casti programu se ho pak muzou na ORs ptat
+{
+  TORDb shromazduje vsechny oblasti rizeni
+  Ostatni casti programu se ho pak muzou na oblati rizeni ptat.
+}
 
 interface
 
@@ -24,7 +26,6 @@ type
     cnt:Integer;
 
     constructor Create();
-
     procedure Parse(data:string);
 
   end;//class

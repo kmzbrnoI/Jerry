@@ -1,6 +1,8 @@
 unit settings;
 
-// Okynko nastaveni
+{
+  Okynko nastaveni
+}
 
 interface
 

@@ -1,6 +1,9 @@
 unit RegCollector;
 
-// Collector regulatoru hnacich vozidel
+{
+  Collector regulatoru hnacich vozidel
+  Trida TRegulatorCollector sdruzuje vsechny regulatory, resp. zalozky.
+}
 
 interface
 
@@ -11,24 +14,24 @@ type
 
  TRegulatorCollector = class
    private const
-    _MAX_FORMS = 4;
+    _MAX_FORMS = 4;                                                             // maximum otevrenych regulatoru
 
    private
-    tabs:TList<TCloseTabSheet>;
+    tabs:TList<TCloseTabSheet>;                                                 // senzam vsech zalozek
 
-     function GetTab(OblR:string; addr:Word):TCloseTabSheet;
-     procedure NewLoko(OblR:string; addr:Word; lok_data:string; total:boolean);
+     function GetTab(addr:Word):TCloseTabSheet;                                 // vrati zalozku s lokomotivou adresy \addr, jinak nil
+     procedure NewLoko(addr:Word; lok_data:string; total:boolean);              // pozadavek na novou zalozku (novy regulator)
 
-     procedure OnTSClose(Sender:TObject);
+     procedure OnTSClose(Sender:TObject);                                       // event zavreni zalozky zaviracim tlacitkem vpravo nahore zalozky
 
    public
      constructor Create();
      destructor Destroy(); override;
 
-     function KeyPress(key:Integer):boolean;     // returns handled
-     procedure Parse(data:TStrings);
-     procedure CloseAll();
-     procedure UpdateMultitrack(Sender:TCloseTabSheet);
+     function KeyPress(key:Integer):boolean;                                    // keyPress; vraci, jestli byla klavesa zpracovana (zpracovana = true)
+     procedure Parse(data:TStrings);                                            // parse zprav pro regulatory (typicky prefix "LOK")
+     procedure CloseAll();                                                      // zavrit vsechny regulatory
+     procedure UpdateMultitrack(Sender:TCloseTabSheet);                         // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
 
  end;
 
@@ -43,8 +46,7 @@ uses HVDb, fNewLoko, Main;
 
 constructor TRegulatorCollector.Create();
 begin
- inherited Create();
-
+ inherited;
  Self.tabs := TList<TCloseTabSheet>.Create();
 end;//ctor
 
@@ -54,10 +56,12 @@ begin
  for i := 0 to Self.tabs.Count-1 do
    Self.tabs[i].Free();
  Self.tabs.Free();
- inherited Destroy();
+ inherited;
 end;//dtor
 
-procedure TRegulatorCollector.NewLoko(OblR:string; addr:Word; lok_data:string; total:boolean);
+////////////////////////////////////////////////////////////////////////////////
+
+procedure TRegulatorCollector.NewLoko(addr:Word; lok_data:string; total:boolean);
 var tab:TCloseTabSheet;
 begin
  for tab in Self.tabs do
@@ -90,7 +94,7 @@ begin
  F_Main.PC_MainChange(F_Main);
 end;//procedure
 
-function TRegulatorCollector.GetTab(OblR:string; addr:Word):TCloseTabSheet;
+function TRegulatorCollector.GetTab(addr:Word):TCloseTabSheet;
 var tab:TCloseTabSheet;
 begin
  Result := nil;
@@ -123,24 +127,17 @@ end;//procedure
 ////////////////////////////////////////////////////////////////////////////////
 // parse dat ze serveru
 
-//  or;LOK;ADDR;AUTH;[ok,not,stolen,release]; info  - odpoved na pozadavek o autorizaci rizeni hnaciho vozidla (odesilano take jako informace o zruseni ovladani hnacicho vozidla)
-//  or;LOK;ADDR;F;F_left-F_right;states          - informace o stavu funkci lokomotivy
-//    napr.; or;LOK;0-4;00010 informuje, ze je zaple F3 a F0, F1, F2 a F4 jsou vyple
-//  or;LOK;ADDR;SPD;sp_km/h;sp_stupne;dir        - informace o zmene rychlosti (ci smeru) lokomotivy
-//  or;LOK;ADDR;RESP;[ok, err]; info
-//  -;LOK;TOTAL;[0,1]                       - zmena rucniho rizeni lokomotivy
-
 procedure TRegulatorCollector.Parse(data:TStrings);
 var tab:TCloseTabSheet;
 begin
- tab := Self.GetTab(data[0], StrToInt(data[2]));
+ tab := Self.GetTab(StrToInt(data[2]));
 
  if (data[3] = 'AUTH') then
   begin
    if (tab = nil) then
     begin
      if ((data[4] = 'ok') or (data[4] = 'total')) then
-      Self.NewLoko(data[0], StrToInt(data[2]), data[5], data[4]='total')
+      Self.NewLoko(StrToInt(data[2]), data[5], data[4]='total')
      else if (data[4] = 'not') then
       begin
        if (data.Count > 5) then

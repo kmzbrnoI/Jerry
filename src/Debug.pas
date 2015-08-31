@@ -1,6 +1,8 @@
 unit Debug;
 
-// Debug okynko, otevirano klavesou F4
+{
+  Debug okynko, otevirano klavesou F4
+}
 
 interface
 

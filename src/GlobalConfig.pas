@@ -1,6 +1,8 @@
 unit GlobalConfig;
 
-// Globalni konfigurace SW
+{
+  Globalni konfigurace SW
+}
 
 interface
 

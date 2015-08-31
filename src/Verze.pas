@@ -1,6 +1,8 @@
 unit Verze;
 
-// Zjisteni verze aplikace.
+{
+  Tato unit implementuje funkce, ktere zjisti verzi aplikace.
+}
 
 interface
 
