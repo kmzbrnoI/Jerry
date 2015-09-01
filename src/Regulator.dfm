@@ -42,22 +42,6 @@ object F_DigiReg: TF_DigiReg
     Brush.Color = clGray
     OnMouseUp = S_StatusMouseUp
   end
-  object L_ComStatus: TLabel
-    Left = 337
-    Top = 40
-    Width = 63
-    Height = 13
-    Alignment = taRightJustify
-    Caption = 'L_ComStatus'
-    Color = clBtnFace
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentColor = False
-    ParentFont = False
-  end
   object L_speed: TLabel
     Left = 21
     Top = 164
@@ -92,10 +76,6 @@ object F_DigiReg: TF_DigiReg
     TabOrder = 7
     object TS_func_0_13: TTabSheet
       Caption = 'F0-F13'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 169
-      ExplicitHeight = 37
     end
     object TS_func_14_28: TTabSheet
       Caption = 'F14-F28'

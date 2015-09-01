@@ -29,7 +29,6 @@ type
     B_Idle: TButton;
     S_Status: TShape;
     T_Speed: TTimer;
-    L_ComStatus: TLabel;
     TB_reg: TTrackBar;
     L_speed: TLabel;
     CHB_Multitrack: TCheckBox;
@@ -55,6 +54,7 @@ type
    updating:boolean;                                                            // je true, pokud se nastavuji elementy zvnejsi
    TS:TCloseTabSheet;                                                           // odkaz na zalozku PageControlleru
    CHB_funkce:array[0.._MAX_FORM_FUNC] of TCheckBox;                            // CheckBoxy funkci
+   com_err:string;                                                              // posledni komunikacni chyba
 
    procedure SendCmd(cmd:string);                                               // odesli prikaz konkretniho hnaciho vozidla na server
    procedure SetElementsState(state:boolean);                                   // nastav Enabled elementu na formulari na hodnotu \state
@@ -147,8 +147,6 @@ begin
     Self.CHB_funkce[i].Checked := Self.HV.funkce[i];
 
   Self.updating := false;
-  Self.L_ComStatus.Font.Color := clGreen;
-  Self.L_ComStatus.Caption    := 'loko KOMUNIKUJE';
 
   Self.SetElementsState(true);
 
@@ -286,19 +284,19 @@ begin
  end else if (data[3] = 'RESP') then begin
   if (data[4] = 'ok') then
    begin
-    Self.L_ComStatus.Font.Color := clGreen;
-    Self.L_ComStatus.Caption    := 'loko KOMUNIKUJE';
+    Self.S_Status.Brush.Color := clGreen;
+    Self.com_err := '';
     if (data.Count > 5) then
        Self.L_speed.Caption := data[5];
    end else begin
-    Self.L_ComStatus.Font.Color := clRed;
+    Self.S_Status.Brush.Color := clRed;
     if (data.Count > 5) then
-      Self.L_ComStatus.Caption  := data[5]
+      Self.com_err := data[5]
     else
-      Self.L_ComStatus.Caption  := 'loko NEKOMUNIKUJE';
+      Self.com_err := 'loko NEKOMUNIKUJE';
    end;
 
-  Self.sent.Dequeue();
+  if (Self.sent.Count > 0) then Self.sent.Dequeue();
 
  //////////////////////////////////////////////////
  end else if (data[3] = 'AUTH') then begin
@@ -322,12 +320,6 @@ begin
        Self.S_Status.Brush.Color := clRed;
       end;
      Self.B_PrevzitLoko.Enabled := true;
-
-     if (data.Count > 5) then
-      begin
-       Self.L_ComStatus.Font.Color := clGray;
-       Self.L_ComStatus.Caption    := data[5];
-      end;
     end;
 
    F_Main.PC_Main.Repaint();
@@ -354,8 +346,10 @@ end;//procedure
 procedure TF_DigiReg.S_StatusMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
- if (Self.S_Status.Brush.Color <> clGreen) then
-  Self.B_PrevzitLokoClick(self);
+ if (Self.com_err <> '') then
+   Application.MessageBox(PChar('Loko nekomunikuje:'+#13#10+Self.com_err), 'Loko nekomunikuje', MB_OK OR MB_ICONWARNING)
+ else
+   if (Self.B_PrevzitLoko.Enabled) then Self.B_PrevzitLokoClick(self);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -367,7 +361,7 @@ end;
 
 procedure TF_DigiReg.T_SpeedTimer(Sender: TObject);
 begin
- if (Self.S_Status.Brush.Color <> clGreen) then Exit();
+ if (Self.B_PrevzitLoko.Enabled) then Exit();
 
  Self.UpdateRych();
  Self.UpdateSent();
@@ -381,8 +375,8 @@ begin
     begin
      // timeout
      Self.sent.Dequeue();
-     Self.L_ComStatus.Font.Color := clRed;
-     Self.L_ComStatus.Caption    := 'loko NEKOMUNIKUJE';
+     Self.S_Status.Brush.Color := clRed;
+     Self.com_err := 'loko NEKOMUNIKUJE';
     end;
   end;
 end;//procedure
@@ -404,7 +398,7 @@ end;//procedure
 
 function TF_DigiReg.MyKeyPress(key:Integer):boolean;
 begin
- if (Self.S_Status.Brush.Color <> clGreen) then
+ if (Self.B_PrevzitLoko.Enabled) then
   begin
    if ((key = VK_RETURN) and (Self.ActiveControl <> Self.B_PrevzitLoko)) then begin
     Self.B_PrevzitLokoClick(Self);
