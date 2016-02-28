@@ -3255,6 +3255,16 @@ object F_Main: TF_Main
       Enabled = False
       OnExecute = A_DisconnectExecute
     end
+    object A_Debug: TAction
+      Caption = 'Debug'
+      ShortCut = 16499
+      OnExecute = A_DebugExecute
+    end
+    object A_About: TAction
+      Caption = 'About'
+      ShortCut = 16496
+      OnExecute = A_AboutExecute
+    end
   end
   object AE_Main: TApplicationEvents
     OnMessage = AE_MainMessage

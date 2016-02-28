@@ -410,16 +410,8 @@ begin
  Result := true;
 
  case (key) of
-  VK_NUMPAD0 : Self.CHB_funkce[0].Checked := not Self.CHB_funkce[0].Checked;
-  VK_NUMPAD1 : Self.CHB_funkce[1].Checked := not Self.CHB_funkce[1].Checked;
-  VK_NUMPAD2 : Self.CHB_funkce[2].Checked := not Self.CHB_funkce[2].Checked;
-  VK_NUMPAD3 : Self.CHB_funkce[3].Checked := not Self.CHB_funkce[3].Checked;
-  VK_NUMPAD4 : Self.CHB_funkce[4].Checked := not Self.CHB_funkce[4].Checked;
-  VK_NUMPAD5 : Self.CHB_funkce[5].Checked := not Self.CHB_funkce[5].Checked;
-  VK_NUMPAD6 : Self.CHB_funkce[6].Checked := not Self.CHB_funkce[6].Checked;
-  VK_NUMPAD7 : Self.CHB_funkce[7].Checked := not Self.CHB_funkce[7].Checked;
-  VK_NUMPAD8 : Self.CHB_funkce[8].Checked := not Self.CHB_funkce[8].Checked;
-  VK_NUMPAD9 : Self.CHB_funkce[9].Checked := not Self.CHB_funkce[9].Checked;
+  VK_NUMPAD0..VK_NUMPAD9 : Self.CHB_funkce[key-VK_NUMPAD0].Checked := not Self.CHB_funkce[key-VK_NUMPAD0].Checked;
+  VK_F1..VK_F24 : Self.CHB_funkce[key-VK_F1+1].Checked := not Self.CHB_funkce[key-VK_F1+1].Checked;
 
   VK_ADD      : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 0;
   VK_SUBTRACT : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 1;

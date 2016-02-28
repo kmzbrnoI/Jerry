@@ -9,7 +9,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ActnList, CloseTabSheet, Themes, StdCtrls, Buttons,
-  AppEvnts, StrUtils;
+  AppEvnts, StrUtils, Menus;
 
 type
   TF_Main = class(TForm)
@@ -21,6 +21,8 @@ type
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     AE_Main: TApplicationEvents;
+    A_Debug: TAction;
+    A_About: TAction;
     procedure A_ConnectExecute(Sender: TObject);
     procedure A_DisconnectExecute(Sender: TObject);
 
@@ -47,6 +49,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure PC_MainChange(Sender: TObject);
+    procedure A_AboutExecute(Sender: TObject);
+    procedure A_DebugExecute(Sender: TObject);
 
   private
     FCloseButtonMouseDownTab: TCloseTabSheet;
@@ -74,20 +78,22 @@ procedure TF_Main.AE_MainMessage(var Msg: tagMSG; var Handled: Boolean);
 begin
  if (msg.message = WM_KeyDown) then
   begin
-   if (RegColl.KeyPress(msg.wParam)) then Exit();
+   if ((Self.Active) and (RegColl.KeyPress(msg.wParam))) then Exit();
 
-   case  msg.wParam of
-     VK_F1 : Application.MessageBox(PChar('Jerry v'+NactiVerzi(Application.ExeName)+#13#10+
-                                          'build '+GetLastBuildDate()+' '+GetLastBuildTime()+#13#10+
-                                          'Vytvoøil Jan Horáèek (c) 2015 pro KMŽ Brno I.'),
-                                    'Info', MB_OK OR MB_ICONINFORMATION);
-     VK_F4 : F_Debug.Show();
-   end;//case
+   // sem muze prijit zpracovani dalsich klaves
   end;//WM_KeyDown
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Pripojit se k serveru
+
+procedure TF_Main.A_AboutExecute(Sender: TObject);
+begin
+ Application.MessageBox(PChar('Jerry v'+NactiVerzi(Application.ExeName)+#13#10+
+                              'build '+GetLastBuildDate()+' '+GetLastBuildTime()+#13#10+
+                              'Vytvoøil Jan Horáèek (c) 2015-2016 pro KMŽ Brno I.'),
+                        'Info', MB_OK OR MB_ICONINFORMATION);
+end;
 
 procedure TF_Main.A_ConnectExecute(Sender: TObject);
 var host:string;
@@ -124,6 +130,11 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Odpojit se od serveru
+
+procedure TF_Main.A_DebugExecute(Sender: TObject);
+begin
+ F_Debug.Show();
+end;
 
 procedure TF_Main.A_DisconnectExecute(Sender: TObject);
 begin
