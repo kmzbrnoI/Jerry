@@ -84,7 +84,7 @@ begin
    Exit();
   end;
 
- PanelTCPClient.SendLn('-;LOK;G;PLEASE;'+ORDb.data[Self.LB_Stanice.ItemIndex].id+';'+Self.E_Note.Text);
+ PanelTCPClient.SendLn('-;LOK;G;PLEASE;'+ORDb.db_reverse[Self.LB_Stanice.Items[Self.LB_Stanice.ItemIndex]]+';'+Self.E_Note.Text);
 
  Self.LB_Stanice.Enabled := false;
  Self.E_Note.Enabled     := false;
@@ -107,11 +107,11 @@ begin
 end;//procedure
 
 procedure TF_NewLoko.FillStanice();
-var i:Integer;
+var name:string;
 begin
  Self.LB_Stanice.Clear();
- for i := 0 to ORDb.cnt-1 do
-   Self.LB_Stanice.Items.Add(ORDb.data[i].name);
+ for name in ORDb.db.Values do
+   Self.LB_Stanice.Items.Add(name);
 end;//procedure
 
 procedure TF_NewLoko.ServerResponse(ok:boolean; msg:string);

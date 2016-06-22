@@ -1,31 +1,23 @@
 unit ORList;
 
-{
-  TORDb shromazduje vsechny oblasti rizeni
-  Ostatni casti programu se ho pak muzou na oblati rizeni ptat.
-}
+// TORDb shromazduje vsechny oblasti rizeni
+//  ostatni casti programu se ho pak muzou na ORs ptat
 
 interface
 
-uses SysUtils, StrUtils, Classes;
-
-const
-  _MAX_OR = 64;
+uses SysUtils, StrUtils, Classes, Generics.Collections;
 
 type
-  TOR = record
-   id:string;
-   name:string;
-  end;
-
   TORDb = class
    private
    public
 
-    data: array [0.._MAX_OR] of TOR;
-    cnt:Integer;
+    db: TDictionary<string, string>;
+    db_reverse: TDictionary<string, string>;
 
     constructor Create();
+    destructor Destroy(); override;
+
     procedure Parse(data:string);
 
   end;//class
@@ -41,10 +33,17 @@ uses RPConst;
 
 constructor TORDb.Create();
 begin
- inherited Create();
-
- Self.cnt := 0;
+ inherited;
+ Self.db := TDictionary<string, string>.Create();
+ Self.db_reverse := TDictionary<string, string>.Create();
 end;//ctor
+
+destructor TORDb.Destroy();
+begin
+ Self.db.Free();
+ Self.db_reverse.Clear();
+ inherited;
+end;//dtor
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +57,8 @@ begin
 
    ExtractStringsEx([']'], ['['], data, list1);
 
-   Self.cnt := list1.Count;
+   Self.db.Clear();
+   Self.db_reverse.Clear();
 
    for i := 0 to list1.Count-1 do
     begin
@@ -66,18 +66,17 @@ begin
      ExtractStringsEx([','], [], list1[i], list2);
 
      try
-       Self.data[i].id   := list2[0];
-       Self.data[i].name := list2[1];
+       Self.db.Add(list2[0], list2[1]);
+       Self.db_reverse.Add(list2[1], list2[0]);
      except
-       Self.data[i].id   := '';
-       Self.data[i].name := '';
+
      end;
     end;
 
    list1.Free();
    list2.Free();
  except
-   Self.cnt := 0;
+
  end;
 end;//procedure
 

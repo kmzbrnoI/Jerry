@@ -40,6 +40,7 @@ type
      rychlost_stupne:Word;                                                      // aktualni rychlost ve stupnich
      rychlost_kmph:Word;                                                        // aktualni rychlost v km/h
      smer:Integer;                                                              // aktualni smer
+     orid:string;                                                               // id oblasti rizeni, ve ktere se nachazi loko
 
      POMtake : TList<THVPomCV>;                                                 // seznam POM pri prevzeti do automatu
      POMrelease : TList<THVPomCV>;                                              // seznam POM pri uvolneni to rucniho rizeni
@@ -139,7 +140,7 @@ var str, str2, str3:TStrings;
     pomCv:THVPomCv;
     tmp:string;
 begin
- // format zapisu: nazev|majitel|oznaceni|poznamka|adresa|trida|souprava|stanovisteA|funkce|rychlost_stupne|rychlost_kmph|smer|{[{cv1take|cv1take-value}][{...}]...}|{[{cv1release|cv1release-value}][{...}]...}|
+ // format zapisu: nazev|majitel|oznaceni|poznamka|adresa|trida|souprava|stanovisteA|funkce|rychlost_stupne|rychlost_kmph|smer|or_id|{[{cv1take|cv1take-value}][{...}]...}|{[{cv1release|cv1release-value}][{...}]...}|
  // souprava je bud cislo soupravy, nebo znak '-'
  str  := TStringList.Create();
  str2 := TStringList.Create();
@@ -170,11 +171,12 @@ begin
    Self.rychlost_stupne := StrToInt(str[9]);
    Self.rychlost_kmph   := StrToInt(str[10]);
    Self.smer            := StrToInt(str[11]);
+   Self.orid            := str[12];
 
-   if (str.Count > 12) then
+   if (str.Count > 13) then
     begin
      // pom-take
-     ExtractStringsEx([']'] , ['['], str[12], str2);
+     ExtractStringsEx([']'] , ['['], str[13], str2);
      for tmp in str2 do
       begin
        ExtractStringsEx(['|'] , [], tmp, str3);
@@ -184,7 +186,7 @@ begin
       end;
 
      // pom-release
-     ExtractStringsEx([']'] , ['['], str[13], str2);
+     ExtractStringsEx([']'] , ['['], str[14], str2);
      for tmp in str2 do
       begin
        ExtractStringsEx(['|'] , [], tmp, str3);
@@ -195,10 +197,10 @@ begin
     end;//if str.Count > 12
 
    // func-vyznam
-   if (str.Count > 14) then
+   if (str.Count > 15) then
     begin
      str2.Clear();
-     ExtractStringsEx([';'], [], str[14], str2);
+     ExtractStringsEx([';'], [], str[15], str2);
      for i := 0 to _MAX_FUNC do
        if (i < str2.Count) then
         Self.funcVyznam[i] := str2[i]
@@ -256,6 +258,8 @@ begin
    else
      Result := Result + '0';
   end;
+
+ Result := Result + '||||'+Self.orid+'|';
 end;//function
 
 ////////////////////////////////////////////////////////////////////////////////
