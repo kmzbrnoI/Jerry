@@ -55,11 +55,14 @@ uses
   fNewLoko in 'fNewLoko.pas' {F_NewLoko},
   Debug in 'Debug.pas' {F_Debug},
   Verze in 'Verze.pas',
-  Hash in 'Hash.pas';
+  Hash in 'Hash.pas',
+  Windows;
 
 {$R *.res}
 
 begin
+  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TF_Main, F_Main);
