@@ -104,6 +104,7 @@ begin
  Self.E_Note.Enabled     := true;
  Self.zadost_probiha     := false;
  Self.ST_Stav.Caption    := 'Žádost zrušena';
+ Self.ST_Stav.Font.Color := clBlack;
 end;//procedure
 
 procedure TF_NewLoko.FillStanice();
@@ -116,6 +117,8 @@ end;//procedure
 
 procedure TF_NewLoko.ServerResponse(ok:boolean; msg:string);
 begin
+ if (Self.ST_Stav.Caption = 'Žádost zrušena') then Exit();
+
  if (ok) then
   begin
    Self.ST_Stav.Font.Color := clGreen;
