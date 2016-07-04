@@ -78,7 +78,11 @@ procedure TF_Main.AE_MainMessage(var Msg: tagMSG; var Handled: Boolean);
 begin
  if (msg.message = WM_KeyDown) then
   begin
-   if ((Self.Active) and (RegColl.KeyPress(msg.wParam))) then Exit();
+   if ((Self.Active) and (RegColl.KeyPress(msg.wParam))) then
+    begin
+     Handled := true;
+     Exit();
+    end;
 
    // sem muze prijit zpracovani dalsich klaves
   end;//WM_KeyDown
@@ -400,7 +404,7 @@ begin
  if (Self.PC_Main.ActivePage = nil) then
   Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')'
  else
-  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '-- Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '– Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
