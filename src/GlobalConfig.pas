@@ -27,6 +27,7 @@ type
 
   TArguments = record
     username,password, server:string;
+    autoconnect:boolean;
     port:Word;
     loks:TList<TLokArgument>;
   end;
@@ -41,6 +42,13 @@ type
   TGlobConfig = class
     public const
       _DEFAULT_FN = 'config_jerry.ini';
+      _DEFAULT_ARGS : TArguments = (
+        username: '';
+        password: '';
+        server: '';
+        autoconnect: false;
+        port: 0;
+      );
 
     private
       filename:string;
@@ -72,7 +80,8 @@ uses TCPClientPanel, main;
 
 constructor TGlobConfig.Create();
 begin
- inherited Create();
+ inherited;
+ Self.data.args := _DEFAULT_ARGS;
  Self.data.args.loks := TList<TLokArgument>.Create();
  Self.ParseArguments();
 end;//ctor
@@ -80,7 +89,7 @@ end;//ctor
 destructor TGlobConfig.Destroy();
 begin
  Self.data.args.loks.Free();
- inherited Destroy();
+ inherited;
 end;//dtor
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +116,7 @@ begin
  Self.data.frmPos.X := ini.ReadInteger('F_Main', 'X', 0);
  Self.data.frmPos.Y := ini.ReadInteger('F_Main', 'Y', 0);
 
- Result := 1;
+ Result := 0;
 end;//function
 
 function TGlobConfig.SaveFile(const filename:string):Integer;
@@ -155,6 +164,11 @@ begin
  while (i <= ParamCount) do
   begin
    arg := ParamStr(i);
+   if (arg = '-a') then
+    begin
+     // autoconnect
+     Self.data.args.autoconnect := true;
+    end else
    if ((arg = '-u') and (i < ParamCount-1)) then
     begin
      // parse username

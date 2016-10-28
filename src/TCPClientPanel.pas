@@ -365,7 +365,7 @@ begin
    Self.SendLn('-;OR-LIST;');
 
    // Autorizace strojvedouciho
-   if (GlobConfig.data.args.username <> '') then
+   if (GlobConfig.data.args.username <> TGlobConfig._DEFAULT_ARGS.username) then
     // nejprve zkontrolujeme, jestli nam nekdo nepredal username a pasword argumenty
     Self.SendLn('-;LOK;G;AUTH;' + GlobConfig.data.args.username + ';' + GlobConfig.data.args.password)
    else if (GlobConfig.data.auth.username <> '') then

@@ -27,14 +27,15 @@ program Jerry;
     "-p" password
     "-s" server (ip/dns)
     "-pt" port
+    "-a" autoconnect
     addr:token
 
  napr.
-   jerry.exe -u root -p heslo 1521:8afff1s86fs4sf86hy16j 2341:f4w64fe5f4wefew4fryh4
+   jerry.exe -a -u root -p heslo 1521:8afff1s86fs4sf86hy16j 2341:f4w64fe5f4wefew4fryh4
 
  Pokud nnektery z argumentu uzivatelske jmeno, heslo, server, nebo port neni
  vyplnen, je pouzit udaj z nastaveni, popripade je uzivatel vyzvan k zadani
- loginu. Pokud neni program volan s zadnymi hancimi vozidly, pouze se pripoji
+ loginu. Pokud neni program volan s zadnymi hnacimi vozidly, pouze se pripoji
  k serveru a autorizuje.
 }
 
@@ -72,7 +73,8 @@ begin
   Application.CreateForm(TF_Debug, F_Debug);
 
   // automaticke pripojeni k serveru
-  if (GlobConfig.data.server.autoconnect) then F_Main.A_ConnectExecute(nil);
+  if ((GlobConfig.data.server.autoconnect) or (GlobConfig.data.args.autoconnect)) then
+    F_Main.A_ConnectExecute(nil);
 
   Application.Run;
 end.

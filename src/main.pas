@@ -108,13 +108,13 @@ begin
  Application.ProcessMessages();
 
  // byl hostname predan jako argument?
- if (GlobConfig.data.args.server <> '') then
+ if (GlobConfig.data.args.server <> TGlobConfig._DEFAULT_ARGS.server) then
    host := GlobConfig.data.args.server
  else
    host := GlobConfig.data.server.host;
 
  // byl port predan jako argument?
- if (GlobConfig.data.args.port <> 0) then
+ if (GlobConfig.data.args.port <> TGlobConfig._DEFAULT_ARGS.port) then
    port := GlobConfig.data.args.port
  else
    port := GlobConfig.data.server.port;
