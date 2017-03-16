@@ -10,10 +10,11 @@ interface
 
 uses SysUtils, IdTCPClient, ListeningThread, IdTCPConnection, IdGlobal,
      Classes, StrUtils, RPConst, Graphics, Windows, Forms, Controls,
-     Generics.Collections, Hash;
+     Generics.Collections, Hash, ExtCtrls;
 
 const
   _DEFAULT_PORT = 5896;
+  _PING_TIMER_PERIOD_MS = 20000;
 
   // tady jsou vyjmenovane vsechny verze protokoluk pripojeni k serveru, ktere klient podporuje
   protocol_version_accept : array[0..0] of string =
@@ -37,6 +38,7 @@ type
     control_disconnect:boolean;                                                 // true, pokud se odpojuji od serveru na zaklade pozadavku uzivatele, pri nucenem odpojeni false
     fauthorised:boolean;                                                        // true, pokud strojvedouci autorizovan, pouzivat \authorised
     first_connection:boolean;                                                   // true, pokud aktualni pripojovani je prvni pripojovani (po startu)
+    pingTimer:TTimer;
 
      procedure OnTcpClientConnected(Sender: TObject);                           // event TCP klienta pripojeni k serveru
      procedure OnTcpClientDisconnected(Sender: TObject);                        // event TCP klienta odpojeni od serveru
@@ -46,6 +48,8 @@ type
      // data se predavaji v Self.Parsed
      procedure ParseLokGlobal();                                                // parsing dat s prefixem "-;LOK;"
      procedure ParseGlobal();                                                   // parsing dat s prefixem "-;"
+
+     procedure SendPing(Sedner:TObject);
 
    public
 
@@ -159,6 +163,11 @@ begin
  Self.parsed := TStringList.Create;
  Self.first_connection := true;
 
+ Self.pingTimer := TTimer.Create(nil);
+ Self.pingTimer.Enabled := false;
+ Self.pingTimer.Interval := _PING_TIMER_PERIOD_MS;
+ Self.pingTimer.OnTimer := Self.SendPing;
+
  // vytvoreni TCP klienta
  Self.tcpClient := TIdTCPClient.Create(nil);
  Self.tcpClient.OnConnected := Self.OnTcpClientConnected;
@@ -177,6 +186,8 @@ begin
 
    if (Assigned(Self.parsed)) then
      FreeAndNil(Self.parsed);
+
+   Self.pingTimer.Free();
  finally
    inherited;
  end;
@@ -261,6 +272,7 @@ begin
  F_Main.SB_Main.Panels[0].Text := 'Probíhá handshake...';
 
  Self.fstatus := TPanelConnectionStatus.handshake;
+ Self.pingTimer.Enabled := true;
 
  // odeslat handshake
  Self.SendLn('-;HELLO;'+Self._PROTOCOL_VERSION+';');
@@ -273,6 +285,7 @@ begin
 
  // status klienta na odpojen
  Self.fstatus := TPanelConnectionStatus.closed;
+ Self.pingTimer.Enabled := false;
 
  // aktualizace okynka
  F_Main.A_Connect.Enabled      := true;
@@ -461,6 +474,18 @@ procedure TPanelTCPClient.LokoPlease(addr:Word; token:string);
 begin
  Self.SendLn('-;LOK;'+IntToStr(addr)+';PLEASE;'+token);
 end;//procedure
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure TPanelTCPClient.SendPing(Sedner:TObject);
+begin
+ try
+   if (Self.tcpClient.Connected) then
+     Self.SendLn('-;PING');
+ except
+
+ end;
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
