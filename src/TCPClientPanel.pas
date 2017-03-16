@@ -171,13 +171,15 @@ end;//ctor
 
 destructor TPanelTCPClient.Destroy();
 begin
- if (Assigned(Self.tcpClient)) then
-   FreeAndNil(Self.tcpClient);
+ try
+   if (Assigned(Self.tcpClient)) then
+     FreeAndNil(Self.tcpClient);
 
- if (Assigned(Self.parsed)) then
-   FreeAndNil(Self.parsed);
-
- inherited;
+   if (Assigned(Self.parsed)) then
+     FreeAndNil(Self.parsed);
+ finally
+   inherited;
+ end;
 end;//dtor
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +218,11 @@ end;//function
 
 function TPanelTCPClient.Disconnect():Integer;
 begin
- if (not Self.tcpClient.Connected) then Exit(1);
+ try
+   if (not Self.tcpClient.Connected) then Exit(1);
+ except
+
+ end;
 
  Self.control_disconnect := true;
  if Assigned(Self.rthread) then Self.rthread.Terminate;
@@ -435,7 +441,11 @@ end;//procedure
 
 procedure TPanelTCPClient.SendLn(str:string);
 begin
- if (not Self.tcpClient.Connected) then Exit; 
+ try
+   if (not Self.tcpClient.Connected) then Exit;
+ except
+
+ end;
 
  try
    Self.tcpClient.Socket.WriteLn(str);
