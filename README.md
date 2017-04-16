@@ -20,3 +20,7 @@ Viz src/Jerry.dpr
 
 (c) Jan Horacek 2015-2016
 Licensed under Apache License v2.0.
+
+## Specialni komponenty
+
+- [JEDI Code Library](http://wiki.delphi-jedi.org/index.php?title=JEDI_Code_Library)
