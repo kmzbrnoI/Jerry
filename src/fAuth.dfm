@@ -3,7 +3,7 @@ object F_Auth: TF_Auth
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
-  Caption = 'Server vy'#382'aduje autentikaci'
+  Caption = 'Server vy'#382'aduje autorizaci'
   ClientHeight = 188
   ClientWidth = 242
   Color = clBtnFace
