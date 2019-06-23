@@ -95,7 +95,7 @@ procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
  Application.MessageBox(PChar('Jerry v'+NactiVerzi(Application.ExeName)+#13#10+
                               'build '+GetLastBuildDate()+' '+GetLastBuildTime()+#13#10+
-                              'Vytvoøil Jan Horáèek (c) 2015-2016 pro KMŽ Brno I.'),
+                              'Vytvoøil Jan Horáèek 2015-2019 pro KMŽ Brno I.'),
                         'Info', MB_OK OR MB_ICONINFORMATION);
 end;
 

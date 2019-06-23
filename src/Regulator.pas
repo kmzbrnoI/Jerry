@@ -14,10 +14,16 @@ uses
 const
   _TIMEOUT_SEC = 5;
   _MAX_FORM_FUNC = 27;
+  _MOM_KEEP_ON_MS = 1000;
 
 type
   TLogCommand = record
     time:TDateTime;
+  end;
+
+  TMomRelease = record
+    f: Integer;
+    shutdownTime: TDateTime;
   end;
 
   TF_DigiReg = class(TForm)
@@ -36,6 +42,7 @@ type
     PC_Funkce: TPageControl;
     TS_func_0_13: TTabSheet;
     TS_func_14_28: TTabSheet;
+    T_Mom_Release: TTimer;
     procedure CHB_svetlaClick(Sender: TObject);
     procedure B_PrevzitLokoClick(Sender: TObject);
     procedure B_STOPClick(Sender: TObject);
@@ -46,15 +53,17 @@ type
     procedure T_SpeedTimer(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CHB_TotalClick(Sender: TObject);
+    procedure T_Mom_ReleaseTimer(Sender: TObject);
   private
 
-   sent:TQueue<TLogCommand>;                                                    // vytupni fronta odeslanych prikazu na server
+   sent:TQueue<TLogCommand>;                                                    // vystupni fronta odeslanych prikazu na server
    speed:Integer;                                                               // posledni poslana rychlost, pouziva se pri aktualizaci rychlosti v T_Speed
    HV:THV;                                                                      // hnaciho vozidlo, ktere ridim
    updating:boolean;                                                            // je true, pokud se nastavuji elementy zvnejsi
    TS:TCloseTabSheet;                                                           // odkaz na zalozku PageControlleru
    CHB_funkce:array[0.._MAX_FORM_FUNC] of TCheckBox;                            // CheckBoxy funkci
    com_err:string;                                                              // posledni komunikacni chyba
+   q_mom_release:TQueue<TMomRelease>;                                           // fronta momentary funkci k vypnuti
 
    procedure SendCmd(cmd:string);                                               // odesli prikaz konkretniho hnaciho vozidla na server
    procedure SetElementsState(state:boolean);                                   // nastav Enabled elementu na formulari na hodnotu \state
@@ -63,6 +72,12 @@ type
 
    procedure CreateCHBFunkce();                                                 // vytvori CheckBoxy funkci
    procedure DestroyCHBFunkce();                                                // znici CHeckBoxy funkci
+
+   procedure MomRelease(mr:TMomRelease);
+   function CreateMomRelease(f: Integer; shutdownTime: TDateTime):TMomRelease; overload;
+   function CreateMomRelease(f: Integer):TMomRelease; overload;
+
+   class procedure SimulateClick(var chb:TCheckBox);
 
   public
    addr:Word;                                                                   // adresa rizeneho HV (hnaciho vozidla)
@@ -102,6 +117,7 @@ begin
  Self.speed := -2;
  Self.CHB_Multitrack.Checked := multitrack;
  Self.CHB_Total.Checked := total;
+ Self.q_mom_release := TQueue<TMomRelease>.Create();
 
  Self.HV := THV.Create(lok_data);
 
@@ -117,6 +133,9 @@ end;//ctor
 
 destructor TF_DigiReg.Destroy();
 begin
+ Self.T_Mom_Release.Enabled := false;
+ Self.T_Speed.Enabled := false;
+ Self.q_mom_release.Free();
  Self.SendCmd('RELEASE;');
  Self.sent.Free();
  Self.HV.Free();
@@ -144,7 +163,10 @@ begin
   Self.TB_reg.Position   := Self.HV.rychlost_stupne;
 
   for i := 0 to _MAX_FORM_FUNC do
+   begin
+    Self.CHB_funkce[i].AllowGrayed := (Self.HV.funcType[i] = THVFuncType.momentary);
     Self.CHB_funkce[i].Checked := Self.HV.funkce[i];
+   end;
 
   Self.updating := false;
 
@@ -187,13 +209,19 @@ end;
 // Zapnuti/vypnuti libovolne funkce
 
 procedure TF_DigiReg.CHB_svetlaClick(Sender: TObject);
+var f:Integer;
  begin
   if (Self.updating) then Exit();
-  
-  if ((Sender as TCheckBox).Checked) then
-    Self.SendCmd('F;'+IntToStr((Sender as TCheckBox).Tag)+';1')
-  else
-    Self.SendCmd('F;'+IntToStr((Sender as TCheckBox).Tag)+';0');
+  f := (Sender as TCheckBox).Tag;
+
+  if ((Sender as TCheckBox).State = cbChecked) then
+    Self.SendCmd('F;'+IntToStr(f)+';1')
+  else if ((Sender as TCheckBox).State = cbGrayed) then begin
+    Self.q_mom_release.Enqueue(Self.CreateMomRelease(f));
+    Self.CHB_funkce[f].Enabled := false;
+    Self.SendCmd('F;'+IntToStr(f)+';1');
+  end else
+    Self.SendCmd('F;'+IntToStr(f)+';0');
  end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -410,8 +438,10 @@ begin
  Result := true;
 
  case (key) of
-  VK_NUMPAD0..VK_NUMPAD9 : Self.CHB_funkce[key-VK_NUMPAD0].Checked := not Self.CHB_funkce[key-VK_NUMPAD0].Checked;
-  VK_F1..VK_F24 : Self.CHB_funkce[key-VK_F1+1].Checked := not Self.CHB_funkce[key-VK_F1+1].Checked;
+  VK_NUMPAD0..VK_NUMPAD9 : if (Self.CHB_funkce[key-VK_NUMPAD0].Enabled) then
+                             Self.SimulateClick(Self.CHB_funkce[key-VK_NUMPAD0]);
+  VK_F1..VK_F24 : if (Self.CHB_funkce[key-VK_F1+1].Enabled) then
+                    Self.SimulateClick(Self.CHB_funkce[key-VK_F1+1]);
 
   VK_ADD      : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 0;
   VK_SUBTRACT : if (Self.RG_Smer.Enabled) then Self.RG_Smer.ItemIndex := 1;
@@ -508,4 +538,50 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-end.//unit
+procedure TF_DigiReg.T_Mom_ReleaseTimer(Sender: TObject);
+begin
+ if (Self.q_mom_release.Count > 0) then
+   if (Self.q_mom_release.Peek().shutdownTime <= Now) then
+     Self.MomRelease(Self.q_mom_release.Dequeue());
+end;
+
+
+procedure TF_DigiReg.MomRelease(mr:TMomRelease);
+begin
+ Self.CHB_funkce[mr.f].State := cbUnchecked; // odesle prikaz k vypnuti funkce
+ Self.CHB_funkce[mr.f].Enabled := true;
+end;
+
+function TF_DigiReg.CreateMomRelease(f: Integer; shutdownTime: TDateTime):TMomRelease;
+begin
+ Result.f := f;
+ Result.shutdownTime := shutdownTime;
+end;
+
+function TF_DigiReg.CreateMomRelease(f: Integer):TMomRelease;
+begin
+ Result := Self.CreateMomRelease(f, Now+EncodeTime(0, 0, _MOM_KEEP_ON_MS div 1000, _MOM_KEEP_ON_MS mod 1000));
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+class procedure TF_DigiReg.SimulateClick(var chb:TCheckBox);
+begin
+ if (chb.AllowGrayed) then
+  begin
+   if (chb.State = cbUnchecked) then
+     chb.State := cbGrayed
+   else if (chb.State = cbGrayed) then
+     chb.State := cbChecked
+   else
+     chb.State := cbUnchecked;
+  end else begin
+   chb.Checked := not chb.Checked;
+  end;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+end.
+
+//unit
