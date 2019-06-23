@@ -111,7 +111,7 @@ procedure TF_NewLoko.FillStanice();
 var name:string;
 begin
  Self.LB_Stanice.Clear();
- for name in ORDb.db.Values do
+ for name in ORDb.names_sorted do
    Self.LB_Stanice.Items.Add(name);
 end;//procedure
 
