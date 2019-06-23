@@ -58,66 +58,7 @@ type
      class function HVFuncTypeToChar(t:THVFuncType):char;
   end;
 
-  // databaze hnacich vozidel
-  THVDb = class
-   public
-    HVs:array [0.._MAX_HV] of THV;                                              // hanciho vozidla jsou mapovana v poli 0..9999 podle adresy (adresa je primarni klic)
-    count:Integer;
-
-    constructor Create();
-    destructor Destroy(); override;
-
-    procedure ParseHVs(data:string);
-    procedure ClearList();
-
-  end;
-
 implementation
-
-////////////////////////////////////////////////////////////////////////////////
-
-constructor THVDb.Create();
-var i:Integer;
-begin
- inherited;
- for i := 0 to _MAX_HV-1 do
-  Self.HVs[i] := nil;
-end;//ctor
-
-destructor THVDb.Destroy();
-begin
- Self.ClearList();
- inherited;
-end;//dtor
-
-////////////////////////////////////////////////////////////////////////////////
-
-procedure THVDb.ClearList();
-var i:Integer;
-begin
- for i := 0 to Self.count-1 do
-  if (Assigned(Self.HVs[i])) then
-    FreeAndNil(Self.HVs[i]);
-end;//procedure
-
-////////////////////////////////////////////////////////////////////////////////
-
-procedure THVDb.ParseHVs(data:string);
-var str:TStrings;
-    i:Integer;
-begin
- str := TStringList.Create();
- ExtractStringsEx([']'], ['['], data, str);
-
- Self.ClearList();
-
- Self.count := str.Count;
-
- for i := 0 to str.Count-1 do
-   Self.HVs[i] := THV.Create(str[i]);
-
- str.Free();
-end;//procedure
 
 ////////////////////////////////////////////////////////////////////////////////
 
