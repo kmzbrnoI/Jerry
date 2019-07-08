@@ -11,7 +11,7 @@ uses
   RegCollector in 'RegCollector.pas',
   Regulator in 'Regulator.pas' {F_DigiReg},
   ORList in 'ORList.pas',
-  settings in 'settings.pas' {F_Settings},
+  fSettings in 'fSettings.pas' {F_Settings},
   HVDb in 'HVDb.pas',
   CloseTabSheet in 'CloseTabSheet.pas',
   fAuth in 'fAuth.pas' {F_Auth},

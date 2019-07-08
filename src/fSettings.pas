@@ -1,4 +1,4 @@
-unit settings;
+unit fSettings;
 
 {
   Okynko nastaveni

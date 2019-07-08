@@ -72,7 +72,7 @@ var
 
 implementation
 
-uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, fDebug, settings;
+uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, fDebug, fSettings;
 
 ////////////////////////////////////////////////////////////////////////////////
 

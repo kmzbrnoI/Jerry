@@ -68,7 +68,7 @@ implementation
 
 {$R *.dfm}
 
-uses TCPClientPanel, GlobalConfig, settings, fNewLoko, fDebug, RegCollector,
+uses TCPClientPanel, GlobalConfig, fSettings, fNewLoko, fDebug, RegCollector,
       Verze, Regulator;
 
 ////////////////////////////////////////////////////////////////////////////////
