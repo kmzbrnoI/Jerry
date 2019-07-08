@@ -1,26 +1,45 @@
 # Jerry
 
-Tento program slouzi jako klientska aplikace k hJOP serveru k rizeni hnacich
+Tento program slouží jako klientská aplikace k hJOP serveru k řízeni hnacích
 vozidel.
 
-Funkce:
- - rizeni jizdniho stupne, smeru
- - moznost nouzoveho zastaveni, moznost plynuleho zastaveni
+## Funkce
+ - řízení jízdního stupně, směru
+ - možnost nouzového zastaveni, možnost plynulého zastavení
  - multitrakce
- - rozliseni mezi totalnim rucnim rizenim (vhodne napr. pro posun) a
-   polorucnim rizenim (vhodne napr. pro rizeni funkci HV v trati)
- - kontrola odpovedi serveru, resp. centraly, na prikaz
- - moznost prevzit hnaci vozidla na Rocomouse a zpet do regulatoru
- - zadost o lokomotivu(y) do oblasti rizeni
- - zmena serveru, portu, uzivatelskeho jmena a hesla
- - prevzeti hnaciho vozidla za pomoci autorizacniho tokenu
- - kompatibilita s vnejsimi programy akceptovanim argumentu
+ - rozlišení mezi totálním ručním řízením (vhodné např. pro posun) a
+   poloručním řízením (vhodné např. pro řízení funkcí HV v trati)
+ - kontrola odpovědi serveru na přikazy
+ - možnost převzít hnací vozidla na Rocomouse a zpět do regulátoru
+ - žádost o lokomotivu(y) do oblastí řízení
+ - změna serveru, portu, uživatelského jména a hesla
+ - převzetí hnacího vozidla za pomocí autorizačního tokenu
+ - kompatibilita s vnějšími programy akceptováním argumentů
 
-Viz src/Jerry.dpr
+## Spouštění programu
 
-(c) Jan Horacek 2015-2016
+Jerry přebírá tyto argumenty:
+
+ * '-u' username (přihlašovací jméno)
+ * '-p' password (hash přihlašovacího hesla)
+ * '-s' server (ip/dns) (specifikace umístění serveru)
+ * '-pt' port (specifikace portu serveru)
+ * '-a' (automatické připojení k serveru)
+ * addr:token (adresa a token hnacího vozidla v převzetí)
+
+např.
+```
+jerry.exe -a -u root -p heslo 1521:8afff1s86fs4sf86hy16j 2341:f4w64fe5f4wefew4fryh4
+```
+
+Pokud některý z argumentů uživatelské jméno, heslo, server nebo port není
+vyplněn, je použit údaj z nastavení, popřípade je uživatel vyzván k zadání
+loginu. Pokud není program volán s žádnými hnacími vozidly, pouze se připojí
+k serveru a autorizuje.
+
+Vytvořil Jan Horáček
 Licensed under Apache License v2.0.
 
-## Specialni komponenty
+## Speciální komponenty
 
 - [JEDI Code Library](http://wiki.delphi-jedi.org/index.php?title=JEDI_Code_Library)
