@@ -130,9 +130,11 @@ end;
 procedure TRegulatorCollector.Parse(data:TStrings);
 var tab:TCloseTabSheet;
 begin
+ if (data.Count < 4) then
+   Exit();
  tab := Self.GetTab(StrToInt(data[2]));
 
- if (data[3] = 'AUTH') then
+ if (UpperCase(data[3]) = 'AUTH') then
   begin
    if (tab = nil) then
     begin

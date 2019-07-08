@@ -415,6 +415,10 @@ end;
 procedure TPanelTCPClient.ParseLokGlobal();
 var loko:TLokArgument;
 begin
+ if (parsed.Count < 4) then
+   Exit();
+ parsed[3] := UpperCase(parsed[3]);
+
  if (parsed[3] = 'AUTH') then
   begin
    // autorizace konkretni lokomotivy

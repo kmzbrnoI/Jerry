@@ -272,6 +272,8 @@ var func:TStrings;
     left, right, i:Integer;
     pom:boolean;
 begin
+ data[3] := UpperCase(data[3]);
+
  if (data[3] = 'F') then begin
    func := TStringList.Create();
    ExtractStringsEx(['-'], [], data[4], func);
