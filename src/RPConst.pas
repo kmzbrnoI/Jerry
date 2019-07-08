@@ -22,7 +22,7 @@ function StrToBool(str:string):boolean;
 begin
  if (str = '1') then Result := true
  else Result := false;
-end;//function
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vlastni parsovani stringu predevsim pro TCP komunikaci.

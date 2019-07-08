@@ -141,7 +141,7 @@ begin
  Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
 
  Self.Show();
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 

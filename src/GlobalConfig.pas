@@ -117,7 +117,7 @@ begin
  Self.data.frmPos.Y := ini.ReadInteger('F_Main', 'Y', 0);
 
  Result := 0;
-end;//function
+end;
 
 function TGlobConfig.SaveFile(const filename:string):Integer;
 var ini:TMemIniFile;
@@ -143,12 +143,12 @@ begin
  ini.UpdateFile();
 
  Result := 0;
-end;//function
+end;
 
 function TGlobConfig.SaveFile():Integer;
 begin
  Result := Self.SaveFile(Self.filename);
-end;//function
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -210,7 +210,7 @@ begin
   end;//while
 
  data.Free();
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 

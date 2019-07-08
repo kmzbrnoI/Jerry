@@ -223,7 +223,7 @@ begin
  Self.control_disconnect := false;
 
  Result := 0;
-end;//function
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -248,7 +248,7 @@ begin
  end;
 
  Result := 0;
-end;//function
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // eventy z IdTCPClient
@@ -276,7 +276,7 @@ begin
 
  // odeslat handshake
  Self.SendLn('-;HELLO;'+Self._PROTOCOL_VERSION+';');
-end;//procedure
+end;
 
 procedure TPanelTCPClient.OnTcpClientDisconnected(Sender: TObject);
 begin
@@ -308,7 +308,7 @@ begin
  // po odpojeni od serveru se tak aplikace zavre
  if (F_Main.close_app) then
    F_Main.Close();
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -341,7 +341,7 @@ begin
  except
 
  end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -350,7 +350,7 @@ begin
  Self.OnTcpClientDisconnected(Self);
  F_Main.SB_Main.Panels[0].Text := 'Spojení se serverem pøerušeno';
  F_Main.SB_Main.Panels[1].Text := '';
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -404,7 +404,7 @@ begin
    F_NewLoko.FillStanice();
   end;
 
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -448,7 +448,7 @@ begin
    else
      F_NewLoko.ServerResponse(parsed[4] = 'ok', '');
   end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -468,12 +468,12 @@ begin
  end;
 
  F_Debug.Log('SEND: '+str);
-end;//procedure
+end;
 
 procedure TPanelTCPClient.LokoPlease(addr:Word; token:string);
 begin
  Self.SendLn('-;LOK;'+IntToStr(addr)+';PLEASE;'+token);
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 

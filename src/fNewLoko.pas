@@ -55,7 +55,7 @@ begin
  if ((Self.zadost_probiha) and
   (Application.MessageBox('Opravdu zrušit žádost o lokomotivu?', 'Opravdu?', MB_YESNO OR MB_ICONQUESTION) = mrNo)) then
    CanClose := false;
-end;//procedure
+end;
 
 procedure TF_NewLoko.FormShow(Sender: TObject);
 begin
@@ -74,7 +74,7 @@ end;
 procedure TF_NewLoko.LB_StaniceDblClick(Sender: TObject);
 begin
  B_ApplyClick(B_Apply);
-end;//procedure
+end;
 
 procedure TF_NewLoko.B_ApplyClick(Sender: TObject);
 begin
@@ -92,7 +92,7 @@ begin
  Self.B_Cancel.Enabled   := true;
  Self.zadost_probiha     := true;
  Self.ST_Stav.Caption    := 'Odeslána žádost ...';
-end;//procedure
+end;
 
 procedure TF_NewLoko.B_CancelClick(Sender: TObject);
 begin
@@ -105,7 +105,7 @@ begin
  Self.zadost_probiha     := false;
  Self.ST_Stav.Caption    := 'Žádost zrušena';
  Self.ST_Stav.Font.Color := clBlack;
-end;//procedure
+end;
 
 procedure TF_NewLoko.FillStanice();
 var name:string;
@@ -113,7 +113,7 @@ begin
  Self.LB_Stanice.Clear();
  for name in ORDb.names_sorted do
    Self.LB_Stanice.Items.Add(name);
-end;//procedure
+end;
 
 procedure TF_NewLoko.ServerResponse(ok:boolean; msg:string);
 begin
@@ -133,6 +133,6 @@ begin
    Self.E_Note.Enabled     := true;
    Self.zadost_probiha     := false;
   end;
-end;//procedure
+end;
 
 end.//unit

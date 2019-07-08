@@ -222,7 +222,7 @@ var f:Integer;
     Self.SendCmd('F;'+IntToStr(f)+';1');
   end else
     Self.SendCmd('F;'+IntToStr(f)+';0');
- end;//procedure
+ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Prevzit loko do rucniho rizeni
@@ -230,7 +230,7 @@ var f:Integer;
 procedure TF_DigiReg.B_PrevzitLokoClick(Sender: TObject);
 begin
  PanelTCPClient.SendLn('-;LOK;'+IntToStr(Self.addr)+';PLEASE;');
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Nastavit rychlost loko na 0 stupnu
@@ -250,7 +250,7 @@ procedure TF_DigiReg.B_STOPClick(Sender: TObject);
 
   Self.speed := 0;
   Self.TB_reg.Position := 0;
- end;//procedure
+ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Zmena smeru loko
@@ -262,7 +262,7 @@ procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
     Self.speed := -1;
     Self.T_SpeedTimer(Self);
    end;
- end;//procedure
+ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Parsign dat ze serveru
@@ -365,7 +365,7 @@ begin
 
    if ((F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) and (Self.TB_reg.Enabled)) then Self.TB_reg.SetFocus();
  end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Kliknuti na Share S_Status zpusobi zadost o prevzeti hnaciho vozidla,
@@ -393,7 +393,7 @@ begin
 
  Self.UpdateRych();
  Self.UpdateSent();
-end;//procedure
+end;
 
 procedure TF_DigiReg.UpdateSent();
 begin
@@ -407,7 +407,7 @@ begin
      Self.com_err := 'loko NEKOMUNIKUJE';
     end;
   end;
-end;//procedure
+end;
 
 procedure TF_DigiReg.UpdateRych(multitrack:boolean = true);
 begin
@@ -418,7 +418,7 @@ begin
    Self.speed := Self.TB_reg.Position;
    if (multitrack) then RegColl.UpdateMultitrack(Self.Parent as TCloseTabSheet);
   end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // vyvola se, pokud je me okynko aktivni a je nad nim stiskla klavesa
@@ -451,7 +451,7 @@ begin
  else
    Result := false;
  end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Odeslani prikazu serveru
@@ -463,7 +463,7 @@ begin
 
  lc.time := Now;
  Self.sent.Enqueue(lc);
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Zmena enabled objektu na formulari
@@ -481,14 +481,14 @@ begin
 
   CHB_Total.Enabled := state;
   CHB_Multitrack.Enabled := state;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 function TF_DigiReg.GetMultitrack():boolean;
 begin
  Result := Self.CHB_Multitrack.Checked;
-end;//function
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vytvoreni vsech CHB_funkce

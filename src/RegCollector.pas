@@ -92,7 +92,7 @@ begin
    (tab.form as TF_DigiReg).CHB_Total.SetFocus();
 
  F_Main.PC_MainChange(F_Main);
-end;//procedure
+end;
 
 function TRegulatorCollector.GetTab(addr:Word):TCloseTabSheet;
 var tab:TCloseTabSheet;
@@ -101,7 +101,7 @@ begin
  for tab in Self.tabs do
    if ((tab.form as TF_DigiReg).addr = addr) then
      Exit(tab);
-end;//function
+end;
 
 procedure TRegulatorCollector.CloseAll();
 var i:Integer;
@@ -112,7 +112,7 @@ begin
    Self.tabs[i].Free;
   end;
  Self.tabs.Clear();
-end;//procedure
+end;
 
 function TRegulatorCollector.KeyPress(key:Integer):boolean;
 var i:Integer;
@@ -122,7 +122,7 @@ begin
      Exit(true);
 
  Result := false;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // parse dat ze serveru
@@ -152,7 +152,7 @@ begin
   end else begin
    if (tab <> nil) then (tab.form as TF_DigiReg).Parse(data);
   end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -169,7 +169,7 @@ begin
  (Sender as TCloseTabSheet).Visible := false;
  (Sender as TCloseTabSheet).form.Free();
  (Sender as TCloseTabSheet).Free();
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -183,7 +183,7 @@ begin
        (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
        (tab.form as TF_DigiReg).UpdateRych(false);
       end;
-end;//procedure
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
