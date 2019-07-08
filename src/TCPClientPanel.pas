@@ -402,12 +402,14 @@ begin
    end;
   end
 
+ else if ((parsed[1] = 'PING') and (parsed.Count > 2) and (UpperCase(parsed[2]) = 'REQ-RESP')) then
+   Self.SendLn('-;PONG')
+
  else if (parsed[1] = 'OR-LIST') then
   begin
    ORDb.Parse(parsed[2]);
    F_NewLoko.FillStanice();
   end;
-
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
