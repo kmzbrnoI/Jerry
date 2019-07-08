@@ -72,28 +72,6 @@ var
 
 implementation
 
-{
- navazani komunikace:
-  1) klient se pripoji
-  2) klient posle hanshake ("-;HELLO;verze_protokolu")
-  3) klient vycka na odpoved na handshake
-  4) klient posle na server pozadavek o autorizaci obecneho rizeni -- login strojvedouciho a vycka na odpoved
-  5) klient nacte seznam oblasti rizeni a nabidne uzivateli vybrat oblast rizeni, do ktere provest zadost o LOKO
-
- jak funguje rizeni z regulatoru:
-    a) cesta zadosti z regulatoru
-        1) klient se pripoji, autorizuje se vuci serveru prikazem LOK;G;AUTH;
-        2) klient si nacte seznam oblasti rizeni
-        3) klient si vybere oblasti rizeni a do ni posle pozadavek
-        4) oblasti rizeni priradi regulatoru hnaci vozidlo (vozidla)
-
-    b) cesta primeho prevzeti
-        1) klient se pripoji, autorizuje se vuci serveru prikazem LOK;G;AUTH;
-        2) klient si obstara autorizacni token pro dane hnaci vozidlo (napriklad od dispecera -- resp. z panelu)
-        3) klient pozada o LOKO a prilozi token, loko je mu prirazeno (pozor: token ma omezenou casovou platnost)
-
-}
-
 uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, fDebug, settings;
 
 ////////////////////////////////////////////////////////////////////////////////
