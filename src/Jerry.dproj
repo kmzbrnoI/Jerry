@@ -71,7 +71,7 @@
 			<DCCReference Include="fNewLoko.pas">
 				<Form>F_NewLoko</Form>
 			</DCCReference>
-			<DCCReference Include="Debug.pas">
+			<DCCReference Include="fDebug.pas">
 				<Form>F_Debug</Form>
 			</DCCReference>
 			<DCCReference Include="Verze.pas"/>

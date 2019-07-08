@@ -73,62 +73,6 @@ var
 implementation
 
 {
- Specifikace komunikacniho protokolu:
-  Jedna se o retezec, ve kterem jsou jednotliva data oddelena strednikem
-  prvni parametr je v pripade regulatoru vzdy '-'.
-  Komunikace probiha znakovou sadou UTF-8.
-  Komunikace JE case-sensitive.
-
-
- vynatek z protokolu:
- PRIKAZY PRO REGULATOR:
-
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////// KLIENT -> SERVER ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
- -;OR-LIST;                              - pozadavek na ziskani seznamu oblasti rizeni (stanic)
-
-
- -;LOK;G;AUTH;username;passwd            - pozadavek na autorizaci uzivatele
- -;LOK;G:PLEASE;or_id;comment            - pozadavek na rizeni loko z dane oblasti rizeni
- -;LOK;G:CANCEL;                         - zruseni pozadavku o loko
-
- -:LOK;addr;PLEASE;token                 - zadost o rizeni konkretni lokomotivy; token neni potreba pripojovat v pripade, kdy loko uz mame autorizovane a bylo nam ukradeno napriklad mysi
- -;LOK;addr;RELEASE                      - zadost o uvolneni lokomotivy z regulatoru
- -;LOK;addr;SP;sp_km/h                   - nastaveni rychlosti lokomotivy
- -;LOK;addr;SPD;sp_km/h;dir[0,1]         - nastaveni rychlosti a smeru lokomotivy
- -;LOK;addr;D;dir[0,1]                   - nastaveni smeru lokomotivy
- -;LOK;addr;SP-S;sp_stupen[0-28]         - nastaveni rychlosti lokomotivy ve stupnich
- -;LOK;addr;SPD-S;sp_stupen;dir[0,1]     - nastaveni rychlosti a smeru lokomotivy ve stupnich
- -;LOK;addr;F;F_left-F_right;states      - nastaveni funkci lokomotivy
-   napr.; or;LOK;F;0-4;00010 nastavi F3 a ostatni F vypne
- -;LOK;addr;STOP;                        - nouzove zastaveni
- -;LOK;addr;TOTAL;[0,1]                  - nastaveni totalniho rucniho rizeni hnaciho vozidla
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////// SERVER -> KLIENT ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
- -;OR-LIST;[or1id,or1name][or2id, ...    - zaslani seznamu vsech oblasti rizeni; id je unikatni ID, nazev je nazev pro uzivatele
-                                           dale v protokolu je pouzivano pouze ID
-
- -;LOK;G:PLEASE-RESP;[ok, err];info      - odpoved na zadost o lokomotivu z reliefu; v info je pripadna chybova zprava
- -;LOK;G;AUTH;[ok,not,total];info        - navratove hlaseni o autorizaci uzivatele
- -;LOK;addr;AUTH;[ok,not,stolen,release];info;hv_data
-                                        - odpoved na pozadavek o autorizaci rizeni hnaciho vozidla (odesilano take jako informace o zruseni ovladani hnacicho vozidla)
-                                           info je string
-                                           hv_data jsou pripojovana k prikazu v pripade, ze doslo uspesne k autorizaci; jedna se o PanelString hnaciho vozdila obsahujici vsechny informace o nem
- -;LOK;addr;F;F_left-F_right;states      - informace o stavu funkci lokomotivy
-   napr.; or;LOK;0-4;00010 informuje, ze je zaple F3 a F0, F1, F2 a F4 jsou vyple
- -;LOK;addr;SPD;sp_km/h;sp_stupne;dir    - informace o zmene rychlosti (ci smeru) lokomotivy
- -;LOK;addr;RESP;[ok, err];info;speed_kmph
-                                          - odpoved na prikaz;  speed_kmph je nepovinny argument; info zpravidla obsahuje rozepsani chyby, pokud je odpoved "ok", info je prazdne
- -;LOK;addr;TOTAL;[0,1]                   - zmena rucniho rizeni lokomotivy
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
  navazani komunikace:
   1) klient se pripoji
   2) klient posle hanshake ("-;HELLO;verze_protokolu")
@@ -150,7 +94,7 @@ implementation
 
 }
 
-uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, Debug, settings;
+uses Main, RegCollector, ORList, GlobalConfig, fAuth, fNewLoko, fDebug, settings;
 
 ////////////////////////////////////////////////////////////////////////////////
 
