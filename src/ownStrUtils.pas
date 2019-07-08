@@ -1,35 +1,19 @@
-unit RPConst;
-
-{
-  Konstanty programu
-}
+unit ownStrUtils;
 
 interface
 
-uses Classes, SysUtils;
+uses Character, SysUtils, Classes;
 
-
-type
-
-  TWordAr = array of Word;
-
-  procedure ExtractStringsEx(Separators: TSysCharSet; Ignore: TSysCharSet; Content: string; var Strings: TStrings);
+procedure ExtractStringsEx(Separators: TSysCharSet; Ignore: TSysCharSet; Content: string; var Strings: TStrings);
 
 implementation
-
-
-function StrToBool(str:string):boolean;
-begin
- if (str = '1') then Result := true
- else Result := false;
-end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vlastni parsovani stringu predevsim pro TCP komunikaci.
 // Toto parsovani oproti systemovemu ExtractStrings oddeluje i pradzne stringy.
 // Navic cokoliv ve znacich "{" a "}" je povazovano jako plaintext bez oddelnovacu.
 // Tyto znaky mohou by i zanorene.
-// Napr. text: ahoj;ja;jsem;{Honza;Horazek}
+// Napr. text: ahoj;ja;jsem;{Honza;Horacek}
 //    vrati: ["ahoj", "ja", "jsem", "Honza;Horacek"]
 
 procedure ExtractStringsEx(Separators: TSysCharSet; Ignore: TSysCharSet; Content: string; var Strings: TStrings);

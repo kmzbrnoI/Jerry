@@ -6,7 +6,7 @@ unit HVDb;
 
 interface
 
-uses Classes, SysUtils, StdCtrls, RPConst, Generics.Collections;
+uses Classes, SysUtils, StdCtrls, ownStrUtils, Generics.Collections;
 
 const
   _MAX_HV = 128;

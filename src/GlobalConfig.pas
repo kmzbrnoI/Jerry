@@ -6,7 +6,7 @@ unit GlobalConfig;
 
 interface
 
-uses IniFiles, SysUtils, RPConst, Types, Generics.Collections, Classes;
+uses IniFiles, SysUtils, Types, Generics.Collections, Classes, ownStrUtils;
 
 type
   TServerConfig = record

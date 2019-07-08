@@ -9,7 +9,7 @@ unit TCPClientPanel;
 interface
 
 uses SysUtils, IdTCPClient, ListeningThread, IdTCPConnection, IdGlobal,
-     Classes, StrUtils, RPConst, Graphics, Windows, Forms, Controls,
+     Classes, StrUtils, Graphics, Windows, Forms, Controls, ownStrUtils,
      Generics.Collections, Hash, ExtCtrls;
 
 const

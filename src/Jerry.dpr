@@ -6,7 +6,6 @@ uses
   main in 'main.pas' {F_Main},
   TCPClientPanel in 'TCPClientPanel.pas',
   ListeningThread in 'ListeningThread.pas',
-  RPConst in 'RPConst.pas',
   GlobalConfig in 'GlobalConfig.pas',
   RegCollector in 'RegCollector.pas',
   Regulator in 'Regulator.pas' {F_DigiReg},
@@ -19,7 +18,8 @@ uses
   fDebug in 'fDebug.pas' {F_Debug},
   Verze in 'Verze.pas',
   Hash in 'Hash.pas',
-  Windows;
+  Windows,
+  ownStrUtils in 'ownStrUtils.pas';
 
 {$R *.res}
 
@@ -33,7 +33,6 @@ begin
   Application.CreateForm(TF_Auth, F_Auth);
   Application.CreateForm(TF_NewLoko, F_NewLoko);
   Application.CreateForm(TF_Debug, F_Debug);
-
   // automaticke pripojeni k serveru
   if ((GlobConfig.data.server.autoconnect) or (GlobConfig.data.args.autoconnect)) then
     F_Main.A_ConnectExecute(nil);

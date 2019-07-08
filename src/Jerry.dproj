@@ -1,4 +1,4 @@
-	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 		<PropertyGroup>
 			<ProjectGuid>{B757EF79-DAD0-4F5B-B20C-6FB481FAEFEF}</ProjectGuid>
 			<ProjectVersion>12.0</ProjectVersion>
@@ -53,7 +53,6 @@
 			</DCCReference>
 			<DCCReference Include="TCPClientPanel.pas"/>
 			<DCCReference Include="ListeningThread.pas"/>
-			<DCCReference Include="RPConst.pas"/>
 			<DCCReference Include="GlobalConfig.pas"/>
 			<DCCReference Include="RegCollector.pas"/>
 			<DCCReference Include="Regulator.pas">
@@ -76,6 +75,7 @@
 			</DCCReference>
 			<DCCReference Include="Verze.pas"/>
 			<DCCReference Include="Hash.pas"/>
+			<DCCReference Include="ownStrUtils.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>

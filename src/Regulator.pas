@@ -99,7 +99,7 @@ implementation
 
 {$R *.dfm}
 
-uses TCPClientPanel, ORList, Main, RegCollector, RPConst;
+uses TCPClientPanel, ORList, Main, RegCollector, ownStrUtils;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vytvoreni noveho regulatoru
