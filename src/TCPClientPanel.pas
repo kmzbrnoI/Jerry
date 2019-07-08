@@ -326,6 +326,10 @@ begin
  F_Debug.Log('GET: '+data);
 
  try
+   if (Self.parsed.Count < 2) then
+     Exit();
+   Self.parsed[1] := UpperCase(Self.parsed[1]);
+
    // zakladni rozdeleni podle prefixu
    if (Self.parsed[0] = '-') then
     begin
@@ -335,7 +339,7 @@ begin
         Self.ParseLokGlobal()
        else
         RegColl.Parse(parsed);
-     end else
+      end else
        Self.ParseGlobal();
     end;
  except
