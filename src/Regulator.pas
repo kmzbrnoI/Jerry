@@ -14,7 +14,7 @@ uses
 const
   _TIMEOUT_SEC = 5;
   _MAX_FORM_FUNC = 27;
-  _MOM_KEEP_ON_MS = 1000;
+  _MOM_KEEP_ON_MS = 750;
 
 type
   TLogCommand = record

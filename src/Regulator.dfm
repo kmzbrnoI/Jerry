@@ -76,18 +76,10 @@ object F_DigiReg: TF_DigiReg
     TabOrder = 7
     object TS_func_0_13: TTabSheet
       Caption = 'F0-F13'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TS_func_14_28: TTabSheet
       Caption = 'F14-F28'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object RG_Smer: TRadioGroup
@@ -211,7 +203,7 @@ object F_DigiReg: TF_DigiReg
     Top = 5
   end
   object T_Mom_Release: TTimer
-    Interval = 750
+    Interval = 200
     OnTimer = T_Mom_ReleaseTimer
     Left = 96
     Top = 5
