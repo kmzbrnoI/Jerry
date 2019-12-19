@@ -1,4 +1,4 @@
-unit RegCollector;
+ï»¿unit RegCollector;
 
 {
   Collector regulatoru hnacich vozidel
@@ -143,9 +143,9 @@ begin
      else if (data[4] = 'not') then
       begin
        if (data.Count > 5) then
-         Application.MessageBox(PChar('Loko '+data[2]+' nepøevzato'+#13#10+data[5]), 'Nepøevzato', MB_OK OR MB_ICONWARNING)
+         Application.MessageBox(PChar('Loko '+data[2]+' nepÅ™evzato'+#13#10+data[5]), 'NepÅ™evzato', MB_OK OR MB_ICONWARNING)
        else
-         Application.MessageBox(PChar('Loko '+data[2]+' nepøevzato'), 'Nepøevzato', MB_OK OR MB_ICONWARNING);
+         Application.MessageBox(PChar('Loko '+data[2]+' nepÅ™evzato'), 'NepÅ™evzato', MB_OK OR MB_ICONWARNING);
       end;
     end else begin
      // tab <> nil

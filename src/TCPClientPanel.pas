@@ -1,4 +1,4 @@
-unit TCPClientPanel;
+Ôªøunit TCPClientPanel;
 
 {
   Trida TPanelTCPClient zabezpecuje TCP klient soket, ktery resi komunikaci
@@ -191,7 +191,7 @@ begin
  // update okynka
  F_Main.A_Connect.Enabled    := false;
  F_Main.A_Disconnect.Enabled := true;
- F_Main.SB_Main.Panels[0].Text := 'ProbÌh· handshake...';
+ F_Main.SB_Main.Panels[0].Text := 'Prob√≠h√° handshake...';
 
  Self.fstatus := TPanelConnectionStatus.handshake;
  Self.pingTimer.Enabled := true;
@@ -274,7 +274,7 @@ end;
 procedure TPanelTCPClient.Timeout();
 begin
  Self.OnTcpClientDisconnected(Self);
- F_Main.SB_Main.Panels[0].Text := 'SpojenÌ se serverem p¯eruöeno';
+ F_Main.SB_Main.Panels[0].Text := 'Spojen√≠ se serverem p≈ôeru≈°eno';
  F_Main.SB_Main.Panels[1].Text := '';
 end;
 
@@ -299,12 +299,12 @@ begin
     end;//for i
 
    if (not found) then
-     Application.MessageBox(PChar('Verze protokolu, kterou poûÌv· server ('+Self.parsed[2]+') nenÌ podporov·na'),
-       'UpozornÏnÌ', MB_OK OR MB_ICONWARNING);
+     Application.MessageBox(PChar('Verze protokolu, kterou po≈æ√≠v√° server ('+Self.parsed[2]+') nen√≠ podporov√°na'),
+       'Upozornƒõn√≠', MB_OK OR MB_ICONWARNING);
 
    Self.fstatus := TPanelConnectionStatus.opened;
-   F_Main.SB_Main.Panels[0].Text := 'P¯ipojeno k serveru';
-   F_Main.SB_Main.Panels[1].Text := 'ProbÌh· autorizace...';
+   F_Main.SB_Main.Panels[0].Text := 'P≈ôipojeno k serveru';
+   F_Main.SB_Main.Panels[1].Text := 'Prob√≠h√° autorizace...';
 
    // ziskame seznam oblasti rizeni (to muzeme i bez autorizace)
    Self.SendLn('-;OR-LIST;');
@@ -320,7 +320,7 @@ begin
     // pokud nemame odkud ziskat login, zobrazime okynko
     F_Auth.OpenForm('Autorizujte se');
     Self.SendLn('-;LOK;G;AUTH;' + F_Auth.E_username.Text + ';' + GenerateHash(AnsiString(F_Auth.E_Password.Text)));
-    F_Main.SB_Main.Panels[1].Text := 'Odesl·n poûadavek na autorizaci...';
+    F_Main.SB_Main.Panels[1].Text := 'Odesl√°n po≈æadavek na autorizaci...';
    end;
   end
 
@@ -354,7 +354,7 @@ begin
    Self.fauthorised := (LowerCase(Self.parsed[4]) = 'ok');
    if (Self.fauthorised) then
     begin
-     F_Main.SB_Main.Panels[1].Text := 'Autorizov·no';
+     F_Main.SB_Main.Panels[1].Text := 'Autorizov√°no';
 
      if (Self.first_connection) then
       begin
@@ -374,7 +374,7 @@ begin
      Self.first_connection := false;
     end else begin
      RegColl.CloseAll();
-     F_Main.SB_Main.Panels[1].Text := 'NEAUTORIZOV¡NO : '+parsed[5];
+     F_Main.SB_Main.Panels[1].Text := 'NEAUTORIZOV√ÅNO : '+parsed[5];
     end;
   end else//if parsed[3] = AUTH
 

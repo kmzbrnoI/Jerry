@@ -1,4 +1,4 @@
-unit main;
+Ôªøunit main;
 
 {
   Unit hlavniho okynka, tady se resi predevsim interakce s GUI.
@@ -95,7 +95,7 @@ procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
  Application.MessageBox(PChar('Jerry v'+NactiVerzi(Application.ExeName)+#13#10+
                               'build '+GetLastBuildDate()+' '+GetLastBuildTime()+#13#10+
-                              'Vytvo¯il Jan Hor·Ëek 2015-2019 pro KMé Brno I.'),
+                              'Vytvo≈ôil Jan Hor√°ƒçek 2015-2019 pro KM≈Ω Brno I.'),
                         'Info', MB_OK OR MB_ICONINFORMATION);
 end;
 
@@ -103,7 +103,7 @@ procedure TF_Main.A_ConnectExecute(Sender: TObject);
 var host:string;
     port:Word;
 begin
- F_Main.SB_Main.Panels[0].Text := 'P¯ipojov·nÌ ...';
+ F_Main.SB_Main.Panels[0].Text := 'P≈ôipojov√°n√≠ ...';
  Screen.Cursor := crHourGlass;
  Application.ProcessMessages();
 
@@ -124,7 +124,7 @@ begin
  except
   on E : Exception do
    begin
-    Application.MessageBox(PChar('P¯ipojenÌ se nezda¯ilo'+#13#10+E.Message), 'Nep¯ipojeno', MB_OK OR MB_ICONWARNING);
+    Application.MessageBox(PChar('P≈ôipojen√≠ se nezda≈ôilo'+#13#10+E.Message), 'Nep≈ôipojeno', MB_OK OR MB_ICONWARNING);
     F_Main.SB_Main.Panels[0].Text := 'Odpojeno od serveru';
    end;
  end;
@@ -142,7 +142,7 @@ end;
 
 procedure TF_Main.A_DisconnectExecute(Sender: TObject);
 begin
- F_Main.SB_Main.Panels[0].Text := 'Odpojov·nÌ ...';
+ F_Main.SB_Main.Panels[0].Text := 'Odpojov√°n√≠ ...';
  Screen.Cursor := crHourGlass;
  Application.ProcessMessages();
  PanelTCPClient.Disconnect();
@@ -156,7 +156,7 @@ procedure TF_Main.BitBtn1Click(Sender: TObject);
 begin
  if (PanelTCPClient.status <> TPanelConnectionStatus.opened) then
   begin
-   Application.MessageBox(PChar('Program nenÌ p¯ipojen k serveru, nelze û·dat o lokomotivu.'+#13#10+'P¯ipojit k serveru se m˘ûete v oknÏ nastavenÌ.'), 'Nelze û·dat o lokomotivu', MB_OK OR MB_ICONWARNING);
+   Application.MessageBox(PChar('Program nen√≠ p≈ôipojen k serveru, nelze ≈æ√°dat o lokomotivu.'+#13#10+'P≈ôipojit k serveru se m≈Ø≈æete v oknƒõ nastaven√≠.'), 'Nelze ≈æ√°dat o lokomotivu', MB_OK OR MB_ICONWARNING);
    Exit();
   end;
 
@@ -404,7 +404,7 @@ begin
  if (Self.PC_Main.ActivePage = nil) then
   Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')'
  else
-  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + 'ñ Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '‚Äì Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

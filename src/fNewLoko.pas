@@ -1,4 +1,4 @@
-unit fNewLoko;
+Ôªøunit fNewLoko;
 
 {
   Okynko zadosti o loko do oblasti rizeni
@@ -53,7 +53,7 @@ end;
 procedure TF_NewLoko.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
  if ((Self.zadost_probiha) and
-  (Application.MessageBox('Opravdu zruöit û·dost o lokomotivu?', 'Opravdu?', MB_YESNO OR MB_ICONQUESTION) = mrNo)) then
+  (Application.MessageBox('Opravdu zru≈°it ≈æ√°dost o lokomotivu?', 'Opravdu?', MB_YESNO OR MB_ICONQUESTION) = mrNo)) then
    CanClose := false;
 end;
 
@@ -66,7 +66,7 @@ begin
  Self.LB_Stanice.Enabled := true;
  Self.E_Note.Enabled := true;
  Self.ST_Stav.Font.Color := clBlack;
- Self.ST_Stav.Caption := 'û·dost neprobÏhla';
+ Self.ST_Stav.Caption := '≈æ√°dost neprobƒõhla';
  Self.ActiveControl := Self.LB_Stanice;
  Self.zadost_probiha := false;
 end;
@@ -80,7 +80,7 @@ procedure TF_NewLoko.B_ApplyClick(Sender: TObject);
 begin
  if (Self.LB_Stanice.ItemIndex = -1) then
   begin
-   Application.MessageBox('Vyberte stanici!', 'Nelze pokraËovat', MB_OK OR MB_ICONWARNING);
+   Application.MessageBox('Vyberte stanici!', 'Nelze pokraƒçovat', MB_OK OR MB_ICONWARNING);
    Exit();
   end;
 
@@ -91,7 +91,7 @@ begin
  Self.B_Apply.Enabled    := false;
  Self.B_Cancel.Enabled   := true;
  Self.zadost_probiha     := true;
- Self.ST_Stav.Caption    := 'Odesl·na û·dost ...';
+ Self.ST_Stav.Caption    := 'Odesl√°na ≈æ√°dost ...';
 end;
 
 procedure TF_NewLoko.B_CancelClick(Sender: TObject);
@@ -103,7 +103,7 @@ begin
  Self.LB_Stanice.Enabled := true;
  Self.E_Note.Enabled     := true;
  Self.zadost_probiha     := false;
- Self.ST_Stav.Caption    := 'é·dost zruöena';
+ Self.ST_Stav.Caption    := '≈Ω√°dost zru≈°ena';
  Self.ST_Stav.Font.Color := clBlack;
 end;
 
@@ -117,12 +117,12 @@ end;
 
 procedure TF_NewLoko.ServerResponse(ok:boolean; msg:string);
 begin
- if (Self.ST_Stav.Caption = 'é·dost zruöena') then Exit();
+ if (Self.ST_Stav.Caption = '≈Ω√°dost zru≈°ena') then Exit();
 
  if (ok) then
   begin
    Self.ST_Stav.Font.Color := clGreen;
-   Self.ST_Stav.Caption    := 'Server potvrdil û·dost';
+   Self.ST_Stav.Caption    := 'Server potvrdil ≈æ√°dost';
   end else begin
    Self.ST_Stav.Font.Color := clRed;
    Self.ST_Stav.Caption    := msg;
