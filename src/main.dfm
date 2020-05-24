@@ -29,7 +29,7 @@ object F_Main: TF_Main
     Panels = <
       item
         Text = 'Odpojeno od serveru'
-        Width = 200
+        Width = 120
       end
       item
         Width = 250
