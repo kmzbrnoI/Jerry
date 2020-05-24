@@ -316,8 +316,8 @@ begin
    begin
     Self.S_Status.Brush.Color := clGreen;
     Self.com_err := '';
-    if (data.Count > 5) then
-       Self.L_speed.Caption := data[5];
+    if (data.Count > 6) then
+      Self.L_speed.Caption := data[6];
    end else begin
     Self.S_Status.Brush.Color := clRed;
     if (data.Count > 5) then
