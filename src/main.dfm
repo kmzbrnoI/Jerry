@@ -14,7 +14,6 @@ object F_Main: TF_Main
   Font.Style = []
   OldCreateOrder = False
   Visible = True
-  OnClick = A_ConnectExecute
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
