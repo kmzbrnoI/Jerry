@@ -153,19 +153,19 @@ begin
   Self.PC_Funkce.ActivePageIndex := 0;
 
   Self.S_Status.Brush.Color := clGreen;
-  Self.TS.Caption           := Self.HV.Nazev+' ('+Self.HV.Oznaceni+') : '+IntToStr(Self.HV.Adresa)+'      ';
-  Self.L_stupen.Caption     := IntToStr(Self.HV.rychlost_stupne)+' / 28';
-  Self.L_speed.Caption      := IntToStr(Self.HV.rychlost_kmph);
+  Self.TS.Caption           := Self.HV.name+' ('+Self.HV.designation+') : '+IntToStr(Self.HV.addr)+'      ';
+  Self.L_stupen.Caption     := IntToStr(Self.HV.speed_steps)+' / 28';
+  Self.L_speed.Caption      := IntToStr(Self.HV.speed_kmph);
 
   Self.updating := true;
-  Self.RG_Smer.ItemIndex := Self.HV.smer;
-  Self.speed             := Self.HV.rychlost_stupne;
-  Self.TB_reg.Position   := Self.HV.rychlost_stupne;
+  Self.RG_Smer.ItemIndex := Self.HV.dir;
+  Self.speed             := Self.HV.speed_steps;
+  Self.TB_reg.Position   := Self.HV.speed_steps;
 
   for i := 0 to _MAX_FORM_FUNC do
    begin
     Self.CHB_funkce[i].AllowGrayed := (Self.HV.funcType[i] = THVFuncType.momentary);
-    Self.CHB_funkce[i].Checked := Self.HV.funkce[i];
+    Self.CHB_funkce[i].Checked := Self.HV.functions[i];
    end;
 
   Self.updating := false;

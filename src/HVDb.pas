@@ -14,48 +14,37 @@ const
 
 type
   THVType = (other = -1, steam = 0, diesel = 1, motor = 2, electro = 3, car = 4);
-  TFunkce = array[0.._MAX_FUNC] of boolean;                                     // stav funkci HV
-  THVStanoviste = (lichy = 0, sudy = 1);                                        // v jakem smeru se nachazi stanoviste A
-
-  // POM neni pro regulator vubec potreba, je tu jen z uplnosti:
-  THVPomCV = record                                                             // jeden zaznam POM se sklada z
-    cv:Word;                                                                      // oznaceni CV a
-    data:Byte;                                                                    // dat, ktera se maji do CV zapsat.
-  end;
-
+  TFunkce = array[0.._MAX_FUNC] of boolean;
+  THVStanoviste = (lichy = 0, sudy = 1);
   THVFuncType = (permanent = 0, momentary = 1);
 
   THV = class
    private
-     procedure DefaultData();                                                   // nastavi vsechna data na default hodnoty
+     procedure DefaultData();
 
    public
-     Nazev:string;                                                              // nazev HV
-     Majitel:string;                                                            // majitel HV
-     Oznaceni:string;                                                           // oznaceni HV
-     Poznamka:String;                                                           // poznamka k HV
-     Adresa:Word;                                                               // digitalni adresa HW (0..9999)
-     Trida:THVType;                                                             // trida hnaciho vozidla
-     Souprava:string;                                                           // cislo soupravy, na ktere je HV
-     StanovisteA:THVStanoviste;                                                 // orientace stanoviste A
-     funkce:TFunkce;                                                            // stav funkci
-     rychlost_stupne:Word;                                                      // aktualni rychlost ve stupnich
-     rychlost_kmph:Word;                                                        // aktualni rychlost v km/h
-     smer:Integer;                                                              // aktualni smer
-     orid:string;                                                               // id oblasti rizeni, ve ktere se nachazi loko
+     name: string;
+     owner: string;
+     designation: string;
+     note: String;
+     addr: Word;
+     typ: THVType;
+     train: string;
+     sta: THVStanoviste;
+     functions: TFunkce;
+     speed_steps: Word;
+     speed_kmph: Word;
+     dir: Integer;
+     station: string;
 
-     POMtake : TList<THVPomCV>;                                                 // seznam POM pri prevzeti do automatu
-     POMrelease : TList<THVPomCV>;                                              // seznam POM pri uvolneni to rucniho rizeni
+     funcVyznam: array[0.._MAX_FUNC] of string;
+     funcType: array[0.._MAX_FUNC] of THVFuncType;
 
-     funcVyznam:array[0.._MAX_FUNC] of string;                                  // seznam popisu funkci hnaciho vozidla
-     funcType:array[0.._MAX_FUNC] of THVFuncType;                               // typy funkci hnaciho vozidla
+     procedure ParseData(data:string);
+     constructor Create(data:string); overload;
 
-     procedure ParseData(data:string);                                          // parse dat HV ze serveru
-     constructor Create(data:string); overload;                                 // vytvoreni HV s daty ze serveru
-     destructor Destroy(); override;                                            // zniceni HV
-
-     class function CharToHVFuncType(c:char):THVFuncType;
-     class function HVFuncTypeToChar(t:THVFuncType):char;
+     class function CharToHVFuncType(c: Char): THVFuncType;
+     class function HVFuncTypeToChar(t: THVFuncType): Char;
   end;
 
 implementation
@@ -65,28 +54,16 @@ implementation
 constructor THV.Create(data:string);
 begin
  inherited Create();
- Self.POMtake    := TList<THVPomCv>.Create();
- Self.POMrelease := TList<THVPomCv>.Create();
  Self.ParseData(data);
-end;//ctor
-
-destructor THV.Destroy();
-begin
- Self.POMtake.Free();
- Self.POMrelease.Free();
- inherited;
-end;//ctor
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure THV.ParseData(data:string);
 var str, str2, str3:TStrings;
     i:Integer;
-    pomCv:THVPomCv;
     tmp:string;
 begin
- // format zapisu: nazev|majitel|oznaceni|poznamka|adresa|trida|souprava|stanovisteA|funkce|rychlost_stupne|rychlost_kmph|smer|or_id|{[{cv1take|cv1take-value}][{...}]...}|{[{cv1release|cv1release-value}][{...}]...}|
- // souprava je bud cislo soupravy, nebo znak '-'
  str  := TStringList.Create();
  str2 := TStringList.Create();
  str3 := TStringList.Create();
@@ -95,53 +72,32 @@ begin
  Self.DefaultData();
 
  try
-  Self.Nazev        := str[0];
-  Self.Majitel      := str[1];
-  Self.Oznaceni     := str[2];
-  Self.Poznamka     := str[3];
-  Self.Adresa       := StrToInt(str[4]);
-  Self.Trida        := THVType(StrToInt(str[5]));
-  Self.Souprava     := str[6];
-  Self.StanovisteA  := THVStanoviste(StrToInt(str[7]));
+  Self.name := str[0];
+  Self.owner := str[1];
+  Self.designation := str[2];
+  Self.note := str[3];
+  Self.addr := StrToInt(str[4]);
+  Self.typ := THVType(StrToInt(str[5]));
+  Self.train := str[6];
+  Self.sta  := THVStanoviste(StrToInt(str[7]));
 
   for i := 0 to _MAX_FUNC do
    begin
     if (i < Length(str[8])) then
       if (str[8][i+1] = '1') then
-        Self.funkce[i] := true
+        Self.functions[i] := true
       else
-        Self.funkce[i] := false;
+        Self.functions[i] := false;
    end;
 
-   Self.rychlost_stupne := StrToInt(str[9]);
-   Self.rychlost_kmph   := StrToInt(str[10]);
-   Self.smer            := StrToInt(str[11]);
-   Self.orid            := str[12];
+   Self.speed_steps := StrToInt(str[9]);
+   Self.speed_kmph   := StrToInt(str[10]);
+   Self.dir := StrToInt(str[11]);
+   Self.station := str[12];
 
-   if (str.Count > 13) then
-    begin
-     // pom-take
-     ExtractStringsEx([']'] , ['['], str[13], str2);
-     for tmp in str2 do
-      begin
-       ExtractStringsEx(['|'] , [], tmp, str3);
-       pomCV.cv := StrToInt(str3[0]);
-       pomCV.cv := StrToInt(str3[1]);
-       Self.POMtake.Add(pomCV);
-      end;
+   // pom-take, pom-releases omitted
 
-     // pom-release
-     ExtractStringsEx([']'] , ['['], str[14], str2);
-     for tmp in str2 do
-      begin
-       ExtractStringsEx(['|'] , [], tmp, str3);
-       pomCV.cv := StrToInt(str3[0]);
-       pomCV.cv := StrToInt(str3[1]);
-       Self.POMrelease.Add(pomCV);
-      end;
-    end;//if str.Count > 12
-
-   // func-vyznam
+   // function description
    if (str.Count > 15) then
     begin
      str2.Clear();
@@ -156,7 +112,7 @@ begin
        Self.funcVyznam[i] := '';
     end;
 
-    // typy funkci
+   // function types
    if (str.Count > 16) then
     begin
      for i := 0 to _MAX_FUNC do
@@ -182,19 +138,16 @@ end;
 procedure THV.DefaultData();
 var i:Integer;
 begin
- Self.Nazev     := '';
- Self.Majitel   := '';
- Self.Oznaceni  := '';
- Self.Poznamka  := '';
- Self.Adresa    := 0;
- Self.Trida     := THVType.other;
- Self.Souprava  := '-';
-
- Self.POMtake.Clear();
- self.POMrelease.Clear();
+ Self.name := '';
+ Self.owner := '';
+ Self.designation := '';
+ Self.note := '';
+ Self.addr := 0;
+ Self.typ := THVType.other;
+ Self.train := '-';
 
  for i := 0 to _MAX_FUNC do
-   Self.funkce[i] := false;
+   Self.functions[i] := false;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
