@@ -17,6 +17,8 @@ const
   _MOM_KEEP_ON_MS = 750;
 
 type
+  TRegCaptionType = (ctShort, ctLong);
+
   TLogCommand = record
     time:TDateTime;
   end;
@@ -65,30 +67,33 @@ type
    com_err:string;                                                              // posledni komunikacni chyba
    q_mom_release:TQueue<TMomRelease>;                                           // fronta momentary funkci k vypnuti
 
-   procedure SendCmd(cmd:string);                                               // odesli prikaz konkretniho hnaciho vozidla na server
-   procedure SetElementsState(state:boolean);                                   // nastav Enabled elementu na formulari na hodnotu \state
-   procedure UpdateSent();                                                      // kontroluje, jestli server odpovedel na vsechny pozadavky a v priapde potreby je posila znovu
-   function GetMultitrack():boolean;                                            // je okynko v multitrakci?
+    procedure SendCmd(cmd:string);                                               // odesli prikaz konkretniho hnaciho vozidla na server
+    procedure SetElementsState(state:boolean);                                   // nastav Enabled elementu na formulari na hodnotu \state
+    procedure UpdateSent();                                                      // kontroluje, jestli server odpovedel na vsechny pozadavky a v priapde potreby je posila znovu
+    function GetMultitrack():boolean;                                            // je okynko v multitrakci?
 
-   procedure CreateCHBFunkce();                                                 // vytvori CheckBoxy funkci
-   procedure DestroyCHBFunkce();                                                // znici CHeckBoxy funkci
+    procedure CreateCHBFunkce();                                                 // vytvori CheckBoxy funkci
+    procedure DestroyCHBFunkce();                                                // znici CHeckBoxy funkci
 
-   procedure MomRelease(mr:TMomRelease);
-   function CreateMomRelease(f: Integer; shutdownTime: TDateTime):TMomRelease; overload;
-   function CreateMomRelease(f: Integer):TMomRelease; overload;
+    procedure MomRelease(mr:TMomRelease);
+    function CreateMomRelease(f: Integer; shutdownTime: TDateTime):TMomRelease; overload;
+    function CreateMomRelease(f: Integer):TMomRelease; overload;
 
-   class procedure SimulateClick(var chb:TCheckBox);
+    class procedure SimulateClick(var chb:TCheckBox);
 
   public
    addr:Word;                                                                   // adresa rizeneho HV (hnaciho vozidla)
 
+    constructor Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet;
+                  caption_type: TRegCaptionType); reintroduce;
+    destructor Destroy(); override;
 
-   constructor Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet); reintroduce;
-   destructor Destroy(); override;
+    procedure Parse(data:TStrings);                                              // parse dat pro tento regulator
+    function MyKeyPress(key:Integer):boolean;                                    // keyPress
+    procedure UpdateRych(multitrack:boolean = true);                             // aktualizace rychlosti z vedjesiho regulatoru pri multitrakci
 
-   procedure Parse(data:TStrings);                                              // parse dat pro tento regulator
-   function MyKeyPress(key:Integer):boolean;                                    // keyPress
-   procedure UpdateRych(multitrack:boolean = true);                             // aktualizace rychlosti z vedjesiho regulatoru pri multitrakci
+    procedure LongCaption();
+    procedure ShortCaption();
 
     property multitrack:boolean read GetMultitrack;                             // jestli je HV v multitrakci
   end;
@@ -104,7 +109,8 @@ uses TCPClientPanel, ORList, Main, RegCollector, ownStrUtils;
 ////////////////////////////////////////////////////////////////////////////////
 // Vytvoreni noveho regulatoru
 
-constructor TF_DigiReg.Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean; tab:TCloseTabSheet);
+constructor TF_DigiReg.Create(Addr:word; lok_data:string; multitrack:boolean; total:boolean;
+              tab:TCloseTabSheet; caption_type: TRegCaptionType);
 begin
  inherited Create(nil);
 
@@ -122,6 +128,11 @@ begin
  Self.HV := THV.Create(lok_data);
 
  Self.CreateCHBFunkce();
+
+ if (caption_type = ctLong) then
+   Self.LongCaption()
+ else
+   Self.ShortCaption();
 
  Self.Parent := tab;
  Self.Show();
@@ -153,14 +164,13 @@ begin
   Self.PC_Funkce.ActivePageIndex := 0;
 
   Self.S_Status.Brush.Color := clGreen;
-  Self.TS.Caption           := Self.HV.name+' ('+Self.HV.designation+') : '+IntToStr(Self.HV.addr)+'      ';
-  Self.L_stupen.Caption     := IntToStr(Self.HV.speed_steps)+' / 28';
-  Self.L_speed.Caption      := IntToStr(Self.HV.speed_kmph);
+  Self.L_stupen.Caption := IntToStr(Self.HV.speed_steps)+' / 28';
+  Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
 
   Self.updating := true;
   Self.RG_Smer.ItemIndex := Self.HV.dir;
-  Self.speed             := Self.HV.speed_steps;
-  Self.TB_reg.Position   := Self.HV.speed_steps;
+  Self.speed := Self.HV.speed_steps;
+  Self.TB_reg.Position := Self.HV.speed_steps;
 
   for i := 0 to _MAX_FORM_FUNC do
    begin
@@ -172,9 +182,9 @@ begin
 
   Self.SetElementsState(true);
 
-  Self.TB_reg.Enabled  := Self.CHB_Total.Checked;
+  Self.TB_reg.Enabled := Self.CHB_Total.Checked;
   Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
-  Self.B_Idle.Enabled  := Self.CHB_Total.Checked;
+  Self.B_Idle.Enabled := Self.CHB_Total.Checked;
 
   // zobrazeni nazvu funkci
   for i := 0 to _MAX_FORM_FUNC do
@@ -580,6 +590,18 @@ begin
   end else begin
    chb.Checked := not chb.Checked;
   end;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure TF_DigiReg.LongCaption();
+begin
+ Self.TS.Caption := Self.HV.name+' ('+Self.HV.designation+') : '+IntToStr(Self.HV.addr)+'      ';
+end;
+
+procedure TF_DigiReg.ShortCaption();
+begin
+ Self.TS.Caption := IntToStr(Self.HV.addr)+'      ';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

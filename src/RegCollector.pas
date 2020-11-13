@@ -10,28 +10,31 @@ interface
 uses Regulator, Generics.Collections, SysUtils, Classes, Forms, Dialogs, Windows,
     CloseTabSheet;
 
+const
+  MAX_LONG_CAPTION_TABS: Integer = 2;
+
 type
 
  TRegulatorCollector = class
-   private const
-    _MAX_FORMS = 4;                                                             // maximum otevrenych regulatoru
-
    private
-    tabs:TList<TCloseTabSheet>;                                                 // senzam vsech zalozek
+    tabs: TList<TCloseTabSheet>;
 
-     function GetTab(addr:Word):TCloseTabSheet;                                 // vrati zalozku s lokomotivou adresy \addr, jinak nil
-     procedure NewLoko(addr:Word; lok_data:string; total:boolean);              // pozadavek na novou zalozku (novy regulator)
+     function GetTab(addr:Word):TCloseTabSheet;
+     procedure NewLoko(addr:Word; lok_data:string; total:boolean);
 
-     procedure OnTSClose(Sender:TObject);                                       // event zavreni zalozky zaviracim tlacitkem vpravo nahore zalozky
+     procedure OnTSClose(Sender:TObject);
+     function GetCaptionType(): TRegCaptionType;
 
    public
      constructor Create();
      destructor Destroy(); override;
 
-     function KeyPress(key:Integer):boolean;                                    // keyPress; vraci, jestli byla klavesa zpracovana (zpracovana = true)
-     procedure Parse(data:TStrings);                                            // parse zprav pro regulatory (typicky prefix "LOK")
-     procedure CloseAll();                                                      // zavrit vsechny regulatory
-     procedure UpdateMultitrack(Sender:TCloseTabSheet);                         // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
+     function KeyPress(key:Integer):boolean; // keyPress; vraci, jestli byla klavesa zpracovana (zpracovana = true)
+     procedure Parse(data:TStrings);
+     procedure CloseAll();
+     procedure UpdateMultitrack(Sender:TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
+
+     property caption_type: TRegCaptionType read GetCaptionType;
 
  end;
 
@@ -73,8 +76,8 @@ begin
 
  tab := TCloseTabSheet.Create(F_Main.PC_Main);
  tab.PageControl := F_Main.PC_Main;
- tab.OnClose     := Self.OnTSClose;
- tab.form        := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab);
+ tab.OnClose := Self.OnTSClose;
+ tab.form := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab, Self.caption_type);
  Self.tabs.Add(tab);
 
  (tab.form as TF_DigiReg).CHB_Multitrack.Checked := true;
@@ -90,6 +93,10 @@ begin
    (tab.form as TF_DigiReg).TB_reg.SetFocus()
  else
    (tab.form as TF_DigiReg).CHB_Total.SetFocus();
+
+ if (Self.tabs.Count = MAX_LONG_CAPTION_TABS+1) then
+   for tab in Self.tabs do
+     (tab.form as TF_DigiReg).ShortCaption();
 
  F_Main.PC_MainChange(F_Main);
 end;
@@ -108,8 +115,8 @@ var i:Integer;
 begin
  for i := Self.tabs.Count-1 downto 0 do
   begin
-   (Self.tabs[i].form as TF_DigiReg).Free;
-   Self.tabs[i].Free;
+   (Self.tabs[i].form as TF_DigiReg).Free();
+   Self.tabs[i].Free();
   end;
  Self.tabs.Clear();
 end;
@@ -159,7 +166,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure TRegulatorCollector.OnTSClose(Sender:TObject);
-var i:Integer;
+var i: Integer;
+    tab: TCloseTabSheet;
 begin
  for i := Self.tabs.Count-1 downto 0 do
    if (Self.tabs[i] = Sender) then
@@ -171,6 +179,10 @@ begin
  (Sender as TCloseTabSheet).Visible := false;
  (Sender as TCloseTabSheet).form.Free();
  (Sender as TCloseTabSheet).Free();
+
+ if (Self.tabs.Count = MAX_LONG_CAPTION_TABS) then
+   for tab in Self.tabs do
+     (tab.form as TF_DigiReg).LongCaption();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -185,6 +197,16 @@ begin
        (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
        (tab.form as TF_DigiReg).UpdateRych(false);
       end;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+function TRegulatorCollector.GetCaptionType(): TRegCaptionType;
+begin
+ if (Self.tabs.Count > MAX_LONG_CAPTION_TABS) then
+   Result := ctShort
+ else
+   Result := ctLong;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
