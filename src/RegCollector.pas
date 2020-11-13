@@ -32,7 +32,8 @@ type
      function KeyPress(key:Integer):boolean; // keyPress; vraci, jestli byla klavesa zpracovana (zpracovana = true)
      procedure Parse(data:TStrings);
      procedure CloseAll();
-     procedure UpdateMultitrack(Sender:TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
+     procedure MultitrackSpeedChanged(Sender:TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
+     procedure MultitrackDirChanged(Sender:TCloseTabSheet);
 
      property caption_type: TRegCaptionType read GetCaptionType;
 
@@ -187,16 +188,25 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure TRegulatorCollector.UpdateMultitrack(Sender:TCloseTabSheet);
+procedure TRegulatorCollector.MultitrackSpeedChanged(Sender:TCloseTabSheet);
 var tab:TClosetabSheet;
 begin
- if ((Sender.form as TF_DigiReg).CHB_Multitrack.Checked) then
-   for tab in Self.tabs do
-     if ((tab <> Sender) and ((tab.form as TF_DigiReg).TB_reg.Enabled)) then
-      begin
-       (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
-       (tab.form as TF_DigiReg).UpdateRych(false);
-      end;
+ for tab in Self.tabs do
+  begin
+   if ((tab <> Sender) and ((tab.form as TF_DigiReg).multitrack) and ((tab.form as TF_DigiReg).TB_reg.Enabled)) then
+    begin
+     (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg).TB_reg.Position;
+     (tab.form as TF_DigiReg).UpdateRych(true);
+    end;
+  end;
+end;
+
+procedure TRegulatorCollector.MultitrackDirChanged(Sender:TCloseTabSheet);
+var tab:TClosetabSheet;
+begin
+ for tab in Self.tabs do
+   if ((tab <> Sender) and ((tab.form as TF_DigiReg).multitrack) and ((tab.form as TF_DigiReg).RG_Smer.Enabled)) then
+     (tab.form as TF_DigiReg).ChangeDirFromMultitrack();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

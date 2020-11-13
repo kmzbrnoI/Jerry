@@ -90,7 +90,9 @@ type
 
     procedure Parse(data:TStrings);                                              // parse dat pro tento regulator
     function MyKeyPress(key:Integer):boolean;                                    // keyPress
-    procedure UpdateRych(multitrack:boolean = true);                             // aktualizace rychlosti z vedjesiho regulatoru pri multitrakci
+    procedure UpdateRych(from_multitrack:boolean = false);                       // aktualizace rychlosti z vedjesiho regulatoru pri multitrakci
+    procedure DirChanged(from_multitrack:boolean = false);
+    procedure ChangeDirFromMultitrack();
 
     procedure LongCaption();
     procedure ShortCaption();
@@ -268,10 +270,7 @@ procedure TF_DigiReg.B_STOPClick(Sender: TObject);
 procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
  begin
   if ((Self.speed > -2) and (not Self.updating)) then
-   begin
-    Self.speed := -1;
-    Self.T_SpeedTimer(Self);
-   end;
+    Self.DirChanged();
  end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -421,15 +420,23 @@ begin
   end;
 end;
 
-procedure TF_DigiReg.UpdateRych(multitrack:boolean = true);
+procedure TF_DigiReg.UpdateRych(from_multitrack:boolean);
 begin
  if ((Self.speed <> Self.TB_reg.Position) and (Self.speed > -2)) then
   begin
    Self.SendCmd('SPD-S;'+IntToStr(Self.TB_reg.Position)+';'+IntToStr(Self.RG_Smer.ItemIndex));
    Self.L_stupen.Caption := IntToStr(TB_Reg.Position)+' / 28';
    Self.speed := Self.TB_reg.Position;
-   if (multitrack) then RegColl.UpdateMultitrack(Self.Parent as TCloseTabSheet);
+   if (not from_multitrack) and (Self.CHB_Multitrack.Checked) then
+     RegColl.MultitrackSpeedChanged(Self.Parent as TCloseTabSheet);
   end;
+end;
+
+procedure TF_DigiReg.DirChanged(from_multitrack:boolean);
+begin
+ Self.SendCmd('D;'+IntToStr(Self.RG_Smer.ItemIndex));
+ if (not from_multitrack) and (Self.CHB_Multitrack.Checked) then
+   RegColl.MultitrackDirChanged(Self.Parent as TCloseTabSheet);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -606,6 +613,17 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-end.
+procedure TF_DigiReg.ChangeDirFromMultitrack();
+begin
+ Self.updating := true;
+ case (Self.RG_Smer.ItemIndex) of
+  0: Self.RG_Smer.ItemIndex := 1;
+  1: Self.RG_Smer.ItemIndex := 0;
+ end;
+ Self.updating := false;
+ Self.DirChanged(true);
+end;
 
-//unit
+////////////////////////////////////////////////////////////////////////////////
+
+end.
