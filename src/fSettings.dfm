@@ -53,10 +53,6 @@ object F_Settings: TF_Settings
     TabOrder = 2
     object TS_Server: TTabSheet
       Caption = 'P'#345'ipojen'#237
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label1: TLabel
         Left = 168
         Top = 51
@@ -117,10 +113,6 @@ object F_Settings: TF_Settings
     object TS_Rights: TTabSheet
       Caption = 'Autorizace'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GB_Auth: TGroupBox
         Left = 184
         Top = 16
