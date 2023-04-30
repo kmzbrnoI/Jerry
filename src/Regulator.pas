@@ -603,7 +603,10 @@ end;
 
 procedure TF_DigiReg.LongCaption();
 begin
- Self.TS.Caption := Self.HV.name+' ('+Self.HV.designation+') : '+IntToStr(Self.HV.addr)+'      ';
+  if (Self.HV.designation <> '') then
+    Self.TS.Caption := Self.HV.name+' ('+Self.HV.designation+') : '+IntToStr(Self.HV.addr)+'      '
+  else
+    Self.TS.Caption := Self.HV.name+' : '+IntToStr(Self.HV.addr)+'      ';
 end;
 
 procedure TF_DigiReg.ShortCaption();
