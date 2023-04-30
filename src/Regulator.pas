@@ -102,6 +102,7 @@ type
     procedure UpdateRych(from_multitrack: boolean = false);
     procedure DirChanged(from_multitrack: boolean = false);
     procedure ChangeDirFromMultitrack();
+    procedure IdleRuc();
 
     procedure LongCaption();
     procedure ShortCaption();
@@ -681,6 +682,14 @@ begin
   end;
   Self.updating := false;
   Self.DirChanged(true);
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+procedure TF_DigiReg.IdleRuc();
+begin
+  if (Self.CHB_Total.Checked) then
+    Self.B_IdleClick(Self);
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

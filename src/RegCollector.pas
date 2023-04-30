@@ -33,6 +33,7 @@ type
     function KeyPress(key: Integer): boolean; // keyPress; vraci, jestli byla klavesa zpracovana (zpracovana = true)
     procedure Parse(data: TStrings);
     procedure CloseAll();
+    procedure IdleAllRuc();
     procedure MultitrackSpeedChanged(Sender: TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
     procedure MultitrackDirChanged(Sender: TCloseTabSheet);
 
@@ -133,6 +134,12 @@ begin
       Exit(true);
 
   Result := false;
+end;
+
+procedure TRegulatorCollector.IdleAllRuc();
+begin
+  for var tab in Self.tabs do
+    (tab.form as TF_DigiReg).IdleRuc();
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

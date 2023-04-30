@@ -50,6 +50,7 @@ type
     procedure PC_MainChange(Sender: TObject);
     procedure A_AboutExecute(Sender: TObject);
     procedure A_DebugExecute(Sender: TObject);
+    procedure FormResize(Sender: TObject);
 
   private
     FCloseButtonMouseDownTab: TCloseTabSheet;
@@ -222,6 +223,12 @@ begin
 
     end;
   end;
+end;
+
+procedure TF_Main.FormResize(Sender: TObject);
+begin
+  if (Self.WindowState = TWindowState.wsMinimized) then
+    RegColl.IdleAllRuc();
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
