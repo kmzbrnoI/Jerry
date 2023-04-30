@@ -100,6 +100,7 @@ type
     procedure UpdateRych(from_multitrack: boolean = false);
     procedure DirChanged(from_multitrack: boolean = false);
     procedure ChangeDirFromMultitrack();
+    procedure EmergencyStopFromMultitrack();
     procedure IdleRuc();
 
     procedure Total();
@@ -108,6 +109,7 @@ type
     procedure LongCaption();
     procedure ShortCaption();
 
+    procedure EmergencyStop();
     function TabBgColor(): TColor;
 
     property multitrack: boolean read GetMultitrack;
@@ -284,12 +286,19 @@ end;
 /// /////////////////////////////////////////////////////////////////////////////
 // Nouzove zastaveni loko
 
-procedure TF_DigiReg.B_STOPClick(Sender: TObject);
+procedure TF_DigiReg.EmergencyStop();
 begin
   Self.SendCmd('STOP');
 
   Self.speed := 0;
   Self.TB_reg.Position := 0;
+end;
+
+procedure TF_DigiReg.B_STOPClick(Sender: TObject);
+begin
+  Self.EmergencyStop();
+  if (Self.CHB_Multitrack.Checked) then
+    RegColl.MultitrackEmergencyStop(Self.TS);
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -437,7 +446,7 @@ begin
 
     F_Main.PC_Main.Repaint();
     
-    if ((F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) and
+    if ((F_Main.PC_Main.ActivePage = Self.TS) and
       (Self.TB_reg.Enabled)) then
       Self.TB_reg.SetFocus();
   end;
@@ -497,7 +506,7 @@ begin
     Self.L_stupen.Caption := IntToStr(TB_reg.Position) + ' / 28';
     Self.speed := Self.TB_reg.Position;
     if (not from_multitrack) and (Self.CHB_Multitrack.Checked) then
-      RegColl.MultitrackSpeedChanged(Self.Parent as TCloseTabSheet);
+      RegColl.MultitrackSpeedChanged(Self.TS);
   end;
 end;
 
@@ -505,7 +514,7 @@ procedure TF_DigiReg.DirChanged(from_multitrack: boolean);
 begin
   Self.SendCmd('D;' + IntToStr(Self.RG_Smer.ItemIndex));
   if (not from_multitrack) and (Self.CHB_Multitrack.Checked) then
-    RegColl.MultitrackDirChanged(Self.Parent as TCloseTabSheet);
+    RegColl.MultitrackDirChanged(Self.TS);
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -717,6 +726,13 @@ begin
     Self.updating := false;
   end;
   Self.DirChanged(true);
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+procedure TF_DigiReg.EmergencyStopFromMultitrack();
+begin
+ Self.EmergencyStop();
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

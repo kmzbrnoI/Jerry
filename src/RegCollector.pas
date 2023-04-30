@@ -36,6 +36,7 @@ type
     procedure IdleAllRuc();
     procedure MultitrackSpeedChanged(Sender: TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
     procedure MultitrackDirChanged(Sender: TCloseTabSheet);
+    procedure MultitrackEmergencyStop(Sender: TCloseTabSheet);
     procedure Total(omit: TObject = nil);
     procedure TotalRelease(omit: TObject = nil);
 
@@ -233,6 +234,13 @@ begin
     if ((tab <> Sender) and ((tab.form as TF_DigiReg).multitrack) and
       ((tab.form as TF_DigiReg).RG_Smer.Enabled)) then
       (tab.form as TF_DigiReg).ChangeDirFromMultitrack();
+end;
+
+procedure TRegulatorCollector.MultitrackEmergencyStop(Sender: TCloseTabSheet);
+begin
+  for var tab in Self.tabs do
+    if ((tab <> Sender) and ((tab.form as TF_DigiReg).multitrack)) then
+      (tab.form as TF_DigiReg).EmergencyStopFromMultitrack();
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
