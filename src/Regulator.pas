@@ -540,12 +540,18 @@ begin
       if (Self.RG_Smer.Enabled) then
         Self.RG_Smer.ItemIndex := 1;
 
-    83:
+    83: // 's'
       if (Self.TB_reg.Enabled) then
-        Self.B_STOPClick(Self); // 's'
-    73:
+        Self.B_STOPClick(Self);
+    73: // 'i'
       if (Self.TB_reg.Enabled) then
-        Self.B_IdleClick(Self); // 'i'
+        Self.B_IdleClick(Self);
+    82: // 'r'
+      if (Self.CHB_Total.Enabled) then
+        Self.CHB_Total.Checked := not Self.CHB_Total.Checked;
+    77: // 'm'
+      if (Self.CHB_Multitrack.Enabled) then
+        Self.CHB_Multitrack.Checked := not Self.CHB_Multitrack.Checked;
   else
     Result := false;
   end;
