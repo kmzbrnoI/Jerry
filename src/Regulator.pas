@@ -176,18 +176,20 @@ begin
   Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
 
   Self.updating := true;
-  Self.RG_Smer.ItemIndex := Self.HV.dir;
-  Self.speed := Self.HV.speed_steps;
-  Self.TB_reg.Position := Self.HV.speed_steps;
+  try
+    Self.RG_Smer.ItemIndex := Self.HV.dir;
+    Self.speed := Self.HV.speed_steps;
+    Self.TB_reg.Position := Self.HV.speed_steps;
 
-  for var i := 0 to _MAX_FORM_FUNC do
-  begin
-    Self.CHB_funkce[i].AllowGrayed :=
-      (Self.HV.funcType[i] = THVFuncType.momentary);
-    Self.CHB_funkce[i].Checked := Self.HV.functions[i];
+    for var i := 0 to _MAX_FORM_FUNC do
+    begin
+      Self.CHB_funkce[i].AllowGrayed :=
+        (Self.HV.funcType[i] = THVFuncType.momentary);
+      Self.CHB_funkce[i].Checked := Self.HV.functions[i];
+    end;
+  finally
+    Self.updating := false;
   end;
-
-  Self.updating := false;
 
   Self.SetElementsState(true);
 
@@ -312,29 +314,35 @@ begin
 
 
     Self.updating := true;
-    for var i := left to right do
-    begin
-      if (i < _MAX_FORM_FUNC) then
+    try
+      for var i := left to right do
       begin
-        if (data[5][i - left + 1] = '1') then
-          Self.CHB_funkce[i].Checked := true
-        else
-          Self.CHB_funkce[i].Checked := false;
+        if (i < _MAX_FORM_FUNC) then
+        begin
+          if (data[5][i - left + 1] = '1') then
+            Self.CHB_funkce[i].Checked := true
+          else
+            Self.CHB_funkce[i].Checked := false;
+        end;
       end;
+    finally
+      Self.updating := false;
     end;
-    Self.updating := false;
 
     /// ///////////////////////////////////////////////
   end
   else if (data[3] = 'SPD') then
   begin
     Self.updating := true;
-    Self.RG_Smer.ItemIndex := StrToInt(data[6]);
-    Self.speed := StrToInt(data[5]);
-    Self.TB_reg.Position := Self.speed;
-    Self.L_speed.Caption := data[4];
-    Self.L_stupen.Caption := data[5] + ' / 28';
-    Self.updating := false;
+    try
+      Self.RG_Smer.ItemIndex := StrToInt(data[6]);
+      Self.speed := StrToInt(data[5]);
+      Self.TB_reg.Position := Self.speed;
+      Self.L_speed.Caption := data[4];
+      Self.L_stupen.Caption := data[5] + ' / 28';
+    finally
+      Self.updating := false;
+    end;
 
     var pom: Boolean := not Self.TB_reg.Enabled;
     Self.B_STOP.Enabled := true;
@@ -372,11 +380,14 @@ begin
     if ((data[4] = 'ok') or (data[4] = 'total')) then
     begin
       updating := true;
-      Self.CHB_Total.Checked := (data[4] = 'total');
-      Self.TB_reg.Enabled := Self.CHB_Total.Checked;
-      Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
-      Self.B_Idle.Enabled := Self.CHB_Total.Checked;
-      updating := false;
+      try
+        Self.CHB_Total.Checked := (data[4] = 'total');
+        Self.TB_reg.Enabled := Self.CHB_Total.Checked;
+        Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
+        Self.B_Idle.Enabled := Self.CHB_Total.Checked;
+      finally
+        updating := false;
+      end;
 
       Self.HV.ParseData(data[5]);
       Self.OnShow(Self);
@@ -404,11 +415,14 @@ begin
       Self.sent.Dequeue(); // TOTAL je odpovedi na TOTAL a RESP neni odesilano
 
     updating := true;
-    Self.CHB_Total.Checked := (data[4] = '1');
-    Self.TB_reg.Enabled := Self.CHB_Total.Checked;
-    Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
-    Self.B_Idle.Enabled := Self.CHB_Total.Checked;
-    updating := false;
+    try
+      Self.CHB_Total.Checked := (data[4] = '1');
+      Self.TB_reg.Enabled := Self.CHB_Total.Checked;
+      Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
+      Self.B_Idle.Enabled := Self.CHB_Total.Checked;
+    finally
+      updating := false;
+    end;
 
     if ((F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) and
       (Self.TB_reg.Enabled)) then
@@ -674,13 +688,14 @@ end;
 procedure TF_DigiReg.ChangeDirFromMultitrack();
 begin
   Self.updating := true;
-  case (Self.RG_Smer.ItemIndex) of
-    0:
-      Self.RG_Smer.ItemIndex := 1;
-    1:
-      Self.RG_Smer.ItemIndex := 0;
+  try
+    case (Self.RG_Smer.ItemIndex) of
+      0: Self.RG_Smer.ItemIndex := 1;
+      1: Self.RG_Smer.ItemIndex := 0;
+    end;
+  finally
+    Self.updating := false;
   end;
-  Self.updating := false;
   Self.DirChanged(true);
 end;
 
