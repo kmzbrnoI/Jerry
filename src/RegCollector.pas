@@ -83,8 +83,7 @@ begin
   var tab := TCloseTabSheet.Create(F_Main.PC_Main);
   tab.PageControl := F_Main.PC_Main;
   tab.OnClose := Self.OnTSClose;
-  tab.form := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab,
-    Self.caption_type);
+  tab.form := TF_DigiReg.Create(addr, lok_data, Self.tabs.Count > 0, total, tab, Self.caption_type);
   Self.tabs.Add(tab);
 
   (tab.form as TF_DigiReg).CHB_Multitrack.Checked := true;
@@ -95,15 +94,18 @@ begin
     F_NewLoko.Close();
   end;
 
-  F_Main.PC_Main.ActivePage := tab;
-  if ((tab.form as TF_DigiReg).TB_reg.Enabled) then
-    (tab.form as TF_DigiReg).TB_reg.SetFocus()
-  else
-    (tab.form as TF_DigiReg).CHB_Total.SetFocus();
+  if (Self.tabs.Count = 1) then
+  begin
+    F_Main.PC_Main.ActivePage := tab;
+    if ((tab.form as TF_DigiReg).TB_reg.Enabled) then
+      (tab.form as TF_DigiReg).TB_reg.SetFocus()
+    else
+      (tab.form as TF_DigiReg).CHB_Total.SetFocus();
+  end;
 
   if (Self.tabs.Count = MAX_LONG_CAPTION_TABS + 1) then
-    for tab in Self.tabs do
-      (tab.form as TF_DigiReg).ShortCaption();
+    for var _tab in Self.tabs do
+      (_tab.form as TF_DigiReg).ShortCaption();
 
   F_Main.PC_MainChange(F_Main);
 end;
