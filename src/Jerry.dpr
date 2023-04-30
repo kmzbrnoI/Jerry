@@ -17,7 +17,6 @@ uses
   fNewLoko in 'fNewLoko.pas' {F_NewLoko},
   fDebug in 'fDebug.pas' {F_Debug},
   Verze in 'Verze.pas',
-  Hash in 'Hash.pas',
   Windows,
   ownStrUtils in 'ownStrUtils.pas';
 

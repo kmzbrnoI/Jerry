@@ -51,7 +51,7 @@ var
 
 implementation
 
-uses GlobalConfig, Main;
+uses GlobalConfig, Main, ownStrUtils;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -59,18 +59,18 @@ uses GlobalConfig, Main;
 
 procedure TF_Settings.B_ApplyClick(Sender: TObject);
 begin
- GlobConfig.data.server.host               := Self.E_Host.Text;
- GlobConfig.data.server.port               := Self.SE_Port.Value;
- GlobConfig.data.server.autoconnect        := Self.CHB_Autoconnect.Checked;
+ GlobConfig.data.server.host := Self.E_Host.Text;
+ GlobConfig.data.server.port := Self.SE_Port.Value;
+ GlobConfig.data.server.autoconnect := Self.CHB_Autoconnect.Checked;
 
- GlobConfig.data.auth.autoauth             := Self.CHB_RememberAuth.Checked;
+ GlobConfig.data.auth.autoauth := Self.CHB_RememberAuth.Checked;
  if (GlobConfig.data.auth.autoauth) then
   begin
-   GlobConfig.data.auth.username           := Self.E_username.Text;
-   GlobConfig.data.auth.password           := GenerateHash(AnsiString(Self.E_Password.Text));
+   GlobConfig.data.auth.username := Self.E_username.Text;
+   GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
   end else begin
-   GlobConfig.data.auth.username           := '';
-   GlobConfig.data.auth.password           := '';
+   GlobConfig.data.auth.username := '';
+   GlobConfig.data.auth.password := '';
   end;
 
  Self.Close();

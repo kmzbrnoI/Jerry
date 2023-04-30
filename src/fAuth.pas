@@ -8,7 +8,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Hash;
+  Dialogs, StdCtrls, strUtils, ownStrUtils;
 
 type
   TF_Auth = class(TForm)
@@ -41,12 +41,12 @@ procedure TF_Auth.B_ApplyClick(Sender: TObject);
 begin
  if (Self.CHB_RememberAuth.Checked) then
   begin
-   GlobConfig.data.auth.autoauth   := true;
-   GlobConfig.data.auth.username   := Self.E_username.Text;
-   GlobConfig.data.auth.password   := GenerateHash(AnsiString(Self.E_Password.Text));
+   GlobConfig.data.auth.autoauth := true;
+   GlobConfig.data.auth.username := Self.E_username.Text;
+   GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
   end;
 
- Self.Close;
+ Self.Close();
 end;
 
 procedure TF_Auth.B_CancelClick(Sender: TObject);
