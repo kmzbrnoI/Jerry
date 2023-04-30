@@ -29,10 +29,10 @@ type
   private
     { Private declarations }
   public
-   zadost_probiha:boolean;
+    zadost_probiha: Boolean;
 
     procedure FillStanice();
-    procedure ServerResponse(ok:boolean; msg:string);
+    procedure ServerResponse(ok: Boolean; msg: string);
   end;
 
 var
@@ -46,93 +46,100 @@ uses ORList, TCPClientPanel;
 
 procedure TF_NewLoko.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
- // pokud probiha zadost, zrusime ji
- if (Self.zadost_probiha) then Self.B_CancelClick(Self);
+  // pokud probiha zadost, zrusime ji
+  if (Self.zadost_probiha) then
+    Self.B_CancelClick(Self);
 end;
 
 procedure TF_NewLoko.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
- if ((Self.zadost_probiha) and
-  (Application.MessageBox('Opravdu zrušit žádost o lokomotivu?', 'Opravdu?', MB_YESNO OR MB_ICONQUESTION) = mrNo)) then
-   CanClose := false;
+  if ((Self.zadost_probiha) and
+    (Application.MessageBox('Opravdu zrušit žádost o lokomotivu?', 'Opravdu?',
+    MB_YESNO OR MB_ICONQUESTION) = mrNo)) then
+    CanClose := false;
 end;
 
 procedure TF_NewLoko.FormShow(Sender: TObject);
 begin
- Self.E_Note.Text := '';
- Self.LB_Stanice.ItemIndex := -1;
- Self.B_Apply.Enabled  := true;
- Self.B_Cancel.Enabled := false;
- Self.LB_Stanice.Enabled := true;
- Self.E_Note.Enabled := true;
- Self.ST_Stav.Font.Color := clBlack;
- Self.ST_Stav.Caption := 'žádost neproběhla';
- Self.ActiveControl := Self.LB_Stanice;
- Self.zadost_probiha := false;
+  Self.E_Note.Text := '';
+  Self.LB_Stanice.ItemIndex := -1;
+  Self.B_Apply.Enabled := true;
+  Self.B_Cancel.Enabled := false;
+  Self.LB_Stanice.Enabled := true;
+  Self.E_Note.Enabled := true;
+  Self.ST_Stav.Font.Color := clBlack;
+  Self.ST_Stav.Caption := 'žádost neproběhla';
+  Self.ActiveControl := Self.LB_Stanice;
+  Self.zadost_probiha := false;
 end;
 
 procedure TF_NewLoko.LB_StaniceDblClick(Sender: TObject);
 begin
- B_ApplyClick(B_Apply);
+  B_ApplyClick(B_Apply);
 end;
 
 procedure TF_NewLoko.B_ApplyClick(Sender: TObject);
 begin
- if (Self.LB_Stanice.ItemIndex = -1) then
+  if (Self.LB_Stanice.ItemIndex = -1) then
   begin
-   Application.MessageBox('Vyberte stanici!', 'Nelze pokračovat', MB_OK OR MB_ICONWARNING);
-   Exit();
+    Application.MessageBox('Vyberte stanici!', 'Nelze pokračovat',
+      MB_OK OR MB_ICONWARNING);
+    Exit();
   end;
 
- PanelTCPClient.SendLn('-;LOK;G;PLEASE;'+ORDb.db_reverse[Self.LB_Stanice.Items[Self.LB_Stanice.ItemIndex]]+';'+Self.E_Note.Text);
+  PanelTCPClient.SendLn('-;LOK;G;PLEASE;' + ORDb.db_reverse
+    [Self.LB_Stanice.Items[Self.LB_Stanice.ItemIndex]] + ';' +
+    Self.E_Note.Text);
 
- Self.LB_Stanice.Enabled := false;
- Self.E_Note.Enabled     := false;
- Self.B_Apply.Enabled    := false;
- Self.B_Cancel.Enabled   := true;
- Self.zadost_probiha     := true;
- Self.ST_Stav.Caption    := 'Odeslána žádost ...';
+  Self.LB_Stanice.Enabled := false;
+  Self.E_Note.Enabled := false;
+  Self.B_Apply.Enabled := false;
+  Self.B_Cancel.Enabled := true;
+  Self.zadost_probiha := true;
+  Self.ST_Stav.Caption := 'Odeslána žádost ...';
 end;
 
 procedure TF_NewLoko.B_CancelClick(Sender: TObject);
 begin
- PanelTCPClient.SendLn('-;LOK;G;CANCEL;');
+  PanelTCPClient.SendLn('-;LOK;G;CANCEL;');
 
- Self.B_Cancel.Enabled   := false;
- Self.B_Apply.Enabled    := true;
- Self.LB_Stanice.Enabled := true;
- Self.E_Note.Enabled     := true;
- Self.zadost_probiha     := false;
- Self.ST_Stav.Caption    := 'Žádost zrušena';
- Self.ST_Stav.Font.Color := clBlack;
+  Self.B_Cancel.Enabled := false;
+  Self.B_Apply.Enabled := true;
+  Self.LB_Stanice.Enabled := true;
+  Self.E_Note.Enabled := true;
+  Self.zadost_probiha := false;
+  Self.ST_Stav.Caption := 'Žádost zrušena';
+  Self.ST_Stav.Font.Color := clBlack;
 end;
 
 procedure TF_NewLoko.FillStanice();
-var name:string;
 begin
- Self.LB_Stanice.Clear();
- for name in ORDb.names_sorted do
-   Self.LB_Stanice.Items.Add(name);
+  Self.LB_Stanice.Clear();
+  for var name in ORDb.names_sorted do
+    Self.LB_Stanice.Items.Add(name);
 end;
 
-procedure TF_NewLoko.ServerResponse(ok:boolean; msg:string);
+procedure TF_NewLoko.ServerResponse(ok: Boolean; msg: string);
 begin
- if (Self.ST_Stav.Caption = 'Žádost zrušena') then Exit();
+  if (Self.ST_Stav.Caption = 'Žádost zrušena') then
+    Exit();
 
- if (ok) then
+  if (ok) then
   begin
-   Self.ST_Stav.Font.Color := clGreen;
-   Self.ST_Stav.Caption    := 'Server potvrdil žádost';
-  end else begin
-   Self.ST_Stav.Font.Color := clRed;
-   Self.ST_Stav.Caption    := msg;
+    Self.ST_Stav.Font.Color := clGreen;
+    Self.ST_Stav.Caption := 'Server potvrdil žádost';
+  end
+  else
+  begin
+    Self.ST_Stav.Font.Color := clRed;
+    Self.ST_Stav.Caption := msg;
 
-   Self.B_Cancel.Enabled   := false;
-   Self.B_Apply.Enabled    := true;
-   Self.LB_Stanice.Enabled := true;
-   Self.E_Note.Enabled     := true;
-   Self.zadost_probiha     := false;
+    Self.B_Cancel.Enabled := false;
+    Self.B_Apply.Enabled := true;
+    Self.LB_Stanice.Enabled := true;
+    Self.E_Note.Enabled := true;
+    Self.zadost_probiha := false;
   end;
 end;
 
-end.//unit
+end.// unit

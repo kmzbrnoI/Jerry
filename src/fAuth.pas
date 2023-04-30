@@ -25,7 +25,7 @@ type
   private
     { Private declarations }
   public
-    procedure OpenForm(caption:string);
+    procedure OpenForm(caption: string);
   end;
 
 var
@@ -39,37 +39,38 @@ uses GlobalConfig;
 
 procedure TF_Auth.B_ApplyClick(Sender: TObject);
 begin
- if (Self.CHB_RememberAuth.Checked) then
+  if (Self.CHB_RememberAuth.Checked) then
   begin
-   GlobConfig.data.auth.autoauth := true;
-   GlobConfig.data.auth.username := Self.E_username.Text;
-   GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
+    GlobConfig.data.auth.autoauth := true;
+    GlobConfig.data.auth.username := Self.E_username.Text;
+    GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
   end;
 
- Self.Close();
+  Self.Close();
 end;
 
 procedure TF_Auth.B_CancelClick(Sender: TObject);
 begin
- Self.E_username.Text := '';
- Self.E_Password.Text := '';
- Self.Close();
+  Self.E_username.Text := '';
+  Self.E_Password.Text := '';
+  Self.Close();
 end;
 
 procedure TF_Auth.FormKeyPress(Sender: TObject; var Key: Char);
 begin
- if (Key = #$1B) then
-  Self.B_CancelClick(Self.B_Cancel);
- if ((Key = ';') or (Key = ',')) then Key := #0;
+  if (Key = #$1B) then
+    Self.B_CancelClick(Self.B_Cancel);
+  if ((Key = ';') or (Key = ',')) then
+    Key := #0;
 end;
 
-procedure TF_Auth.OpenForm(caption:string);
+procedure TF_Auth.OpenForm(caption: string);
 begin
- Self.E_username.Text := '';
- Self.E_Password.Text := '';
- Self.ActiveControl := Self.E_username;
- Self.Caption := caption;
- Self.ShowModal();
-end;//proceudre
+  Self.E_username.Text := '';
+  Self.E_Password.Text := '';
+  Self.ActiveControl := Self.E_username;
+  Self.caption := caption;
+  Self.ShowModal();
+end;
 
-end.//unit
+end.// unit

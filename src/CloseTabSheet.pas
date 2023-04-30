@@ -8,24 +8,23 @@ uses Controls, Graphics, Types, ComCtrls, Classes, Forms;
 
 type
 
-  TCloseTabSheet=class(TTabSheet)
-    private
-    protected
-    public
-      FCloseButtonRect: TRect;
-      FOnClose: TNotifyEvent;
-      form:TForm;
-      procedure DoClose; virtual;
+  TCloseTabSheet = class(TTabSheet)
+  private
+  protected
+  public
+    FCloseButtonRect: TRect;
+    FOnClose: TNotifyEvent;
+    form: TForm;
+    procedure DoClose; virtual;
 
-      constructor Create(AOwner:TComponent); override;
-      destructor Destroy; override;
-  property OnClose:TNotifyEvent read FOnClose write FOnClose;
-  end;// class TCloseTabSheet
-
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    property OnClose: TNotifyEvent read FOnClose write FOnClose;
+  end; // class TCloseTabSheet
 
 implementation
 
-constructor TCloseTabSheet.Create(AOwner:TComponent);
+constructor TCloseTabSheet.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FCloseButtonRect := Rect(0, 0, 0, 0);
@@ -38,7 +37,8 @@ end;
 
 procedure TCloseTabSheet.DoClose;
 begin
-  if Assigned(FOnClose) then FOnClose(Self);
+  if Assigned(FOnClose) then
+    FOnClose(Self);
 end;
 
-end.//unit
+end.// unit

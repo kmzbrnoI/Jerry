@@ -53,96 +53,101 @@ implementation
 
 uses GlobalConfig, Main, ownStrUtils;
 
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
 {$R *.dfm}
 
 procedure TF_Settings.B_ApplyClick(Sender: TObject);
 begin
- GlobConfig.data.server.host := Self.E_Host.Text;
- GlobConfig.data.server.port := Self.SE_Port.Value;
- GlobConfig.data.server.autoconnect := Self.CHB_Autoconnect.Checked;
+  GlobConfig.data.server.host := Self.E_Host.Text;
+  GlobConfig.data.server.port := Self.SE_Port.Value;
+  GlobConfig.data.server.autoconnect := Self.CHB_Autoconnect.Checked;
 
- GlobConfig.data.auth.autoauth := Self.CHB_RememberAuth.Checked;
- if (GlobConfig.data.auth.autoauth) then
+  GlobConfig.data.auth.autoauth := Self.CHB_RememberAuth.Checked;
+  if (GlobConfig.data.auth.autoauth) then
   begin
-   GlobConfig.data.auth.username := Self.E_username.Text;
-   GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
-  end else begin
-   GlobConfig.data.auth.username := '';
-   GlobConfig.data.auth.password := '';
+    GlobConfig.data.auth.username := Self.E_username.Text;
+    GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
+  end
+  else
+  begin
+    GlobConfig.data.auth.username := '';
+    GlobConfig.data.auth.password := '';
   end;
 
- Self.Close();
+  Self.Close();
 end;
 
 procedure TF_Settings.B_StornoClick(Sender: TObject);
 begin
- Self.Close();
+  Self.Close();
 end;
 
 procedure TF_Settings.CHB_RememberAuthClick(Sender: TObject);
 begin
- Self.E_username.Enabled := Self.CHB_RememberAuth.Checked;
- Self.E_Password.Enabled := Self.CHB_RememberAuth.Checked;
+  Self.E_username.Enabled := Self.CHB_RememberAuth.Checked;
+  Self.E_Password.Enabled := Self.CHB_RememberAuth.Checked;
 
- if (not Self.CHB_RememberAuth.Checked) then
+  if (not Self.CHB_RememberAuth.Checked) then
   begin
-   Self.E_username.Text := '';
-   Self.E_Password.Text := '';
+    Self.E_username.Text := '';
+    Self.E_Password.Text := '';
   end;
 end;
 
 procedure TF_Settings.CHB_ShowPasswordClick(Sender: TObject);
 begin
- if (Self.CHB_ShowPassword.Checked) then
-  Self.E_Password.PasswordChar := #0
- else
-  Self.E_Password.PasswordChar := '*';
+  if (Self.CHB_ShowPassword.Checked) then
+    Self.E_Password.PasswordChar := #0
+  else
+    Self.E_Password.PasswordChar := '*';
 end;
 
 procedure TF_Settings.E_PasswordChange(Sender: TObject);
 begin
- if (Self.E_Password.Text = '') then Self.CHB_ShowPassword.Enabled := true;
+  if (Self.E_Password.Text = '') then
+    Self.CHB_ShowPassword.Enabled := true;
 end;
 
 procedure TF_Settings.E_usernameKeyPress(Sender: TObject; var Key: Char);
 begin
- if ((Key = ';') or (Key = ',')) then Key := #0;
+  if ((Key = ';') or (Key = ',')) then
+    Key := #0;
 end;
 
 procedure TF_Settings.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
- Self.CHB_ShowPassword.Checked := false;
- Self.E_Password.PasswordChar  := '*';
+  Self.CHB_ShowPassword.Checked := false;
+  Self.E_Password.PasswordChar := '*';
 end;
 
 procedure TF_Settings.FormCreate(Sender: TObject);
 begin
- Self.PC_Main.ActivePageIndex := 0;
+  Self.PC_Main.ActivePageIndex := 0;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
 procedure TF_Settings.OpenForm();
-var data:TGlobConfigData;
+var
+  data: TGlobConfigData;
 begin
- data := GlobConfig.data;
+  data := GlobConfig.data;
 
- Self.E_Host.Text             := data.server.host;
- Self.SE_Port.Value           := data.server.port;
- Self.CHB_Autoconnect.Checked := data.server.autoconnect;
+  Self.E_Host.Text := data.server.host;
+  Self.SE_Port.Value := data.server.port;
+  Self.CHB_Autoconnect.Checked := data.server.autoconnect;
 
- Self.CHB_RememberAuth.Checked := data.auth.autoauth;
- Self.CHB_RememberAuthClick(Self.CHB_RememberAuth);
- Self.E_username.Text          := data.auth.username;
- Self.E_Password.Text          := data.auth.password;
+  Self.CHB_RememberAuth.Checked := data.auth.autoauth;
+  Self.CHB_RememberAuthClick(Self.CHB_RememberAuth);
+  Self.E_username.Text := data.auth.username;
+  Self.E_Password.Text := data.auth.password;
 
- Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
+  Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
 
- Self.Show();
+  Self.Show();
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
-end.//unit
+end.// unit

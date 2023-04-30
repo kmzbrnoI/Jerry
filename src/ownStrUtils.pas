@@ -18,15 +18,14 @@ implementation
 //    vrati: ["ahoj", "ja", "jsem", "Honza;Horacek"]
 
 procedure ExtractStringsEx(Separators: TSysCharSet; Ignore: TSysCharSet; Content: string; var Strings: TStrings);
-var i: word;
-    s: string;
+var s: string;
     plain_cnt:Integer;
  begin
   s := '';
   plain_cnt := 0;
   if (Length(Content) = 0) then Exit();
 
-  for i := 1 to Length(Content) do
+  for var i := 1 to Length(Content) do
    begin
     if (Content[i] = '{') then
      begin
