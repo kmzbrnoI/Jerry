@@ -18,8 +18,6 @@ type
 
   TRegulatorCollector = class
   private
-    tabs: TList<TCloseTabSheet>;
-
     function GetTab(addr: Word): TCloseTabSheet;
     procedure NewLoko(addr: Word; lok_data: string; total: boolean);
 
@@ -27,6 +25,8 @@ type
     function GetCaptionType(): TRegCaptionType;
 
   public
+    tabs: TList<TCloseTabSheet>;
+
     constructor Create();
     destructor Destroy(); override;
 
@@ -36,6 +36,11 @@ type
     procedure IdleAllRuc();
     procedure MultitrackSpeedChanged(Sender: TCloseTabSheet); // aktualizace multitrakce (zmenu vyvolal regulator \Sender), zpropaguj do ostatnich regulatoru
     procedure MultitrackDirChanged(Sender: TCloseTabSheet);
+    procedure Total(omit: TObject = nil);
+    procedure TotalRelease(omit: TObject = nil);
+
+    function AreAllTotal(): Boolean;
+    function AreAllNotTotal(): Boolean;
 
     property caption_type: TRegCaptionType read GetCaptionType;
 
@@ -238,6 +243,40 @@ begin
     Result := ctShort
   else
     Result := ctLong;
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+procedure TRegulatorCollector.Total(omit: TObject = nil);
+begin
+  for var tab in Self.tabs do
+    if (tab.form <> omit) then
+      (tab.form as TF_DigiReg).Total();
+end;
+
+procedure TRegulatorCollector.TotalRelease(omit: TObject = nil);
+begin
+  for var tab in Self.tabs do
+    if (tab.form <> omit) then
+      (tab.form as TF_DigiReg).TotalRelease();
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+function TRegulatorCollector.AreAllTotal(): Boolean;
+begin
+  Result := true;
+  for var tab in Self.tabs do
+    if (not (tab.form as TF_DigiReg).CHB_Total.Checked) then
+      Exit(false);
+end;
+
+function TRegulatorCollector.AreAllNotTotal(): Boolean;
+begin
+  Result := true;
+  for var tab in Self.tabs do
+    if ((tab.form as TF_DigiReg).CHB_Total.Checked) then
+      Exit(false);
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

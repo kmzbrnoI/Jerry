@@ -32,9 +32,10 @@ begin
   Application.CreateForm(TF_Auth, F_Auth);
   Application.CreateForm(TF_NewLoko, F_NewLoko);
   Application.CreateForm(TF_Debug, F_Debug);
+
   // automaticke pripojeni k serveru
   if ((GlobConfig.data.server.autoconnect) or (GlobConfig.data.args.autoconnect)) then
     F_Main.A_ConnectExecute(nil);
 
-  Application.Run;
+  Application.Run();
 end.

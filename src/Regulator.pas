@@ -82,8 +82,7 @@ type
     procedure DestroyCHBFunkce(); // znici CHeckBoxy funkci
 
     procedure MomRelease(mr: TMomRelease);
-    function CreateMomRelease(f: Integer; shutdownTime: TDateTime)
-      : TMomRelease; overload;
+    function CreateMomRelease(f: Integer; shutdownTime: TDateTime): TMomRelease; overload;
     function CreateMomRelease(f: Integer): TMomRelease; overload;
 
     class procedure SimulateClick(var chb: TCheckBox);
@@ -103,6 +102,9 @@ type
     procedure DirChanged(from_multitrack: boolean = false);
     procedure ChangeDirFromMultitrack();
     procedure IdleRuc();
+
+    procedure Total();
+    procedure TotalRelease();
 
     procedure LongCaption();
     procedure ShortCaption();
@@ -126,28 +128,30 @@ begin
   inherited Create(nil);
 
   Self.updating := true;
+  try
+    Self.addr := addr;
+    Self.TS := tab;
 
-  Self.addr := addr;
-  Self.TS := tab;
+    Self.sent := TQueue<TLogCommand>.Create();
+    Self.speed := -2;
+    Self.CHB_Multitrack.Checked := multitrack;
+    Self.CHB_Total.Checked := total;
+    Self.q_mom_release := TQueue<TMomRelease>.Create();
 
-  Self.sent := TQueue<TLogCommand>.Create();
-  Self.speed := -2;
-  Self.CHB_Multitrack.Checked := multitrack;
-  Self.CHB_Total.Checked := total;
-  Self.q_mom_release := TQueue<TMomRelease>.Create();
+    Self.HV := THV.Create(lok_data);
 
-  Self.HV := THV.Create(lok_data);
+    Self.CreateCHBFunkce();
 
-  Self.CreateCHBFunkce();
+    if (caption_type = ctLong) then
+      Self.LongCaption()
+    else
+      Self.ShortCaption();
 
-  if (caption_type = ctLong) then
-    Self.LongCaption()
-  else
-    Self.ShortCaption();
-
-  Self.Parent := tab;
-  Self.Show();
-  Self.updating := false;
+    Self.Parent := tab;
+    Self.Show();
+  finally
+    Self.updating := false;
+  end;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -225,9 +229,18 @@ begin
   if (Self.CHB_Total.Checked) then
   begin
     Self.SendCmd('TOTAL;1');
-  end
-  else
+
+    if ((RegColl.tabs.Count > 1) and (not RegColl.AreAllTotal())) then
+      if (Application.MessageBox('Aktivovat ruèní øízení i pro ostatní otevøená HV?', 'Dotaz', MB_YESNO OR MB_ICONQUESTION OR MB_DEFBUTTON1) = mrYes) then
+        RegColl.Total(Self);
+
+  end else begin
     Self.SendCmd('TOTAL;0');
+
+    if ((RegColl.tabs.Count > 1) and (not RegColl.AreAllNotTotal())) then
+      if (Application.MessageBox('Deaktivovat ruèní øízení i pro ostatní otevøená HV?', 'Dotaz', MB_YESNO OR MB_ICONQUESTION OR MB_DEFBUTTON1) = mrYes) then
+        RegColl.TotalRelease(Self);
+  end;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -705,6 +718,16 @@ procedure TF_DigiReg.IdleRuc();
 begin
   if (Self.CHB_Total.Checked) then
     Self.B_IdleClick(Self);
+end;
+
+procedure TF_DigiReg.Total();
+begin
+  Self.SendCmd('TOTAL;1');
+end;
+
+procedure TF_DigiReg.TotalRelease();
+begin
+  Self.SendCmd('TOTAL;0');
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
