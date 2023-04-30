@@ -53,7 +53,6 @@ type
     procedure S_StatusMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure T_SpeedTimer(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure CHB_TotalClick(Sender: TObject);
     procedure T_Mom_ReleaseTimer(Sender: TObject);
   private
@@ -109,6 +108,8 @@ type
     procedure LongCaption();
     procedure ShortCaption();
 
+    function TabBgColor(): TColor;
+
     property multitrack: boolean read GetMultitrack;
   end;
 
@@ -118,7 +119,7 @@ implementation
 
 {$R *.dfm}
 
-uses TCPClientPanel, ORList, Main, RegCollector, ownStrUtils;
+uses TCPClientPanel, ORList, Main, RegCollector, ownStrUtils, System.UITypes;
 
 /// /////////////////////////////////////////////////////////////////////////////
 
@@ -131,6 +132,7 @@ begin
   try
     Self.addr := addr;
     Self.TS := tab;
+    Self.Parent := tab;
 
     Self.sent := TQueue<TLogCommand>.Create();
     Self.speed := -2;
@@ -147,8 +149,52 @@ begin
     else
       Self.ShortCaption();
 
-    Self.Parent := tab;
-    Self.Show();
+    Self.S_Status.Brush.Color := clGreen;
+
+    Self.PC_Funkce.ActivePageIndex := 0;
+
+    Self.L_stupen.Caption := IntToStr(Self.HV.speed_steps) + ' / 28';
+    Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
+
+    Self.updating := true;
+    try
+      Self.RG_Smer.ItemIndex := Self.HV.dir;
+      Self.speed := Self.HV.speed_steps;
+      Self.TB_reg.Position := Self.HV.speed_steps;
+
+      for var i := 0 to _MAX_FORM_FUNC do
+      begin
+        Self.CHB_funkce[i].AllowGrayed :=
+          (Self.HV.funcType[i] = THVFuncType.momentary);
+        Self.CHB_funkce[i].Checked := Self.HV.functions[i];
+      end;
+    finally
+      Self.updating := false;
+    end;
+
+    Self.SetElementsState(true);
+
+    Self.TB_reg.Enabled := Self.CHB_Total.Checked;
+    Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
+    Self.B_Idle.Enabled := Self.CHB_Total.Checked;
+
+    // zobrazeni nazvu funkci
+    for var i := 0 to _MAX_FORM_FUNC do
+    begin
+      Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
+      if (Self.HV.funcVyznam[i] <> '') then
+      begin
+        Self.CHB_funkce[i].Caption := 'F' + IntToStr(i) + ': ' +
+          Self.HV.funcVyznam[i];
+        Self.CHB_funkce[i].Hint := Self.CHB_funkce[i].Caption;
+      end
+      else
+        Self.CHB_funkce[i].Caption := 'F' + IntToStr(i);
+    end;
+
+    Self.B_PrevzitLoko.Enabled := false;
+
+    Self.Show();    
   finally
     Self.updating := false;
   end;
@@ -170,59 +216,11 @@ begin
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
-
-procedure TF_DigiReg.FormShow(Sender: TObject);
-begin
-  Self.PC_Funkce.ActivePageIndex := 0;
-
-  Self.S_Status.Brush.Color := clGreen;
-  Self.L_stupen.Caption := IntToStr(Self.HV.speed_steps) + ' / 28';
-  Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
-
-  Self.updating := true;
-  try
-    Self.RG_Smer.ItemIndex := Self.HV.dir;
-    Self.speed := Self.HV.speed_steps;
-    Self.TB_reg.Position := Self.HV.speed_steps;
-
-    for var i := 0 to _MAX_FORM_FUNC do
-    begin
-      Self.CHB_funkce[i].AllowGrayed :=
-        (Self.HV.funcType[i] = THVFuncType.momentary);
-      Self.CHB_funkce[i].Checked := Self.HV.functions[i];
-    end;
-  finally
-    Self.updating := false;
-  end;
-
-  Self.SetElementsState(true);
-
-  Self.TB_reg.Enabled := Self.CHB_Total.Checked;
-  Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
-  Self.B_Idle.Enabled := Self.CHB_Total.Checked;
-
-  // zobrazeni nazvu funkci
-  for var i := 0 to _MAX_FORM_FUNC do
-  begin
-    Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
-    if (Self.HV.funcVyznam[i] <> '') then
-    begin
-      Self.CHB_funkce[i].Caption := 'F' + IntToStr(i) + ': ' +
-        Self.HV.funcVyznam[i];
-      Self.CHB_funkce[i].Hint := Self.CHB_funkce[i].Caption;
-    end
-    else
-      Self.CHB_funkce[i].Caption := 'F' + IntToStr(i);
-  end;
-
-  Self.B_PrevzitLoko.Enabled := false;
-end;
-
-/// /////////////////////////////////////////////////////////////////////////////
 // Zapnuti/vypnuti totalniho rucniho rizeni
 
 procedure TF_DigiReg.CHB_TotalClick(Sender: TObject);
 begin
+  F_Main.PC_Main.Repaint();
   if (Self.updating) then
     Exit();
 
@@ -382,7 +380,8 @@ begin
       else
         Self.com_err := 'loko NEKOMUNIKUJE';
     end;
-
+    
+    F_Main.PC_Main.Repaint();
     if (Self.sent.Count > 0) then
       Self.sent.Dequeue();
 
@@ -404,6 +403,7 @@ begin
 
       Self.HV.ParseData(data[5]);
       Self.OnShow(Self);
+      F_Main.PC_Main.Repaint();
     end
     else
     begin
@@ -411,9 +411,7 @@ begin
       if (data[4] = 'stolen') then
       begin
         Self.S_Status.Brush.Color := clYellow;
-      end
-      else
-      begin
+      end else begin
         Self.S_Status.Brush.Color := clRed;
       end;
       Self.B_PrevzitLoko.Enabled := true;
@@ -437,6 +435,8 @@ begin
       updating := false;
     end;
 
+    F_Main.PC_Main.Repaint();
+    
     if ((F_Main.PC_Main.ActivePage = (Self.Parent as TCloseTabSheet)) and
       (Self.TB_reg.Enabled)) then
       Self.TB_reg.SetFocus();
@@ -483,6 +483,7 @@ begin
       Self.sent.Dequeue();
       Self.S_Status.Brush.Color := clRed;
       Self.com_err := 'loko NEKOMUNIKUJE';
+      F_Main.PC_Main.Repaint();
     end;
   end;
 end;
@@ -734,6 +735,23 @@ end;
 procedure TF_DigiReg.TotalRelease();
 begin
   Self.SendCmd('TOTAL;0');
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+function TF_DigiReg.TabBgColor(): TColor;
+begin
+  if (not Assigned(Self)) then
+    Exit(clBtnFace);
+  Result := Self.S_Status.Brush.Color;
+  if (Result = clGreen) then
+  begin
+    if (Self.CHB_Total.Checked) then
+      Result := clActiveCaption
+    else
+      Result := clBtnFace;
+  end;
+
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

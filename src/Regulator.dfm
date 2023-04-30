@@ -13,7 +13,6 @@ object F_DigiReg: TF_DigiReg
   Font.Style = []
   FormStyle = fsStayOnTop
   OldCreateOrder = False
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object L_stupen: TLabel
