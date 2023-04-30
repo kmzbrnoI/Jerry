@@ -9,7 +9,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ActnList, CloseTabSheet, Themes, StdCtrls, Buttons,
-  AppEvnts, StrUtils, Menus;
+  AppEvnts, StrUtils, Menus, System.Actions;
 
 type
   TF_Main = class(TForm)
@@ -69,7 +69,7 @@ implementation
 {$R *.dfm}
 
 uses TCPClientPanel, GlobalConfig, fSettings, fNewLoko, fDebug, RegCollector,
-      Verze, Regulator;
+      Verze, Regulator, System.Types, System.UITypes;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Systemove zpravy, pouzito pro odchyceni stisku klavesy
@@ -93,8 +93,8 @@ end;
 
 procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
- Application.MessageBox(PChar('Jerry v'+NactiVerzi(Application.ExeName)+#13#10+
-                              'build '+GetLastBuildDate()+' '+GetLastBuildTime()+#13#10+
+ Application.MessageBox(PChar('Jerry v'+VersionStr(Application.ExeName)+#13#10+
+                              'build '+LastBuildDate()+' '+LastBuildTime()+#13#10+
                               'Vytvořil Jan Horáček 2015-2019 pro KMŽ Brno I.'),
                         'Info', MB_OK OR MB_ICONINFORMATION);
 end;
@@ -214,7 +214,7 @@ end;
 
 procedure TF_Main.FormShow(Sender: TObject);
 begin
- Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+ Self.Caption := 'Jerry v'+VersionStr(Application.ExeName)+' (build '+LastBuildDate+')';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -269,7 +269,7 @@ begin
     PageControl.Canvas.TextOut(TabCaption.X, TabCaption.Y,
             PageControl.Pages[TabIndex].Caption);
 
-    if not ThemeServices.ThemesEnabled then
+    if (not StyleServices.Enabled) then
     begin
       if (FCloseButtonMouseDownTab = TabSheet) and FCloseButtonShowPushed then
         CloseBtnDrawState := DFCS_CAPTIONCLOSE + DFCS_PUSHED
@@ -284,11 +284,11 @@ begin
       Dec(TabSheet.FCloseButtonRect.Left);
 
       if (FCloseButtonMouseDownTab = TabSheet) and FCloseButtonShowPushed then
-        CloseBtnDrawDetails := ThemeServices.GetElementDetails(twCloseButtonPushed)
+        CloseBtnDrawDetails := StyleServices.GetElementDetails(twCloseButtonPushed)
       else
-        CloseBtnDrawDetails := ThemeServices.GetElementDetails(twCloseButtonNormal);
+        CloseBtnDrawDetails := StyleServices.GetElementDetails(twCloseButtonNormal);
 
-      ThemeServices.DrawElement(PageControl.Canvas.Handle, CloseBtnDrawDetails,
+      StyleServices.DrawElement(PageControl.Canvas.Handle, CloseBtnDrawDetails,
                 TabSheet.FCloseButtonRect);
     end;
   end else begin
@@ -402,9 +402,9 @@ end;
 procedure TF_Main.PC_MainChange(Sender: TObject);
 begin
  if (Self.PC_Main.ActivePage = nil) then
-  Self.Caption := 'Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')'
+  Self.Caption := 'Jerry v'+VersionStr(Application.ExeName)+' (build '+LastBuildDate+')'
  else
-  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '– Jerry v'+NactiVerzi(Application.ExeName)+' (build '+GetLastBuildDate+')';
+  Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption)-5) + '– Jerry v'+VersionStr(Application.ExeName)+' (build '+LastBuildDate+')';
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

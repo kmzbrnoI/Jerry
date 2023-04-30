@@ -2,9 +2,10 @@ unit ownStrUtils;
 
 interface
 
-uses Character, SysUtils, Classes;
+uses Character, SysUtils, Classes, System.hash;
 
 procedure ExtractStringsEx(Separators: TSysCharSet; Ignore: TSysCharSet; Content: string; var Strings: TStrings);
+function pwdHash(plain: string): string;
 
 implementation
 

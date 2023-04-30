@@ -8,44 +8,44 @@ interface
 
 uses Windows, SysUtils, Forms, jclPEImage;
 
- function NactiVerzi(const FileName: string): string;//cteni verze z nastaveni
- function GetLastBuildDate:string;
- function GetLastBuildTime:string;
+ function VersionStr(const FileName: string): string;
+ function LastBuildDate(): string;
+ function LastBuildTime(): string;
 
 implementation
 
-function NactiVerzi(const FileName: string): string;//cteni verze z nastaveni
+function VersionStr(const FileName: string): string;
 var
   size, len: longword;
-  handle: THandle;
+  handle: Cardinal;
   buffer: pchar;
   pinfo: ^VS_FIXEDFILEINFO;
   Major, Minor, Release: word;
 begin
-  Result:='Není dostupná';
+  Result := 'Není dostupná';
   size := GetFileVersionInfoSize(Pointer(FileName), handle);
-  if size > 0 then begin
+  if (size > 0) then
+  begin
     GetMem(buffer, size);
-    if GetFileVersionInfo(Pointer(FileName), 0, size, buffer)
-    then
-      if VerQueryValue(buffer, '\', pointer(pinfo), len) then begin
-        Major   := HiWord(pinfo.dwFileVersionMS);
-        Minor   := LoWord(pinfo.dwFileVersionMS);
-        Release := HiWord(pinfo.dwFileVersionLS);
-        Result := Format('%d.%d.%d',[Major, Minor, Release]);
-      end;
+    if (GetFileVersionInfo(Pointer(FileName), 0, size, buffer)) and (VerQueryValue(buffer, '\', pointer(pinfo), len)) then
+    begin
+      Major := HiWord(pinfo.dwFileVersionMS);
+      Minor := LoWord(pinfo.dwFileVersionMS);
+      Release := HiWord(pinfo.dwFileVersionLS);
+      Result := Format('%d.%d.%d', [Major, Minor, Release]);
+    end;
     FreeMem(buffer);
   end;
 end;
 
-function GetLastBuildDate():String;
- begin
+function LastBuildDate(): string;
+begin
   DateTimeToString(Result, 'dd.mm.yyyy', jclPEImage.PeReadLinkerTimeStamp(Application.ExeName));
- end;
+end;
 
-function GetLastBuildTime():String;
- begin
+function LastBuildTime(): string;
+begin
   DateTimeToString(Result, 'hh:mm:ss', jclPEImage.PeReadLinkerTimeStamp(Application.ExeName));
- end;
+end;
 
 end.//unit

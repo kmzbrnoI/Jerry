@@ -62,7 +62,6 @@ end;
 procedure THV.ParseData(data:string);
 var str, str2, str3:TStrings;
     i:Integer;
-    tmp:string;
 begin
  str  := TStringList.Create();
  str2 := TStringList.Create();
