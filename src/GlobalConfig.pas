@@ -35,7 +35,6 @@ type
   TGlobConfigData = record
     server: TServerConfig;
     auth: TAuthConfig;
-    frmPos: TPoint;
     args: TArguments;
   end;
 
@@ -94,18 +93,19 @@ var
   ini: TMemIniFile;
 begin
   ini := TMemIniFile.Create(filename);
-  Self.filename := filename;
+  try
+    Self.filename := filename;
 
-  Self.data.server.host := ini.ReadString('server', 'host', 'localhost');
-  Self.data.server.port := ini.ReadInteger('server', 'port', _DEFAULT_PORT);
-  Self.data.server.autoconnect := ini.ReadBool('server', 'autoconnect', false);
+    Self.data.server.host := ini.ReadString('server', 'host', 'localhost');
+    Self.data.server.port := ini.ReadInteger('server', 'port', _DEFAULT_PORT);
+    Self.data.server.autoconnect := ini.ReadBool('server', 'autoconnect', false);
 
-  Self.data.auth.autoauth := ini.ReadBool('auth', 'autoauth', false);
-  Self.data.auth.username := ini.ReadString('auth', 'username', '');
-  Self.data.auth.password := ini.ReadString('auth', 'password', '');
-
-  Self.data.frmPos.X := ini.ReadInteger('F_Main', 'X', 0);
-  Self.data.frmPos.Y := ini.ReadInteger('F_Main', 'Y', 0);
+    Self.data.auth.autoauth := ini.ReadBool('auth', 'autoauth', false);
+    Self.data.auth.username := ini.ReadString('auth', 'username', '');
+    Self.data.auth.password := ini.ReadString('auth', 'password', '');
+  finally
+    ini.Free();
+  end;
 end;
 
 procedure TGlobConfig.SaveFile(const filename: string);
@@ -113,19 +113,19 @@ var
   ini: TMemIniFile;
 begin
   ini := TMemIniFile.Create(filename);
+  try
+    ini.WriteString('server', 'host', Self.data.server.host);
+    ini.WriteInteger('server', 'port', Self.data.server.port);
+    ini.WriteBool('server', 'autoconnect', Self.data.server.autoconnect);
 
-  ini.WriteString('server', 'host', Self.data.server.host);
-  ini.WriteInteger('server', 'port', Self.data.server.port);
-  ini.WriteBool('server', 'autoconnect', Self.data.server.autoconnect);
+    ini.WriteBool('auth', 'autoauth', Self.data.auth.autoauth);
+    ini.WriteString('auth', 'username', Self.data.auth.username);
+    ini.WriteString('auth', 'password', Self.data.auth.password);
 
-  ini.WriteBool('auth', 'autoauth', Self.data.auth.autoauth);
-  ini.WriteString('auth', 'username', Self.data.auth.username);
-  ini.WriteString('auth', 'password', Self.data.auth.password);
-
-  ini.WriteInteger('F_Main', 'X', Self.data.frmPos.X);
-  ini.WriteInteger('F_Main', 'Y', Self.data.frmPos.Y);
-
-  ini.UpdateFile();
+    ini.UpdateFile();
+  finally
+    ini.Free();
+  end;
 end;
 
 procedure TGlobConfig.SaveFile();
@@ -140,60 +140,56 @@ var
   data: TStrings;
 begin
   data := TStringList.Create();
-
-  var i := 1;
-  while (i <= ParamCount) do
-  begin
-    var arg: string := ParamStr(i);
-    if (arg = '-a') then
+  try
+    var i := 1;
+    while (i <= ParamCount) do
     begin
-      // autoconnect
-      Self.data.args.autoconnect := true;
-    end
-    else if ((arg = '-u') and (i < ParamCount - 1)) then
-    begin
-      // parse username
-      Inc(i);
-      Self.data.args.username := ParamStr(i);
-    end
-    else if ((arg = '-p') and (i < ParamCount - 1)) then
-    begin
-      // parse password
-      Inc(i);
-      Self.data.args.password := ParamStr(i);
-    end
-    else if ((arg = '-s') and (i < ParamCount - 1)) then
-    begin
-      Inc(i);
-      Self.data.args.server := ParamStr(i);
-    end
-    else if ((arg = '-pt') and (i < ParamCount - 1)) then
-    begin
-      Inc(i);
-      Self.data.args.port := StrToIntDef(ParamStr(i), _DEFAULT_PORT);
-    end
-    else
-    begin
-      // parse loko
-      try
-        data.Clear();
-        ExtractStringsEx([':'], [], ParamStr(i), data);
-        var lok: TLokArgument;
-        lok.addr := StrToInt(data[0]);
-        if (data.Count > 1) then
-          lok.token := data[1]
-        else
-          lok.token := '';
-        Self.data.args.loks.Add(lok);
-      except
-        // chyby jsou ignorovany
+      var arg: string := ParamStr(i);
+      if (arg = '-a') then
+      begin // autoconnect
+        Self.data.args.autoconnect := true;
+      end
+      else if ((arg = '-u') and (i < ParamCount - 1)) then
+      begin // username
+        Inc(i);
+        Self.data.args.username := ParamStr(i);
+      end
+      else if ((arg = '-p') and (i < ParamCount - 1)) then
+      begin // password
+        Inc(i);
+        Self.data.args.password := ParamStr(i);
+      end
+      else if ((arg = '-s') and (i < ParamCount - 1)) then
+      begin // server hostname
+        Inc(i);
+        Self.data.args.server := ParamStr(i);
+      end
+      else if ((arg = '-pt') and (i < ParamCount - 1)) then
+      begin // server port
+        Inc(i);
+        Self.data.args.port := StrToIntDef(ParamStr(i), _DEFAULT_PORT);
+      end
+      else begin // lokos
+        try
+          data.Clear();
+          ExtractStringsEx([':'], [], ParamStr(i), data);
+          var lok: TLokArgument;
+          lok.addr := StrToInt(data[0]);
+          if (data.Count > 1) then
+            lok.token := data[1]
+          else
+            lok.token := '';
+          Self.data.args.loks.Add(lok);
+        except
+          // chyby jsou ignorovany
+        end;
       end;
-    end;
 
-    Inc(i);
-  end; // while
-
-  data.Free();
+      Inc(i);
+    end; // while
+  finally
+    data.Free();
+  end;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

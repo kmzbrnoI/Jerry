@@ -206,17 +206,11 @@ begin
 end;
 
 procedure TF_Main.FormDestroy(Sender: TObject);
-var
-  data: TGlobConfigData;
 begin
   Screen.Cursor := crHourGlass;
 
-  // ulozime globalni konfiguracni data
   if (Assigned(GlobConfig)) then
   begin
-    data := GlobConfig.data;
-    data.frmPos := Point(Self.Left, Self.Top);
-    GlobConfig.data := data;
     try
       GlobConfig.SaveFile();
     except
