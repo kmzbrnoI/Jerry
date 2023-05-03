@@ -763,8 +763,12 @@ begin
   if (Result = clGreen) then
   begin
     if (Self.CHB_Total.Checked) then
-      Result := clActiveCaption
-    else
+    begin
+      if (Self.speed > 0) then
+        Result := clMoneyGreen
+      else
+        Result := clActiveCaption
+    end else
       Result := clBtnFace;
   end;
 
