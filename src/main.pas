@@ -251,7 +251,6 @@ var
   TabSheet: TCloseTabSheet;
   TabCaption: TPoint;
   CloseBtnRect: TRect;
-  CloseBtnDrawState: Cardinal;
   CloseBtnDrawDetails: TThemedElementDetails;
 begin
   PageControl := Control as TPageControl;
@@ -284,28 +283,17 @@ begin
     PageControl.Canvas.TextOut(TabCaption.X, TabCaption.Y,
       PageControl.Pages[TabIndex].Caption);
 
-    if (not StyleServices.Enabled) then
-    begin
-      if (FCloseButtonMouseDownTab = TabSheet) and FCloseButtonShowPushed then
-        CloseBtnDrawState := DFCS_CAPTIONCLOSE + DFCS_PUSHED
-      else
-        CloseBtnDrawState := DFCS_CAPTIONCLOSE;
+    Dec(TabSheet.FCloseButtonRect.Left);
 
-      Windows.DrawFrameControl(PageControl.Canvas.Handle,
-        TabSheet.FCloseButtonRect, DFC_CAPTION, CloseBtnDrawState);
-    end else begin
-      Dec(TabSheet.FCloseButtonRect.Left);
+    if (FCloseButtonMouseDownTab = TabSheet) and FCloseButtonShowPushed then
+      CloseBtnDrawDetails := StyleServices.GetElementDetails
+        (twCloseButtonPushed)
+    else
+      CloseBtnDrawDetails := StyleServices.GetElementDetails
+        (twCloseButtonNormal);
 
-      if (FCloseButtonMouseDownTab = TabSheet) and FCloseButtonShowPushed then
-        CloseBtnDrawDetails := StyleServices.GetElementDetails
-          (twCloseButtonPushed)
-      else
-        CloseBtnDrawDetails := StyleServices.GetElementDetails
-          (twCloseButtonNormal);
-
-      StyleServices.DrawElement(PageControl.Canvas.Handle, CloseBtnDrawDetails,
-        TabSheet.FCloseButtonRect);
-    end;
+    StyleServices.DrawElement(PageControl.Canvas.Handle, CloseBtnDrawDetails,
+      TabSheet.FCloseButtonRect);
   end else begin
     PageControl.Canvas.FillRect(Rect);
     PageControl.Canvas.TextOut(TabCaption.X, TabCaption.Y,
