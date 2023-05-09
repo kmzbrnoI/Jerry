@@ -757,7 +757,7 @@ end;
 
 function TF_DigiReg.TabBgColor(): TColor;
 begin
-  if (not Assigned(Self)) then
+  if ((not Assigned(Self)) or (not Assigned(Self.S_Status))) then
     Exit(clBtnFace);
   Result := Self.S_Status.Brush.Color;
   if (Result = clGreen) then
