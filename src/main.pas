@@ -51,6 +51,7 @@ type
     procedure A_AboutExecute(Sender: TObject);
     procedure A_DebugExecute(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure UpdateFormStyle();
 
   private
     FCloseButtonMouseDownTab: TCloseTabSheet;
@@ -200,6 +201,7 @@ procedure TF_Main.FormCreate(Sender: TObject);
 begin
   try
     GlobConfig.LoadFile();
+    Self.UpdateFormStyle();
   except
 
   end;
@@ -400,6 +402,16 @@ begin
   else
     Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption) - 5) + '– Jerry v' +
       VersionStr(Application.ExeName) + ' (build ' + LastBuildDate() + ')';
+end;
+
+/// /////////////////////////////////////////////////////////////////////////////
+
+procedure TF_Main.UpdateFormStyle();
+begin
+  if (GlobConfig.data.stayOnTop) then
+    Self.FormStyle := fsStayOnTop
+  else
+    Self.FormStyle := fsNormal;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

@@ -49,7 +49,7 @@ object F_Settings: TF_Settings
     Top = 8
     Width = 629
     Height = 273
-    ActivePage = TS_Rights
+    ActivePage = TS_display
     TabOrder = 2
     object TS_Server: TTabSheet
       Caption = 'P'#345'ipojen'#237
@@ -172,6 +172,18 @@ object F_Settings: TF_Settings
           TabOrder = 3
           OnClick = CHB_ShowPasswordClick
         end
+      end
+    end
+    object TS_display: TTabSheet
+      Caption = 'Zobrazen'#237
+      ImageIndex = 2
+      object CHB_StayOnTop: TCheckBox
+        Left = 248
+        Top = 24
+        Width = 129
+        Height = 17
+        Caption = 'Okno v'#382'dy na pop'#345'ed'#237
+        TabOrder = 0
       end
     end
   end

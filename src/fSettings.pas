@@ -32,6 +32,8 @@ type
     CHB_ShowPassword: TCheckBox;
     Button1: TButton;
     Button2: TButton;
+    TS_display: TTabSheet;
+    CHB_StayOnTop: TCheckBox;
     procedure B_StornoClick(Sender: TObject);
     procedure B_ApplyClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -74,6 +76,9 @@ begin
     GlobConfig.data.auth.username := '';
     GlobConfig.data.auth.password := '';
   end;
+
+  GlobConfig.data.stayOnTop := Self.CHB_StayOnTop.Checked;
+  F_Main.UpdateFormStyle();
 
   Self.Close();
 end;
@@ -144,6 +149,8 @@ begin
   Self.E_Password.Text := data.auth.password;
 
   Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
+
+  Self.CHB_StayOnTop.Checked := data.stayOnTop;
 
   Self.Show();
 end;

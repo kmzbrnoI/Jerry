@@ -36,6 +36,7 @@ type
     server: TServerConfig;
     auth: TAuthConfig;
     args: TArguments;
+    stayOnTop: Boolean;
   end;
 
   TGlobConfig = class
@@ -103,6 +104,8 @@ begin
     Self.data.auth.autoauth := ini.ReadBool('auth', 'autoauth', false);
     Self.data.auth.username := ini.ReadString('auth', 'username', '');
     Self.data.auth.password := ini.ReadString('auth', 'password', '');
+
+    Self.data.stayOnTop := ini.ReadBool('form', 'stayOnTop', false);
   finally
     ini.Free();
   end;
@@ -121,6 +124,8 @@ begin
     ini.WriteBool('auth', 'autoauth', Self.data.auth.autoauth);
     ini.WriteString('auth', 'username', Self.data.auth.username);
     ini.WriteString('auth', 'password', Self.data.auth.password);
+
+    ini.WriteBool('form', 'stayOnTop', Self.data.stayOnTop);
 
     ini.UpdateFile();
   finally
