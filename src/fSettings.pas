@@ -69,7 +69,8 @@ begin
   if (GlobConfig.data.auth.autoauth) then
   begin
     GlobConfig.data.auth.username := Self.E_username.Text;
-    GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
+    if (Self.E_Password.Text <> 'heslo') then
+      GlobConfig.data.auth.password := ownStrUtils.pwdHash(Self.E_Password.Text);
   end
   else
   begin
@@ -146,7 +147,10 @@ begin
   Self.CHB_RememberAuth.Checked := data.auth.autoauth;
   Self.CHB_RememberAuthClick(Self.CHB_RememberAuth);
   Self.E_username.Text := data.auth.username;
-  Self.E_Password.Text := data.auth.password;
+  if (data.auth.password = '') then
+    Self.E_Password.Text := ''
+  else
+    Self.E_Password.Text := 'heslo';
 
   Self.CHB_ShowPassword.Enabled := (data.auth.password = '');
 

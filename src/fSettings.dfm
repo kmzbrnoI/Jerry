@@ -49,7 +49,7 @@ object F_Settings: TF_Settings
     Top = 8
     Width = 629
     Height = 273
-    ActivePage = TS_display
+    ActivePage = TS_Rights
     TabOrder = 2
     object TS_Server: TTabSheet
       Caption = 'P'#345'ipojen'#237
