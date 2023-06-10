@@ -336,15 +336,8 @@ begin
     Self.updating := true;
     try
       for var i := left to right do
-      begin
         if (i < _MAX_FORM_FUNC) then
-        begin
-          if (data[5][i - left + 1] = '1') then
-            Self.CHB_funkce[i].Checked := true
-          else
-            Self.CHB_funkce[i].Checked := false;
-        end;
-      end;
+          Self.CHB_funkce[i].Checked := (data[5][i - left + 1] = '1');
     finally
       Self.updating := false;
     end;
@@ -633,7 +626,7 @@ begin
       AutoSize := false;
       Width := (Self.TS_func_0_13.ClientWidth div 2) - 10;
 
-      Inc(myTop, 16);
+      Inc(myTop, Height-1);
 
       OnClick := Self.CHB_svetlaClick;
     end; // with
