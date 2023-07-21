@@ -95,7 +95,7 @@ end;
 procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
   Application.MessageBox(PChar('Jerry v' + VersionStr(Application.ExeName) +
-    #13#10 + 'build ' + LastBuildDate() + ' ' + LastBuildTime() + #13#10 +
+    #13#10 + 'build ' + FormatDateTime('dd.mm.yyyy hh:nn:ss', BuildDateTime()) + #13#10 +
     'Vytvořil Jan Horáček 2015-2019 pro KMŽ Brno I.'), 'Info',
     MB_OK OR MB_ICONINFORMATION);
 end;
@@ -232,7 +232,7 @@ end;
 procedure TF_Main.FormShow(Sender: TObject);
 begin
   Self.Caption := 'Jerry v' + VersionStr(Application.ExeName) + ' (build ' +
-    LastBuildDate + ')';
+    FormatDateTime('dd.mm.yyyy', BuildDateTime()) + ')';
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -397,11 +397,12 @@ end;
 
 procedure TF_Main.PC_MainChange(Sender: TObject);
 begin
-  if (Self.PC_Main.ActivePage = nil) then
-    Self.Caption := 'Jerry v' + VersionStr(Application.ExeName) + ' (build ' + LastBuildDate() + ')'
+  if (Self.PC_Main.ActivePage <> nil) then
+    Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption) - 5) + '– '
   else
-    Self.Caption := LeftStr(Self.PC_Main.ActivePage.Caption, Length(Self.PC_Main.ActivePage.Caption) - 5) + '– Jerry v' +
-      VersionStr(Application.ExeName) + ' (build ' + LastBuildDate() + ')';
+    Self.Caption := '';
+
+  Self.Caption := Self.Caption + 'Jerry v' + VersionStr(Application.ExeName) + ' (build ' + FormatDateTime('dd.mm.yyyy', BuildDateTime()) + ')';
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

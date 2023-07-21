@@ -6,13 +6,14 @@
 
 interface
 
-uses Windows, SysUtils, Forms, jclPEImage;
+uses Windows, SysUtils;
 
  function VersionStr(const FileName: string): string;
- function LastBuildDate(): string;
- function LastBuildTime(): string;
+ function BuildDateTime(): TDateTime;
 
 implementation
+
+uses DateUtils;
 
 function VersionStr(const FileName: string): string;
 var
@@ -38,14 +39,9 @@ begin
   end;
 end;
 
-function LastBuildDate(): string;
+function BuildDateTime(): TDateTime;
 begin
-  DateTimeToString(Result, 'dd.mm.yyyy', jclPEImage.PeReadLinkerTimeStamp(Application.ExeName));
-end;
-
-function LastBuildTime(): string;
-begin
-  DateTimeToString(Result, 'hh:mm:ss', jclPEImage.PeReadLinkerTimeStamp(Application.ExeName));
+  Result := (TTimeZone.Local.ToLocalTime(PImageNtHeaders(HInstance + Cardinal(PImageDosHeader(HInstance)^._lfanew))^.FileHeader.TimeDateStamp / SecsPerDay) + UnixDateDelta);
 end;
 
 end.//unit
