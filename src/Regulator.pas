@@ -13,7 +13,7 @@ uses
 
 const
   _TIMEOUT_SEC = 5;
-  _MAX_FORM_FUNC = 27;
+  _MAX_FORM_FUNC = 28;
   _MOM_KEEP_ON_MS = 750;
 
 type
@@ -603,34 +603,46 @@ end;
 procedure TF_DigiReg.CreateCHBFunkce();
 var
   myTop: Integer;
+  i: Integer;
 begin
   myTop := 0;
 
-  for var i := 0 to 27 do
+  for var j := 0 to _MAX_FORM_FUNC do
   begin
+    i := j-1;
     if ((i mod 7) = 0) then
       myTop := 0;
-
-    Self.CHB_funkce[i] := TCheckBox.Create(Self);
-    with (Self.CHB_funkce[i]) do
+    Self.CHB_funkce[j] := TCheckBox.Create(Self);
+    with (Self.CHB_funkce[j]) do
     begin
-      if (i < 14) then
-        Parent := Self.TS_func_0_13
-      else
-        Parent := Self.TS_func_14_28;
+      if (i<0) then begin
+        // funkce F0 je jinde nez zbytek
+        Parent := Self.PC_Funkce;
+      end else begin
+        if (i < 14) then
+          Parent := Self.TS_func_0_13
+        else
+          Parent := Self.TS_func_14_28;
+      end;
 
-      left := ((i div 7) mod 2) * (Self.TS_func_0_13.ClientWidth div 2);
-      Top := myTop;
-      Caption := 'F' + IntToStr(i);
-      Tag := i;
+      if (i < 0) then begin
+        // pevne umisteni F0
+        left := 128;
+        Top := 3;
+      end else begin
+        // ostatni se pocitaji
+        left := ((i div 7) mod 2) * (Self.TS_func_0_13.ClientWidth div 2);
+        Top := myTop;
+        Inc(myTop, Height-1);
+      end;
+      // spolecne nastaveni pro F0-F28
+      Caption := 'F' + IntToStr(j);
+      Tag := j;
       AutoSize := false;
       Width := (Self.TS_func_0_13.ClientWidth div 2) - 10;
-
-      Inc(myTop, Height-1);
-
       OnClick := Self.CHB_svetlaClick;
     end; // with
-  end; // for i
+  end; // for j
 
 end;
 
