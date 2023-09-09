@@ -361,7 +361,9 @@ begin
     begin
       FCloseButtonMouseDownTab.DoClose;
       FCloseButtonMouseDownTab := nil;
-      PageControl.Repaint;
+      PageControl.Repaint();
+      if (Assigned(PageControl.OnChange)) then
+        PageControl.OnChange(PageControl);
     end;
   end;
 end;
