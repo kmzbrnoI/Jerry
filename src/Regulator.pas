@@ -13,7 +13,7 @@ uses
 
 const
   _TIMEOUT_SEC = 5;
-  _MAX_FORM_FUNC = 27;
+  _MAX_FORM_FUNC = 28;
   _MOM_KEEP_ON_MS = 750;
 
 type
@@ -45,7 +45,7 @@ type
     TS_func_0_13: TTabSheet;
     TS_func_14_28: TTabSheet;
     T_Mom_Release: TTimer;
-    procedure CHB_svetlaClick(Sender: TObject);
+    procedure CHB_FuncClick(Sender: TObject);
     procedure B_PrevzitLokoClick(Sender: TObject);
     procedure B_STOPClick(Sender: TObject);
     procedure RG_SmerClick(Sender: TObject);
@@ -246,7 +246,7 @@ end;
 /// /////////////////////////////////////////////////////////////////////////////
 // Zapnuti/vypnuti libovolne funkce
 
-procedure TF_DigiReg.CHB_svetlaClick(Sender: TObject);
+procedure TF_DigiReg.CHB_FuncClick(Sender: TObject);
 var
   f: Integer;
 begin
@@ -601,37 +601,48 @@ end;
 // Vytvoreni vsech CHB_funkce
 
 procedure TF_DigiReg.CreateCHBFunkce();
-var
-  myTop: Integer;
+const
+  _COLS = 2;
+  _ROWS = 7;
+  _CLEAR_PX = 5;
 begin
-  myTop := 0;
-
-  for var i := 0 to 27 do
+  Self.CHB_funkce[0] := TCheckBox.Create(Self);
+  with (Self.CHB_funkce[0]) do
   begin
-    if ((i mod 7) = 0) then
+    Parent := Self.PC_Funkce;
+    Left := (Self.TS_func_0_13.ClientWidth div _COLS) + ((Self.PC_Funkce.Width - Self.TS_func_0_13.Width) div 2);
+    Top := 3;
+    Caption := 'F0';
+    Tag := 0;
+    AutoSize := False;
+    Width := (Self.TS_func_0_13.ClientWidth div _COLS) - _CLEAR_PX;
+    OnClick := Self.CHB_FuncClick;
+  end; // with
+
+  var myTop := 0;
+  for var i := 1 to _MAX_FORM_FUNC do
+  begin
+    if (((i-1) mod _ROWS) = 0) then
       myTop := 0;
 
     Self.CHB_funkce[i] := TCheckBox.Create(Self);
     with (Self.CHB_funkce[i]) do
     begin
-      if (i < 14) then
+      if (i <= (_ROWS*_COLS)) then
         Parent := Self.TS_func_0_13
       else
         Parent := Self.TS_func_14_28;
 
-      left := ((i div 7) mod 2) * (Self.TS_func_0_13.ClientWidth div 2);
+      Left := (((i-1) div _ROWS) mod _COLS) * (Self.TS_func_0_13.ClientWidth div _COLS);
       Top := myTop;
       Caption := 'F' + IntToStr(i);
       Tag := i;
       AutoSize := false;
-      Width := (Self.TS_func_0_13.ClientWidth div 2) - 10;
-
+      Width := (Self.TS_func_0_13.ClientWidth div _COLS) - _CLEAR_PX;
+      OnClick := Self.CHB_FuncClick;
       Inc(myTop, Height-1);
-
-      OnClick := Self.CHB_svetlaClick;
     end; // with
   end; // for i
-
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

@@ -74,10 +74,10 @@ object F_DigiReg: TF_DigiReg
     ActivePage = TS_func_0_13
     TabOrder = 7
     object TS_func_0_13: TTabSheet
-      Caption = 'F0-F13'
+      Caption = 'F1-F14'
     end
     object TS_func_14_28: TTabSheet
-      Caption = 'F14-F28'
+      Caption = 'F15-F28'
       ImageIndex = 1
     end
   end
