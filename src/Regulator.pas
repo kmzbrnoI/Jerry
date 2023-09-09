@@ -78,8 +78,6 @@ type
     function GetMultitrack(): boolean; // je okynko v multitrakci?
 
     procedure CreateCHBFunkce(); // vytvori CheckBoxy funkci
-    procedure DestroyCHBFunkce(); // znici CHeckBoxy funkci
-
     procedure MomRelease(mr: TMomRelease);
     function CreateMomRelease(f: Integer; shutdownTime: TDateTime): TMomRelease; overload;
     function CreateMomRelease(f: Integer): TMomRelease; overload;
@@ -87,9 +85,9 @@ type
     class procedure SimulateClick(var chb: TCheckBox);
 
   public
-    addr: Word; // adresa rizeneho HV (hnaciho vozidla)
+    addr: Cardinal; // adresa rizeneho HV (hnaciho vozidla)
 
-    constructor Create(addr: Word; lok_data: string; multitrack: boolean;
+    constructor Create(addr: Cardinal; lok_data: string; multitrack: boolean;
       total: boolean; tab: TCloseTabSheet; caption_type: TRegCaptionType);
       reintroduce;
     destructor Destroy(); override;
@@ -97,7 +95,7 @@ type
     procedure Parse(data: TStrings); // parse dat pro tento regulator
     function MyKeyPress(key: Integer): boolean; // keyPress
     // aktualizace rychlosti z vedlejsiho regulatoru pri multitrakci
-    procedure UpdateRych(from_multitrack: boolean = false);
+    procedure UpdateSpeed(from_multitrack: boolean = false);
     procedure DirChanged(from_multitrack: boolean = false);
     procedure ChangeDirFromMultitrack();
     procedure EmergencyStopFromMultitrack();
@@ -125,7 +123,7 @@ uses TCPClientPanel, ORList, Main, RegCollector, ownStrUtils, System.UITypes;
 
 /// /////////////////////////////////////////////////////////////////////////////
 
-constructor TF_DigiReg.Create(addr: Word; lok_data: string; multitrack: boolean;
+constructor TF_DigiReg.Create(addr: Cardinal; lok_data: string; multitrack: boolean;
   total: boolean; tab: TCloseTabSheet; caption_type: TRegCaptionType);
 begin
   inherited Create(nil);
@@ -206,13 +204,19 @@ end;
 
 destructor TF_DigiReg.Destroy();
 begin
-  Self.T_Mom_Release.Enabled := false;
-  Self.T_Speed.Enabled := false;
-  Self.q_mom_release.Free();
-  Self.SendCmd('RELEASE;');
-  Self.sent.Free();
-  Self.HV.Free();
-  Self.DestroyCHBFunkce();
+  try
+    Self.T_Mom_Release.Enabled := false;
+    Self.T_Speed.Enabled := false;
+    Self.q_mom_release.Free();
+    Self.SendCmd('RELEASE;');
+    Self.sent.Free();
+    Self.HV.Free();
+
+    for var i := 0 to _MAX_FORM_FUNC do
+      Self.CHB_funkce[i].Free();
+  finally
+
+  end;
 
   inherited;
 end;
@@ -331,7 +335,6 @@ begin
     finally
       func.Free();
     end;
-
 
     Self.updating := true;
     try
@@ -471,7 +474,7 @@ begin
   if (Self.B_PrevzitLoko.Enabled) then
     Exit();
 
-  Self.UpdateRych();
+  Self.UpdateSpeed();
   Self.UpdateSent();
 end;
 
@@ -490,7 +493,7 @@ begin
   end;
 end;
 
-procedure TF_DigiReg.UpdateRych(from_multitrack: boolean);
+procedure TF_DigiReg.UpdateSpeed(from_multitrack: boolean);
 begin
   if ((Self.speed <> Self.TB_reg.Position) and (Self.speed > -2)) then
   begin
@@ -543,16 +546,16 @@ begin
       if (Self.RG_Smer.Enabled) then
         Self.RG_Smer.ItemIndex := 1;
 
-    83: // 's'
+    ord('S'):
       if (Self.TB_reg.Enabled) then
         Self.B_STOPClick(Self);
-    73: // 'i'
+    ord('I'):
       if (Self.TB_reg.Enabled) then
         Self.B_IdleClick(Self);
-    82: // 'r'
+    ord('R'):
       if (Self.CHB_Total.Enabled) then
         Self.CHB_Total.Checked := not Self.CHB_Total.Checked;
-    77: // 'm'
+    ord('M'):
       if (Self.CHB_Multitrack.Enabled) then
         Self.CHB_Multitrack.Checked := not Self.CHB_Multitrack.Checked;
   else
@@ -643,14 +646,6 @@ begin
       Inc(myTop, Height-1);
     end; // with
   end; // for i
-end;
-
-/// /////////////////////////////////////////////////////////////////////////////
-
-procedure TF_DigiReg.DestroyCHBFunkce();
-begin
-  for var i := 0 to _MAX_FORM_FUNC do
-    Self.CHB_funkce[i].Free();
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -775,7 +770,6 @@ begin
     end else
       Result := clBtnFace;
   end;
-
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////

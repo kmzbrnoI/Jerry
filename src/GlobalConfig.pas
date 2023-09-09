@@ -21,7 +21,7 @@ type
   end;
 
   TLokArgument = record
-    addr: Word;
+    addr: Cardinal;
     token: string;
   end;
 

@@ -79,8 +79,6 @@ begin
 end;
 
 procedure TF_Debug.Log(msg: string);
-var
-  LI: TListItem;
 begin
   if (not Self.CHB_DataLogging.Checked) then
     Exit();
@@ -88,7 +86,7 @@ begin
     (ContainsStr(msg, '-;PONG')))) then
     Exit();
 
-  LI := Self.LV_Log.Items.Insert(0);
+  var LI: TListItem := Self.LV_Log.Items.Insert(0);
   LI.Caption := FormatDateTime('hh:nn:ss,zzz', Now);
   LI.SubItems.Add(msg);
 end;

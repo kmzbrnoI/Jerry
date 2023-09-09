@@ -80,10 +80,7 @@ begin
   if (Msg.message = WM_KeyDown) then
   begin
     if ((Self.Active) and (RegColl.KeyPress(Msg.wParam))) then
-    begin
       Handled := true;
-      Exit();
-    end;
 
     // sem muze prijit zpracovani dalsich klaves
   end; // WM_KeyDown
@@ -96,7 +93,7 @@ procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
   Application.MessageBox(PChar('Jerry v' + VersionStr(Application.ExeName) +
     #13#10 + 'build ' + FormatDateTime('dd.mm.yyyy hh:nn:ss', BuildDateTime()) + #13#10 +
-    'Vytvořil Jan Horáček 2015-2019 pro KMŽ Brno I.'), 'Info',
+    'Vytvořil Jan Horáček 2015-2023 pro KMŽ Brno I.'), 'Info',
     MB_OK OR MB_ICONINFORMATION);
 end;
 

@@ -62,7 +62,7 @@ type
     function Disconnect(): Integer;
 
     procedure SendLn(str: string);
-    procedure LokoPlease(addr: Word; token: string); // zadost o lokomotivu tokenem
+    procedure LokoPlease(addr: Cardinal; token: string); // zadost o lokomotivu tokenem
 
     class function VersionToInt(version: string): Integer;
     class function VersionToString(version: Integer): string;
@@ -462,7 +462,7 @@ begin
   F_Debug.Log('SEND: ' + str);
 end;
 
-procedure TPanelTCPClient.LokoPlease(addr: Word; token: string);
+procedure TPanelTCPClient.LokoPlease(addr: Cardinal; token: string);
 begin
   Self.SendLn('-;LOK;' + IntToStr(addr) + ';PLEASE;' + token);
 end;

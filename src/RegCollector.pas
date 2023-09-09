@@ -18,8 +18,8 @@ type
 
   TRegulatorCollector = class
   private
-    function GetTab(addr: Word): TCloseTabSheet;
-    procedure NewLoko(addr: Word; lok_data: string; total: boolean);
+    function GetTab(addr: Cardinal): TCloseTabSheet;
+    procedure NewLoko(addr: Cardinal; lok_data: string; total: boolean);
 
     procedure OnTSClose(Sender: TObject);
     function GetCaptionType(): TRegCaptionType;
@@ -60,21 +60,19 @@ constructor TRegulatorCollector.Create();
 begin
   inherited;
   Self.tabs := TList<TCloseTabSheet>.Create();
-end; // ctor
+end;
 
 destructor TRegulatorCollector.Destroy();
-var
-  i: Integer;
 begin
-  for i := 0 to Self.tabs.Count - 1 do
+  for var i := 0 to Self.tabs.Count - 1 do
     Self.tabs[i].Free();
   Self.tabs.Free();
   inherited;
-end; // dtor
+end;
 
 /// /////////////////////////////////////////////////////////////////////////////
 
-procedure TRegulatorCollector.NewLoko(addr: Word; lok_data: string;
+procedure TRegulatorCollector.NewLoko(addr: Cardinal; lok_data: string;
   total: boolean);
 begin
   for var tab in Self.tabs do
@@ -116,7 +114,7 @@ begin
   F_Main.PC_MainChange(F_Main);
 end;
 
-function TRegulatorCollector.GetTab(addr: Word): TCloseTabSheet;
+function TRegulatorCollector.GetTab(addr: Cardinal): TCloseTabSheet;
 begin
   Result := nil;
   for var tab in Self.tabs do
@@ -223,7 +221,7 @@ begin
     begin
       (tab.form as TF_DigiReg).TB_reg.Position := (Sender.form as TF_DigiReg)
         .TB_reg.Position;
-      (tab.form as TF_DigiReg).UpdateRych(true);
+      (tab.form as TF_DigiReg).UpdateSpeed(true);
     end;
   end;
 end;
