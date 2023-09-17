@@ -339,7 +339,7 @@ begin
     Self.updating := true;
     try
       for var i := left to right do
-        if (i < _MAX_FORM_FUNC) then
+        if (i <= _MAX_FORM_FUNC) then
           Self.CHB_funkce[i].Checked := (data[5][i - left + 1] = '1');
     finally
       Self.updating := false;
