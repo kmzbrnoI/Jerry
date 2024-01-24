@@ -15,6 +15,7 @@ const
   _TIMEOUT_SEC = 5;
   _MAX_FORM_FUNC = 28;
   _MOM_KEEP_ON_MS = 750;
+  _SPEED_UNKNOWN: Integer = -2;
 
 type
   TRegCaptionType = (ctShort, ctLong);
@@ -137,7 +138,7 @@ begin
     Self.Parent := tab;
 
     Self.sent := TQueue<TLogCommand>.Create();
-    Self.speed := -2;
+    Self.speed := _SPEED_UNKNOWN;
     Self.CHB_Multitrack.Checked := multitrack;
     Self.CHB_Total.Checked := total;
     Self.q_mom_release := TQueue<TMomRelease>.Create();
@@ -273,7 +274,7 @@ end;
 
 procedure TF_DigiReg.RG_SmerClick(Sender: TObject);
 begin
-  if ((Self.speed > -2) and (not Self.updating)) then
+  if ((Self.speed > _SPEED_UNKNOWN) and (not Self.updating)) then
     Self.DirChanged();
 end;
 
@@ -457,7 +458,7 @@ end;
 
 procedure TF_DigiReg.UpdateSpeed(from_multitrack: boolean);
 begin
-  if ((Self.speed <> Self.TB_reg.Position) and (Self.speed > -2)) then
+  if ((Self.speed <> Self.TB_reg.Position) and (Self.speed > _SPEED_UNKNOWN)) then
   begin
     Self.SendCmd('SPD-S;' + IntToStr(Self.TB_reg.Position) + ';' +
       IntToStr(Self.RG_Smer.ItemIndex));
