@@ -3,7 +3,7 @@
         <ProjectGuid>{B757EF79-DAD0-4F5B-B20C-6FB481FAEFEF}</ProjectGuid>
         <ProjectVersion>19.5</ProjectVersion>
         <MainSource>Jerry.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>

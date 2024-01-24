@@ -3,6 +3,7 @@ program Jerry;
 
 uses
   Forms,
+  SysUtils,
   main in 'main.pas' {F_Main},
   TCPClientPanel in 'TCPClientPanel.pas',
   ListeningThread in 'ListeningThread.pas',
@@ -23,19 +24,25 @@ uses
 {$R *.res}
 
 begin
-  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS); // for real-time control
 
-  Application.Initialize;
+  Application.Initialize();
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TF_Main, F_Main);
+  Application.OnException := F_Main.OnAppException;
   Application.CreateForm(TF_Settings, F_Settings);
   Application.CreateForm(TF_Auth, F_Auth);
   Application.CreateForm(TF_NewLoko, F_NewLoko);
   Application.CreateForm(TF_Debug, F_Debug);
 
-  // automaticke pripojeni k serveru
-  if ((GlobConfig.data.server.autoconnect) or (GlobConfig.data.args.autoconnect)) then
-    F_Main.A_ConnectExecute(nil);
+  try
+    // automaticke pripojeni k serveru
+    if ((GlobConfig.data.server.autoconnect) or (GlobConfig.data.args.autoconnect)) then
+      F_Main.A_ConnectExecute(nil);
+  except
+    on E:Exception do
+      F_Main.OnAppException(nil, E);
+  end;
 
   Application.Run();
 end.
