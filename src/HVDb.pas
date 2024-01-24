@@ -80,15 +80,8 @@ begin
     Self.sta := THVStanoviste(StrToInt(str[7]));
 
     for var i := 0 to _MAX_FUNC do
-    begin
       if (i < Length(str[8])) then
-      begin
-        if (str[8][i + 1] = '1') then
-          Self.functions[i] := true
-        else
-          Self.functions[i] := false;
-      end;
-    end;
+        Self.functions[i] := (str[8][i + 1] = '1');
 
     Self.speed_steps := StrToInt(str[9]);
     Self.speed_kmph := StrToInt(str[10]);

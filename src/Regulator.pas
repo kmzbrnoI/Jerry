@@ -70,7 +70,7 @@ type
     procedure SendCmd(cmd: string);
 
     // nastav Enabled elementu na formulari na hodnotu \state
-    procedure SetElementsState(state: boolean);
+    procedure SetMyEnabled(state: boolean);
 
     // kontroluje, jestli server odpovedel na vsechny pozadavky a v priapde potreby je posila znovu
     procedure UpdateSent();
@@ -78,6 +78,8 @@ type
     function GetMultitrack(): boolean; // je okynko v multitrakci?
 
     procedure CreateCHBFunkce(); // vytvori CheckBoxy funkci
+    procedure ShowHVData();
+
     procedure MomRelease(mr: TMomRelease);
     function CreateMomRelease(f: Integer; shutdownTime: TDateTime): TMomRelease; overload;
     function CreateMomRelease(f: Integer): TMomRelease; overload;
@@ -150,51 +152,12 @@ begin
       Self.ShortCaption();
 
     Self.S_Status.Brush.Color := clGreen;
-
     Self.PC_Funkce.ActivePageIndex := 0;
-
-    Self.L_stupen.Caption := IntToStr(Self.HV.speed_steps) + ' / 28';
-    Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
-
-    Self.updating := true;
-    try
-      Self.RG_Smer.ItemIndex := Self.HV.dir;
-      Self.speed := Self.HV.speed_steps;
-      Self.TB_reg.Position := Self.HV.speed_steps;
-
-      for var i := 0 to _MAX_FORM_FUNC do
-      begin
-        Self.CHB_funkce[i].AllowGrayed :=
-          (Self.HV.funcType[i] = THVFuncType.momentary);
-        Self.CHB_funkce[i].Checked := Self.HV.functions[i];
-      end;
-    finally
-      Self.updating := false;
-    end;
-
-    Self.SetElementsState(true);
-
-    Self.TB_reg.Enabled := Self.CHB_Total.Checked;
-    Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
-    Self.B_Idle.Enabled := Self.CHB_Total.Checked;
-
-    // zobrazeni nazvu funkci
-    for var i := 0 to _MAX_FORM_FUNC do
-    begin
-      Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
-      if (Self.HV.funcVyznam[i] <> '') then
-      begin
-        Self.CHB_funkce[i].Caption := 'F' + IntToStr(i) + ': ' +
-          Self.HV.funcVyznam[i];
-        Self.CHB_funkce[i].Hint := Self.CHB_funkce[i].Caption;
-      end
-      else
-        Self.CHB_funkce[i].Caption := 'F' + IntToStr(i);
-    end;
-
+    Self.SetMyEnabled(true);
+    Self.ShowHVData();
     Self.B_PrevzitLoko.Enabled := false;
 
-    Self.Show();    
+    Self.Show();
   finally
     Self.updating := false;
   end;
@@ -407,12 +370,11 @@ begin
       end;
 
       Self.HV.ParseData(data[5]);
-      Self.OnShow(Self);
-      F_Main.PC_Main.Repaint();
+      Self.ShowHVData();
     end
     else
     begin
-      Self.SetElementsState(false);
+      Self.SetMyEnabled(false);
       if (data[4] = 'stolen') then
       begin
         Self.S_Status.Brush.Color := clYellow;
@@ -579,18 +541,18 @@ end;
 /// /////////////////////////////////////////////////////////////////////////////
 // Zmena enabled objektu na formulari
 
-procedure TF_DigiReg.SetElementsState(state: boolean);
+procedure TF_DigiReg.SetMyEnabled(state: boolean);
 begin
-  TB_reg.Enabled := state;
-  RG_Smer.Enabled := state;
-  B_STOP.Enabled := state;
-  B_Idle.Enabled := state;
+  Self.TB_reg.Enabled := state and Self.CHB_Total.Checked;
+  Self.RG_Smer.Enabled := state and Self.CHB_Total.Checked;
+  Self.B_STOP.Enabled := state;
+  Self.B_Idle.Enabled := state and Self.CHB_Total.Checked;
 
   for var i := 0 to _MAX_FORM_FUNC do
     Self.CHB_funkce[i].Enabled := state;
 
-  CHB_Total.Enabled := state;
-  CHB_Multitrack.Enabled := state;
+  Self.CHB_Total.Enabled := state;
+  Self.CHB_Multitrack.Enabled := state;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
@@ -646,6 +608,47 @@ begin
       Inc(myTop, Height-1);
     end; // with
   end; // for i
+end;
+
+procedure TF_DigiReg.ShowHVData();
+begin
+  Self.L_stupen.Caption := IntToStr(Self.HV.speed_steps) + ' / 28';
+  Self.L_speed.Caption := IntToStr(Self.HV.speed_kmph);
+
+  var iStartedUpdating: Boolean := False;
+  if (not Self.updating) then
+  begin
+    Self.updating := true;
+    iStartedUpdating := true;
+  end;
+
+  try
+    Self.RG_Smer.ItemIndex := Self.HV.dir;
+    Self.speed := Self.HV.speed_steps;
+    Self.TB_reg.Position := Self.HV.speed_steps;
+
+    for var i := 0 to _MAX_FORM_FUNC do
+    begin
+      Self.CHB_funkce[i].AllowGrayed := (Self.HV.funcType[i] = THVFuncType.momentary);
+      Self.CHB_funkce[i].Checked := Self.HV.functions[i];
+    end;
+  finally
+    if (iStartedUpdating) then
+      Self.updating := false;
+  end;
+
+  // nazvy funkci
+  for var i := 0 to _MAX_FORM_FUNC do
+  begin
+    Self.CHB_funkce[i].ShowHint := (Self.HV.funcVyznam[i] <> '');
+    if (Self.HV.funcVyznam[i] <> '') then
+    begin
+      Self.CHB_funkce[i].Caption := 'F' + IntToStr(i) + ': ' + Self.HV.funcVyznam[i];
+      Self.CHB_funkce[i].Hint := Self.CHB_funkce[i].Caption;
+    end
+    else
+      Self.CHB_funkce[i].Caption := 'F' + IntToStr(i);
+  end;
 end;
 
 /// /////////////////////////////////////////////////////////////////////////////
