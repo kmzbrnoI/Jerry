@@ -39,7 +39,3 @@ k serveru a autorizuje.
 
 Vytvořil Jan Horáček
 Licensed under Apache License v2.0.
-
-## Speciální komponenty
-
-- [JEDI Code Library](http://wiki.delphi-jedi.org/index.php?title=JEDI_Code_Library)
