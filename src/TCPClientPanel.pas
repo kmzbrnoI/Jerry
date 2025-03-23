@@ -26,6 +26,7 @@ type
   TPanelTCPClient = class
   private const
     _PROTOCOL_VERSION_CLIENT = '1.1';
+    _PROTOCOL_APP_NAME = 'Jerry';
 
   private
     rthread: TReadingThread;
@@ -219,7 +220,7 @@ begin
   Self.pingTimer.Enabled := true;
 
   // send handshake
-  Self.SendLn('-;HELLO;' + Self._PROTOCOL_VERSION_CLIENT + ';');
+  Self.SendLn('-;HELLO;' + Self._PROTOCOL_VERSION_CLIENT + ';' + _PROTOCOL_APP_NAME);
 end;
 
 procedure TPanelTCPClient.OnTcpClientDisconnected(Sender: TObject);
