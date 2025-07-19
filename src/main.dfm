@@ -12,7 +12,6 @@ object F_Main: TF_Main
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Visible = True
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
@@ -20,7 +19,6 @@ object F_Main: TF_Main
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 13
   object SB_Main: TStatusBar
     Left = 0

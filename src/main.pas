@@ -95,7 +95,7 @@ procedure TF_Main.A_AboutExecute(Sender: TObject);
 begin
   Application.MessageBox(PChar('Jerry v' + VersionStr(Application.ExeName) +
     #13#10 + 'build ' + FormatDateTime('dd.mm.yyyy hh:nn:ss', BuildDateTime()) + #13#10 +
-    'Vytvořil Jan Horáček 2015-2024 pro KMŽ Brno I.'), 'Info',
+    'Vytvořil Jan Malina (Horáček) 2015-2025 v KMŽ Brno I.'), 'Info',
     MB_OK OR MB_ICONINFORMATION);
 end;
 
