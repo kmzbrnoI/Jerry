@@ -361,11 +361,15 @@ begin
     if ((data[4] = 'ok') or (data[4] = 'total')) then
     begin
       updating := true;
+      Self.SetMyEnabled(true);
       try
         Self.CHB_Total.Checked := (data[4] = 'total');
         Self.TB_reg.Enabled := Self.CHB_Total.Checked;
         Self.RG_Smer.Enabled := Self.CHB_Total.Checked;
         Self.B_Idle.Enabled := Self.CHB_Total.Checked;
+        Self.S_Status.Brush.Color := clGreen;
+        Self.com_err := '';
+        Self.B_PrevzitLoko.Enabled := False;
       finally
         updating := false;
       end;
